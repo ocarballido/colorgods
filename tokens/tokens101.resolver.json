@@ -1,0 +1,35 @@
+{
+  "name": "DesignToken101",
+  "version": "2025.10",
+  "description": "Une las colecciones de Figma (normalizadas en tokens/dtcg/) y los tokens solo de código (code-only.tokens.json, iguales en todos los modos). Un conjunto fijo y dos ejes de modo: theme (Semantic color) y layout (Layout). V08.",
+  "sets": {
+    "base": {
+      "sources": [
+        { "$ref": "dtcg/primitives/Value.tokens.json" },
+        { "$ref": "dtcg/semantic-size/Value.tokens.json" },
+        { "$ref": "code-only.tokens.json" }
+      ]
+    }
+  },
+  "modifiers": {
+    "theme": {
+      "default": "light",
+      "contexts": {
+        "light": [{ "$ref": "dtcg/semantic-color/Light.tokens.json" }],
+        "dark": [{ "$ref": "dtcg/semantic-color/Dark.tokens.json" }]
+      }
+    },
+    "layout": {
+      "default": "mobile",
+      "contexts": {
+        "mobile": [{ "$ref": "dtcg/layout/Mobile.tokens.json" }],
+        "desktop": [{ "$ref": "dtcg/layout/Desktop.tokens.json" }]
+      }
+    }
+  },
+  "resolutionOrder": [
+    { "$ref": "#/sets/base" },
+    { "$ref": "#/modifiers/theme" },
+    { "$ref": "#/modifiers/layout" }
+  ]
+}
