@@ -108,6 +108,14 @@ Tomadas al escribir el motor; cada una dice su motivo. Medidas: `tests/scales.te
 | 48 | Regla de contraste por paso (F26): "desde" es el primer paso a partir del cual todos los pasos, hasta el último, cumplen con blanco en todas las escalas visibles (sin el de la marca); "hasta", el último paso hasta el cual cumplen todos con negro. Con N = 11 da lo mismo que `a7b.mjs` c) (AA: blanco desde 700, negro hasta 600; 3: desde 600 y hasta 700). | Cerrada | 2026-10-12 |
 | 49 | Del motor del curso se quitan `STEPS`, el `build()` de 11 pasos y los ajustes en la URL (`DEFAULTS`, `stateFromSearch`, `searchFromState`): F18 necesita N, convención, tope y roles, y su valor por defecto era `#33CC99`, que la app no puede usar (valores por defecto de `funcionalidades.md`). F18 se escribe en C4. `toFigmaTokens()` pasa a exportar todas las escalas con los nombres de la convención (decisiones 11 y 15); CSS y `@theme` (F15, F16) siguen en C4. `isPaletteName()` ya rechaza los nombres de los roles (F5). | Cerrada | 2026-10-12 |
 
+## Herramientas de desarrollo (paso C2b)
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 50 | Formato y revisión estática con Prettier y ESLint (con las reglas de React, de sus hooks y de accesibilidad `jsx-a11y`), con scripts de npm y ejecutados por Claude Code al editar. | Cerrada (Oscar sigue la recomendación) | 2026-10-12 |
+| 51 | Dependabot: alertas de seguridad y un pull request semanal agrupado con las actualizaciones de npm. | Cerrada (Oscar sigue la recomendación) | 2026-10-12 |
+| 52 | Sin comprobación automática en GitHub (Actions) por ahora: Oscar la quiere solo si es estrictamente necesaria, y no lo es. Cada cambio se comprueba con `npm test && npm run build` en Claude Code antes del pull request (también los de Dependabot), y desde C6 Vercel construye con ese mismo comando. Se revisa si un pull request llega a `main` sin comprobar. | Cerrada (Oscar) | 2026-10-12 |
+
 ## Forma de trabajo
 
 | ID | Decisión | Estado | Fecha |
@@ -115,3 +123,4 @@ Tomadas al escribir el motor; cada una dice su motivo. Medidas: `tests/scales.te
 | W1 | Se avanza por los pasos de `docs/plan.md`, en su orden: primero qué se quiere (funcionalidades por versión), luego UX, diseño en Figma y, al final, stack, repositorio y código. No se escribe código de la app hasta la fase C. | Cerrada | 2026-10-09 |
 | W2 | Un paso por chat. Cada chat empieza leyendo `docs/decisiones.md` y `docs/plan.md`, y termina actualizando los dos. | Provisional (propuesta con el plan) | 2026-10-09 |
 | W3 | Criterio para decidir, dicho por Oscar (2026-10-11): lo más lógico para la app, lo más lógico y de ayuda para los usuarios, y lo más actual en selección de escalas de color para sistemas de diseño y UI. Las recomendaciones de Claude se justifican con estos tres criterios. | Cerrada (Oscar) | 2026-10-11 |
+| W4 | Todo el desarrollo (código, pruebas, configuración y revisiones del repositorio) se hace en Claude Code sobre la copia local de Oscar. Los chats del Project deciden, documentan y preparan el encargo: al llegar a un paso de desarrollo, Claude da el prompt para Claude Code. | Cerrada (Oscar) | 2026-10-12 |
