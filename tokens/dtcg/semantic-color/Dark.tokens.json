@@ -1,0 +1,738 @@
+{
+  "color": {
+    "background": {
+      "overlay": {
+        "$type": "color",
+        "$value": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0.5,
+          "hex": "#000000"
+        },
+        "$description": "Capa sobre el contenido cuando el panel de navegación móvil está abierto (V25). color/black al 50 %, igual en Light y Dark. Valor directo: un alias de Figma no puede cambiar la opacidad.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:75:303",
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--cg-color-background-overlay)"
+          }
+        }
+      },
+      "neutral": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.neutral.950}",
+          "$description": "Fondo de la página",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:101",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-neutral-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:7cd562a8bd1a2e30201b9c6e054ca64313edf88c/-1:-1",
+              "targetVariableName": "color/neutral/950",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.neutral.900}",
+          "$description": "Fondo de tarjetas y bloques de código",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:102",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-neutral-subtle)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:fb8932ae4f942c5ff5948d11ad2165d51012de49/-1:-1",
+              "targetVariableName": "color/neutral/900",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{color.neutral.800}",
+          "$description": "Fondo de superficies destacadas: grupo del selector de tema, y código en línea",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:103",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-neutral-strong)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:1eaee363e93764bd4b92d2492265bb4cb075979f/-1:-1",
+              "targetVariableName": "color/neutral/800",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "hover": {
+          "$type": "color",
+          "$value": "{color.neutral.800}",
+          "$description": "Hover de controles neutros sin fondo (IconButton, sidebar, cabecera de InCode, selector de tema, botón secundario, navegación anterior y siguiente). El texto pasa a text/neutral/default (D12).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:20:2",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-neutral-hover)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:1eaee363e93764bd4b92d2492265bb4cb075979f/-1:-1",
+              "targetVariableName": "color/neutral/800",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "active": {
+          "$type": "color",
+          "$value": "{color.neutral.700}",
+          "$description": "Active (pulsado) de controles neutros. El texto pasa a text/neutral/default: el secundario da 3,99:1 en Dark (D12).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:20:3",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-neutral-active)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:2b055b0cde085d5252d39a91c7015e77054d36de/-1:-1",
+              "targetVariableName": "color/neutral/700",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "translucent": {
+          "$type": "color",
+          "$value": {
+            "colorSpace": "srgb",
+            "components": [
+              0.019607843831181526,
+              0.0470588244497776,
+              0.03529411926865578
+            ],
+            "alpha": 0.9,
+            "hex": "#050C09"
+          },
+          "$description": "color/white al 96 % en Light (S35) y neutral/950 al 90 % en Dark, con blur/300 detrás (solo en código). Valor directo: un alias de Figma no puede cambiar la opacidad",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:75:304",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-neutral-translucent)"
+            }
+          }
+        }
+      },
+      "accent": {
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.emerald.950}",
+          "$description": "Fondo tintado de acento: Callout recommendation, Lo que te llevas, lección actual del sidebar y pasos de Flow",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:109",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-accent-subtle)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:b1c1f22e8bb40b620658560fca635a44c5e22697/-1:-1",
+              "targetVariableName": "color/emerald/950",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "strong": {
+          "default": {
+            "$type": "color",
+            "$value": "{color.emerald.500}",
+            "$description": "Botón principal",
+            "$extensions": {
+              "com.figma.variableId": "VariableID:13:110",
+              "com.figma.scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL"
+              ],
+              "com.figma.codeSyntax": {
+                "WEB": "var(--cg-color-background-accent-strong-default)"
+              },
+              "com.figma.aliasData": {
+                "targetVariableId": "VariableID:8ceda84605bacf41635a832895288fd728cb08f3/-1:-1",
+                "targetVariableName": "color/emerald/500",
+                "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+                "targetVariableSetName": "Primitives"
+              }
+            }
+          },
+          "hover": {
+            "$type": "color",
+            "$value": "{color.emerald.400}",
+            "$description": "Botón principal al pasar el ratón",
+            "$extensions": {
+              "com.figma.variableId": "VariableID:13:111",
+              "com.figma.scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL"
+              ],
+              "com.figma.codeSyntax": {
+                "WEB": "var(--cg-color-background-accent-strong-hover)"
+              },
+              "com.figma.aliasData": {
+                "targetVariableId": "VariableID:d8a09d18a68e06308a946482ffcce545dc1ec9e7/-1:-1",
+                "targetVariableName": "color/emerald/400",
+                "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+                "targetVariableSetName": "Primitives"
+              }
+            }
+          },
+          "active": {
+            "$type": "color",
+            "$value": "{color.emerald.600}",
+            "$description": "Botón principal pulsado",
+            "$extensions": {
+              "com.figma.variableId": "VariableID:13:112",
+              "com.figma.scopes": [
+                "FRAME_FILL",
+                "SHAPE_FILL"
+              ],
+              "com.figma.codeSyntax": {
+                "WEB": "var(--cg-color-background-accent-strong-active)"
+              },
+              "com.figma.aliasData": {
+                "targetVariableId": "VariableID:d1081c96ceea0c1af2afd989e359de61fb82af09/-1:-1",
+                "targetVariableName": "color/emerald/600",
+                "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+                "targetVariableSetName": "Primitives"
+              }
+            }
+          }
+        }
+      },
+      "info": {
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.blue.950}",
+          "$description": "Fondo de los mensajes de información (Callout note)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:115",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-info-subtle)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:a5aae30f649b8afb41fa0c74e16ca92d94a008d8/-1:-1",
+              "targetVariableName": "color/blue/950",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "success": {
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.emerald.950}",
+          "$description": "Fondo de los mensajes de éxito. Sin uso todavía (S31)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:118",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-success-subtle)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:b1c1f22e8bb40b620658560fca635a44c5e22697/-1:-1",
+              "targetVariableName": "color/emerald/950",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "warning": {
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.amber.950}",
+          "$description": "Fondo de los avisos (Callout warning)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:121",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-warning-subtle)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:6328c6b286d159120cb0fa19c2124880bf548737/-1:-1",
+              "targetVariableName": "color/amber/950",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "danger": {
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.red.950}",
+          "$description": "Fondo de los mensajes de error. Sin uso todavía (S31)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:124",
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-background-danger-subtle)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:3e8a8f4404f20fa17a8aeed5ff2c9eb0e62bb964/-1:-1",
+              "targetVariableName": "color/red/950",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      }
+    },
+    "text": {
+      "on-accent": {
+        "$type": "color",
+        "$value": "{color.neutral.950}",
+        "$description": "Texto sobre el botón principal",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:13:113",
+          "com.figma.scopes": [
+            "SHAPE_FILL",
+            "TEXT_FILL"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--cg-color-text-on-accent)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:7cd562a8bd1a2e30201b9c6e054ca64313edf88c/-1:-1",
+            "targetVariableName": "color/neutral/950",
+            "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "neutral": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.neutral.50}",
+          "$description": "Texto principal",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:104",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-neutral-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:a737b72c30d00a92e2955b80c69566c9a2b3135a/-1:-1",
+              "targetVariableName": "color/neutral/50",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "subtle": {
+          "$type": "color",
+          "$value": "{color.neutral.400}",
+          "$description": "Texto secundario",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:105",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-neutral-subtle)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:90879f91a25e049959dce97ddecef27ea0854b18/-1:-1",
+              "targetVariableName": "color/neutral/400",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "accent": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.emerald.400}",
+          "$description": "Enlaces y texto de acento",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:108",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-accent-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:d8a09d18a68e06308a946482ffcce545dc1ec9e7/-1:-1",
+              "targetVariableName": "color/emerald/400",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "hover": {
+          "$type": "color",
+          "$value": "{color.emerald.300}",
+          "$description": "Enlace al pasar el ratón (D12).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:20:4",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-accent-hover)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:14e58dc27dcc27b906110335e8d8199f37a78cab/-1:-1",
+              "targetVariableName": "color/emerald/300",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "info": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.blue.300}",
+          "$description": "Texto e icono de los mensajes de información (Callout note)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:117",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-info-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:99cacad6e65e65131c0ed98bed597a714729ca75/-1:-1",
+              "targetVariableName": "color/blue/300",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "success": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.emerald.300}",
+          "$description": "Texto e icono de los mensajes de éxito (mensaje Copiado del bloque de código)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:120",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-success-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:14e58dc27dcc27b906110335e8d8199f37a78cab/-1:-1",
+              "targetVariableName": "color/emerald/300",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "warning": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.amber.300}",
+          "$description": "Texto e icono de los avisos (Callout warning)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:123",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-warning-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:48a4964c4c850327ba3be1c45d4b359a6fcfb75d/-1:-1",
+              "targetVariableName": "color/amber/300",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "danger": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.red.300}",
+          "$description": "Texto e icono de los mensajes de error. Sin uso todavía (S31)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:126",
+            "com.figma.scopes": [
+              "SHAPE_FILL",
+              "TEXT_FILL"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-text-danger-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:e718d13d74997b3b7ca90fb7764fb0466db34cee/-1:-1",
+              "targetVariableName": "color/red/300",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      }
+    },
+    "border": {
+      "focus": {
+        "$type": "color",
+        "$value": "{color.emerald.400}",
+        "$description": "Anillo de foco (2 px, border-width/200)",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:13:114",
+          "com.figma.scopes": [
+            "STROKE"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--cg-color-border-focus)"
+          },
+          "com.figma.aliasData": {
+            "targetVariableId": "VariableID:d8a09d18a68e06308a946482ffcce545dc1ec9e7/-1:-1",
+            "targetVariableName": "color/emerald/400",
+            "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+            "targetVariableSetName": "Primitives"
+          }
+        }
+      },
+      "neutral": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.neutral.800}",
+          "$description": "Bordes y separadores (decorativos)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:106",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-border-neutral-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:1eaee363e93764bd4b92d2492265bb4cb075979f/-1:-1",
+              "targetVariableName": "color/neutral/800",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{color.neutral.300}",
+          "$description": "Bordes que identifican un control (≥ 3:1)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:107",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-border-neutral-strong)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:b4cb791e79eb1441a842f18dd39051be81125d48/-1:-1",
+              "targetVariableName": "color/neutral/300",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "info": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.blue.700}",
+          "$description": "Borde de los mensajes de información (Callout note). Decorativo: no necesita 3:1",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:116",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-border-info-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:dd7d5bbfadd01bbc7918d75efa65dd781a24d8eb/-1:-1",
+              "targetVariableName": "color/blue/700",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "success": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.emerald.700}",
+          "$description": "Borde de los mensajes de éxito, decorativo. Sin uso todavía (S31)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:119",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(---cg-color-border-success-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:28b6279658a314b84174e0ae61cd6a33029e7a28/-1:-1",
+              "targetVariableName": "color/emerald/700",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "warning": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.amber.700}",
+          "$description": "Borde de los avisos (Callout warning). Decorativo: no necesita 3:1",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:122",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-border-warning-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:6555a41067af92e39eb502724c02a7ddabc4e8ba/-1:-1",
+              "targetVariableName": "color/amber/700",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "danger": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.red.700}",
+          "$description": "Borde de los mensajes de error, decorativo. Sin uso todavía (S31)",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:13:125",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-border-danger-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:619680ab7a1917a6fd8abc8c544fc39e8d47edb1/-1:-1",
+              "targetVariableName": "color/red/700",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      },
+      "accent": {
+        "default": {
+          "$type": "color",
+          "$value": "{color.emerald.700}",
+          "$description": "Borde del Callout recommendation (decorativo; D06).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:16:12",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-border-accent-default)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:28b6279658a314b84174e0ae61cd6a33029e7a28/-1:-1",
+              "targetVariableName": "color/emerald/700",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        },
+        "strong": {
+          "$type": "color",
+          "$value": "{color.emerald.400}",
+          "$description": "Indicador de seleccionado o actual: marca lateral de la lección actual del sidebar y borde de los pasos de Flow con enlace en hover. ≥ 3:1 frente a página, subtle y accent/subtle (1.4.11, D12).",
+          "$extensions": {
+            "com.figma.variableId": "VariableID:20:5",
+            "com.figma.scopes": [
+              "STROKE"
+            ],
+            "com.figma.codeSyntax": {
+              "WEB": "var(--cg-color-border-accent-strong)"
+            },
+            "com.figma.aliasData": {
+              "targetVariableId": "VariableID:d8a09d18a68e06308a946482ffcce545dc1ec9e7/-1:-1",
+              "targetVariableName": "color/emerald/400",
+              "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+              "targetVariableSetName": "Primitives"
+            }
+          }
+        }
+      }
+    }
+  }
+}
