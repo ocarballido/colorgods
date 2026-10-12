@@ -1,4 +1,4 @@
 /* Tailwind solo busca clases en src/ (la ruta es relativa a este archivo), como en DesignToken101 (V44). */
 @import "tailwindcss" source(".");
 /* Las variables de Figma pasadas a CSS (`npm run tokens`) se importan aquí cuando existan:
-   src/styles/tokens.css (capa 1, --t101-*) y src/styles/theme.css (capa 2, @theme inline). */
+   src/styles/tokens.css (capa 1, --cg-*) y src/styles/theme.css (capa 2, @theme inline). */

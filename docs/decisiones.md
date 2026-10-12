@@ -4,7 +4,7 @@ Qué se ha decidido, en una línea por decisión. Si algo aquí contradice una c
 
 Estados: **Cerrada** (no se reabre sin motivo) · **Provisional** (puede cambiar antes de publicar) · **Sustituida** · **Abierta**.
 
-Desde C2 (2026-10-12), este archivo vive en `docs/decisiones.md` del repositorio github.com/ocarballido/colorgods; qué se hace con las copias del Project lo decide Oscar.
+Desde C2 (2026-10-12), este archivo vive en `docs/decisiones.md` del repositorio github.com/ocarballido/colorgods; las copias del Project se borran al fusionar C2 (decisión 44).
 
 ## Tomadas en el traspaso
 
@@ -93,6 +93,8 @@ Propuestas de `funcionalidades.md` §6; Oscar sigue las recomendaciones el 2026-
 | ID | Decisión | Estado | Fecha |
 |---|---|---|---|
 | 42 | Licencia MIT, con Oscar Carballido como titular. El repositorio ya tenía un `LICENSE` MIT del commit inicial con el titular "ocarballido"; se cambia el titular por el nombre, como en la autoría del README. | Cerrada (Oscar) | 2026-10-12 |
+| 43 | Prefijo de las variables de la app: `--cg-` en vez de `--t101-`. Motivo: la app no lleva la marca de DesignToken101 (A5), y con el mismo prefijo las variables de los dos proyectos se confundirían en el código y en Figma. `terrazzo.config.mjs` ya usa `--cg-`; Oscar cambia el *code syntax* Web de las variables de ColorScaleUI a `--cg-` antes de exportarlas. | Cerrada (Oscar sigue la recomendación) | 2026-10-12 |
+| 44 | Documentos: la fuente es `docs/` del repositorio. Cuando el pull request de C2 se fusione en `main`, se borran las copias del Project y queda en él solo una nota que apunta al repositorio; antes no, porque hasta la fusión los documentos solo existen en una rama. Desde entonces, cada chat lee `docs/decisiones.md` y `docs/plan.md` del repositorio (W2). | Cerrada (Oscar sigue la recomendación) | 2026-10-12 |
 
 ## Forma de trabajo
 

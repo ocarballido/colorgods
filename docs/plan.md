@@ -46,7 +46,7 @@ Estado: ✅ hecho · ◐ propuesto, pendiente de aprobación · ▶ siguiente ·
 ## Notas
 
 - **Orden y paralelo.** C2 y C3 no dependen del diseño: si en algún momento hay más tiempo de desarrollo que de diseño, se pueden adelantar (C3 después de A7). Con la decisión 6 cerrada (2026-10-12), C2 se puede hacer ya; C4 espera a que B3 quede cerrado.
-- **Dónde viven los documentos.** Hasta C2, en el Project. Desde C2 (2026-10-12), en `docs/` del repositorio; las copias del Project siguen allí hasta que Oscar decida qué hacer con ellas.
+- **Dónde viven los documentos.** Hasta C2, en el Project. Desde C2 (2026-10-12), en `docs/` del repositorio; las copias del Project se borran al fusionar C2 en `main` y queda una nota que apunta al repositorio (decisión 44).
 - **Ahorro de tokens.** Cada documento es corto y autosuficiente; los chats leen solo lo que su paso necesita. Las pruebas largas se hacen con scripts y se guardan las cifras, no las salidas completas.
 - **Curso y app con 11 pasos.** Desde la decisión 30, la app y DesignToken101 dan hex distintos con 11 pasos (distinta L y croma). Si algún día se quiere que coincidan, el cambio va en el curso (`build()` y `tests/fixtures/`), no en la app.
 - **Fuentes de A5.** Los repositorios de los sistemas de diseño se leyeron en GitHub (el registro de npm no es accesible desde el entorno); commits y archivos en `semanticas.md` §1.
