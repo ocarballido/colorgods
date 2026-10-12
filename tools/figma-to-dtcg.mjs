@@ -161,7 +161,17 @@ export function normalize(files, { map = SCOPE_TYPES } = {}) {
     map,
     unresolved: new Map(),
     tokens: [],
-    count: { files: 0, alias: 0, dimension: 0, fontWeight: 0, fontFamily: 0, color: 0, alpha: 0, number: 0, excluded: 0 },
+    count: {
+      files: 0,
+      alias: 0,
+      dimension: 0,
+      fontWeight: 0,
+      fontFamily: 0,
+      color: 0,
+      alpha: 0,
+      number: 0,
+      excluded: 0,
+    },
   };
   const out = [];
   for (const file of [...files].sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))) {
@@ -198,11 +208,15 @@ export function problems({ unresolved, missingRefs }) {
     for (const entry of unresolved) {
       const scopes = entry.key === NO_SCOPES ? 'sin scopes' : `con ${entry.key}`;
       const n = entry.ids.length;
-      lines.push(`- ${entry.type} ${scopes}: ${n} ${n === 1 ? 'token' : 'tokens'} (${entry.ids.slice(0, 3).join(', ')}${n > 3 ? '…' : ''})`);
+      lines.push(
+        `- ${entry.type} ${scopes}: ${n} ${n === 1 ? 'token' : 'tokens'} (${entry.ids.slice(0, 3).join(', ')}${n > 3 ? '…' : ''})`,
+      );
     }
     lines.push('', 'Decide el tipo de cada uno y añádelo a SCOPE_TYPES, al principio de este archivo. Por ejemplo:');
     for (const entry of unresolved) {
-      lines.push(`  ${entry.type}: { '${entry.key}': ${(TYPE_OPTIONS[entry.type] ?? ['exclude']).map((type) => `'${type}'`).join(' | ')} }`);
+      lines.push(
+        `  ${entry.type}: { '${entry.key}': ${(TYPE_OPTIONS[entry.type] ?? ['exclude']).map((type) => `'${type}'`).join(' | ')} }`,
+      );
     }
   }
   if (missingRefs.length) {
@@ -217,7 +231,9 @@ export function problems({ unresolved, missingRefs }) {
 export function withScopeTypes(source, map) {
   const body = Object.entries(map)
     .map(([type, scopes]) => {
-      const entries = Object.entries(scopes).map(([key, value]) => `    ${/^[A-Z_]+$/.test(key) ? key : `'${key}'`}: '${value}',`);
+      const entries = Object.entries(scopes).map(
+        ([key, value]) => `    ${/^[A-Z_]+$/.test(key) ? key : `'${key}'`}: '${value}',`,
+      );
       return entries.length ? `  ${type}: {\n${entries.join('\n')}\n  },` : `  ${type}: {},`;
     })
     .join('\n');
@@ -241,8 +257,13 @@ if (isCli) {
 
   const files = [];
   for (const collection of fs.readdirSync(IN_DIR, { withFileTypes: true }).filter((entry) => entry.isDirectory())) {
-    for (const name of fs.readdirSync(path.join(IN_DIR, collection.name)).filter((item) => item.endsWith('.tokens.json'))) {
-      files.push({ path: `${collection.name}/${name}`, text: fs.readFileSync(path.join(IN_DIR, collection.name, name), 'utf8') });
+    for (const name of fs
+      .readdirSync(path.join(IN_DIR, collection.name))
+      .filter((item) => item.endsWith('.tokens.json'))) {
+      files.push({
+        path: `${collection.name}/${name}`,
+        text: fs.readFileSync(path.join(IN_DIR, collection.name, name), 'utf8'),
+      });
     }
   }
 

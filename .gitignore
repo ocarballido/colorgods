@@ -7,10 +7,23 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencias y lo que genera el proyecto (npm run build; la caché de tsc -b va en node_modules/.tmp)
 node_modules
 dist
 dist-ssr
 *.local
+*.tsbuildinfo
+
+# Secretos
+.env
+.env.*
+*.pem
+*.key
+
+# Claude Code: configuración personal y worktrees (la compartida, .claude/settings.json, sí va al repositorio)
+.claude/settings.local.json
+.claude/worktrees/
+CLAUDE.local.md
 
 # Editor directories and files
 .vscode/*
