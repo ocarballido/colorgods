@@ -1,0 +1,105 @@
+# Escalas de color: Decisiones
+
+Qué se ha decidido, en una línea por decisión. Si algo aquí contradice una conversación, prevalece este documento. Las pruebas y cifras están en `docs/investigacion-comparacion.md` y, las de los nombres, en `docs/nombres.md`; las funcionalidades y sus criterios, en `docs/funcionalidades.md`; las paletas semánticas, en `docs/semanticas.md`; la UX, en `docs/ux.md`; la competencia, en `docs/competencia.md`; la dirección del método, en `docs/direccion.md`; el stack y la publicación, en `docs/stack.md`.
+
+Estados: **Cerrada** (no se reabre sin motivo) · **Provisional** (puede cambiar antes de publicar) · **Sustituida** · **Abierta**.
+
+Desde C2 (2026-10-12), este archivo vive en `docs/decisiones.md` del repositorio github.com/ocarballido/colorgods; las copias del Project se borran al fusionar C2 (decisión 44).
+
+## Tomadas en el traspaso
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| A1 | La app es un proyecto aparte de DesignToken101, con repositorio propio (`color-scales`, nombre provisional; con la decisión 7, el nombre natural es `colorgods`, se confirma en C2); DesignToken101 sigue con 11 pasos (T22, D46). | Cerrada. Nombre confirmado en C2: `colorgods` (Oscar crea el repositorio el 2026-10-12) | 2026-10-09 |
+| A2 | Se copian `tools/scales.mjs`, `tools/scales.d.mts`, `tests/scales.test.mjs` y `tests/fixtures/` de DesignToken101 en el commit `f4885d7`, citando el origen en la cabecera de cada archivo; la interfaz se escribe nueva. | Cerrada. Hecho en C2 (2026-10-12): los JSON no admiten comentarios y su origen va en `tests/fixtures/ORIGEN.md`; `tests/fixtures/figma-export-prueba.zip` no se copia porque solo lo usa `tests/zip.test.mjs`, que no es del motor | 2026-10-09 |
+| A3 | Con 11 pasos y nombres de Tailwind, la app da los mismos hex que el curso (las pruebas copiadas lo comprueban). | Sustituida por la decisión 4: con 11 pasos, la app da la misma L en cada paso que el curso, pero el croma puede cambiar (8 de los 13 colores de prueba, hasta 0,046 en oklab). El curso no se cambia por ahora. Con la decisión 30, tampoco la L es la del curso. | 2026-10-09 |
+| A4 | N pasos se obtienen interpolando cada curva con PCHIP (Fritsch y Carlson) y tomando N muestras regulares. | Cerrada | 2026-10-09 |
+| A5 | No se lleva la marca de DesignToken101 ni sus lecciones; las curvas se citan como datos de Tailwind CSS (MIT). | Cerrada | 2026-10-09 |
+
+## Decisiones del traspaso
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 1 | Diferencia frente a Leonardo y Scale: N pasos tonales que contienen el color de marca exacto y mantienen su tono, con la luminosidad de una paleta probada (curvas de Tailwind CSS), el contraste visible en cada paso y aviso de recorte, listos para importar en Figma. La app no promete el mismo contraste en el mismo paso para todos los colores (lo que sí da Leonardo). Base: `investigacion-comparacion.md` §2. | Sustituida en parte por la decisión 30: se mantiene todo salvo la última frase; ahora la app sí promete el mismo contraste en el mismo paso, salvo en el de la marca. | 2026-10-09 |
+| 2 | Alcance de la primera versión: un color en hex, RGB o HSL y su escala de neutros con tinte; N de 5 a 15 (cambiado por la decisión 17: de 3 a 16, 19 o 30 según la convención) con la curva propuesta por el tono (C25 del curso) y elegible; cuatro convenciones de nombres (Tailwind, SDS, Radix, personalizada); contraste WCAG de cada paso con blanco y negro y del par elegido, explicando que el mismo paso no tiene el mismo contraste en todos los colores (con la decisión 30, se explica lo contrario); los tres avisos (sin croma, ancla en un extremo, recorte con porcentaje); exportación DTCG para Figma y CSS (con variante `@theme` de Tailwind CSS 4); ajustes en la URL. Fuera: varias marcas a la vez, temas oscuros, modo por contraste objetivo, APCA. | Cerrada | 2026-10-09 |
+| 3 | Nombres con N pasos. Tailwind y SDS, por posición: el paso k (t = k / (N − 1)) se llama como el valor de la convención en t, interpolando entre sus nombres (50, 100 … 900, 950; 100 a 1000) y redondeando a 50; el primero y el último no cambian y no hay nombres repetidos de 5 a 15 (con la decisión 17, de 3 a 16 en Tailwind y de 3 a 19 en SDS). Radix: 1 a N con cualquier N, con una nota de que se usan sus nombres, no la función de sus pasos. Personalizada: N nombres sin repetir, con letras, números, `-` y `_`. Los neutros llevan los mismos nombres. Base: `nombres.md`. | Cerrada | 2026-10-09 |
+| 4 | Dónde cae la marca (método C): N muestras regulares de la curva; la marca sustituye al paso de L más cercano; la proporción de croma es el croma de la marca entre el croma de la curva interpolada en la L de la marca (no en la del paso sustituido). Así la proporción no depende de N. Se descarta desplazar la curva (método B). Base: `investigacion-comparacion.md` §4. | Sustituida en parte por la decisión 30: se mantiene la proporción de croma en la L de la marca; la L de cada paso y el paso de la marca salen de la escalera de luminancia. | 2026-10-09 |
+| 5 | Contraste APCA: fuera de la primera versión; si se añade después, antes se comprueba la licencia de su implementación de referencia. Revisado el 2026-10-11: APCA salió del borrador de WCAG 3 en julio de 2023 y WCAG 3 no se espera antes de 2030 (`direccion.md` §1). | Cerrada | 2026-10-09 |
+| 6 | Stack y publicación (`stack.md`): Vite con React 19 y TypeScript, salida estática; Tailwind CSS 4 con las variables de Figma pasadas a CSS con Terrazzo, como el curso; motor con `node --test` y, para la interfaz, Playwright con axe-core donde haga falta un navegador; Node 24; sin analítica ni cookies. Repositorio público. Publicación en Vercel (plan Hobby mientras no haya uso comercial: ni cobros, ni publicidad, ni venta de servicios en la página), conectado a GitHub, con `npm test && npm run build` como construcción; dominio colorgods.com registrado en CDMON, con los DNS hacia Vercel cuando haya algo que publicar. Se desarrolla en local y Vercel se conecta al final, en C6 (Oscar, 2026-10-12). Repositorio: github.com/ocarballido/colorgods. El presupuesto de peso se fija en C2 midiendo. | Cerrada (Oscar, 2026-10-12; cambia GitHub Pages de la propuesta por Vercel) | 2026-10-12 |
+| 7 | Nombre de la app: colorgods, publicada en el dominio colorgods.com (ya comprado por Oscar). Cómo se escribe en la identidad (mayúsculas, logotipo) se decide en B2. | Cerrada | 2026-10-09 |
+
+## Funcionalidades (pasos A3 y A5)
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 8 | Funcionalidades de la versión 1 con su criterio de aceptación (F1 a F19; F20 a F23 con la decisión 19; F24 a F26 con A7) y candidatas para después: `funcionalidades.md`. | Cerrada (Oscar aprueba el documento el 2026-10-10). Actualizado en A7 (2026-10-11) con las decisiones 30 a 34; las preguntas de su §6 se resuelven con las decisiones 35 a 38 | 2026-10-09 |
+| 9 | Aviso de marca en un extremo por la posición de la marca en la curva, no por el paso: salta si la L de la marca está más cerca de la curva en t = 0,1 que en t = 0,2, o en t = 0,9 que en t = 0,8. Con 11 pasos es la regla del curso (4.096 colores, 0 diferencias) y no cambia con N; cualquier regla por paso cambia con N en 298 a 1.912 de 4.080 colores. Base: `funcionalidades.md` §2 y `comparacion/avisos.mjs`. Sustituye a "por posición del paso" del plan y de `nombres.md` §4. | Sustituida por la decisión 35 (la misma idea sobre la escalera de luminancia) | 2026-10-09 |
+| 10 | Neutros con N pasos: sus curvas (L de `neutral` y C de `gray`) se remuestrean con PCHIP como las del color (A4); con 11 pasos dan los hex del curso. | Sustituida por la decisión 30: los neutros siguen la escalera de luminancia, con el croma de `gray` y el tinte; con 11 pasos ya no dan los hex del curso. | 2026-10-09 |
+| 11 | Exportación: las dos escalas completas, sin elegir pasos (la columna "Exportar" del curso, D46, pasa a candidata); CSS y `@theme` con hex; en `@theme`, cada paleta precedida de `--color-<paleta>-*: initial;` para no mezclarse con una paleta de Tailwind del mismo nombre. | Cerrada (con la 8, 2026-10-10) | 2026-10-09 |
+| 12 | Contraste: el veredicto de cada nivel se calcula sin redondear y el ratio se muestra truncado a dos decimales (redondeado, `#0078D7` con blanco se lee 4,50 y no cumple AA). | Cerrada (con la 8, 2026-10-10) | 2026-10-09 |
+| 13 | Idioma de la versión 1: solo inglés. Los documentos del proyecto siguen en español. | Cerrada (Oscar) | 2026-10-10 |
+| 14 | El gráfico de la curva de referencia (F3; con el método D, curva de croma) entra en la versión 1. | Cerrada (Oscar) | 2026-10-10 |
+| 15 | El usuario elige cuántos pasos exporta con N (F2); no se añaden las casillas "Exportar" del curso (D46). Confirma la parte de exportación de la decisión 11. | Cerrada (Oscar) | 2026-10-10 |
+| 16 | Curvas de referencia de otros sistemas: fuera de la versión 1, candidatas para después. La versión 1 usa las 17 de Tailwind CSS. Con el método D, una curva solo da la forma del croma. | Cerrada (Oscar) | 2026-10-10 |
+| 17 | Rango de N: mínimo 3; máximo según la convención: Tailwind 16 y SDS 19 (desde 17 y 20 pasos sus nombres redondeados a 50 se repiten), Radix y personalizada 30 (tope práctico sin medida; la decisión 29 lo revisa en B3). Sustituye al 5 a 15 de la decisión 2, que no tenía motivo medido. Base: `funcionalidades.md` §5 y `comparacion/limite.mjs` y `rango.mjs`. | Cerrada (Oscar) | 2026-10-10 |
+| 18 | Nota de pasos muy juntos (F12.4): cuando un salto de L entre pasos vecinos es menor que el más pequeño de las paletas de Tailwind CSS (0,014), medido con la L del motor, no con la del hex. Con el método D, medido de nuevo en A7 (`funcionalidades.md` F12.4). | Cerrada (Oscar) | 2026-10-10 |
+| 19 | Paletas semánticas (danger, warning, success, info) en la versión 1, desactivadas por defecto y activables una a una (F20 a F23). Si en el desarrollo no convencen, se ocultan o se quitan. Base: `semanticas.md`. | Cerrada (Oscar) | 2026-10-10 |
+| 20 | Propuesta por rol: una paleta de Tailwind CSS remuestreada (A4), sin atar croma ni tono a la marca, elegida entre las que caen en el margen de tono de 9 sistemas reales (danger 21 a 30: red; warning 43 a 90: amber, orange, yellow; success 138 a 168: green, emerald; info 218 a 267: blue, sky); por defecto, la más cercana a la mediana (red, amber, green, blue). Base: `semanticas.md` §1 a §3 y `comparacion/roles.mjs`. | Cerrada (Oscar sigue la recomendación) | 2026-10-10 |
+| 21 | Colisión de la marca con un rol: ΔE oklab menor que 0,05 entre la marca y la escala del rol en la L de la marca; no se comprueba si la marca no tiene croma o está en un extremo (decisión 9). | Provisional (sin validación perceptual propia; se revisa en B3 y C5). Con el método D se mide a la misma luminancia relativa, no a la misma L (decisión 37); el umbral sigue provisional | 2026-10-10 |
+| 22 | Si la marca colisiona, la paleta del margen más alejada de la marca que no colisione con ella ni con otro rol; si no hay ninguna (siempre en danger, que solo tiene red), se mantiene la de por defecto y se avisa recomendando icono y texto (WCAG 2.2, 1.4.1). No se admite rose para danger: ningún sistema lo usa. | Cerrada (Oscar sigue la recomendación) | 2026-10-10 |
+| 23 | Info no se comprueba contra la marca: Ant Design usa el mismo hex para primario e info y Carbon el mismo tono. | Cerrada (Oscar sigue la recomendación) | 2026-10-10 |
+| 24 | Color propio para un rol: la app no lo cambia; avisa si colisiona con la marca (danger, warning, success) o con otro rol activo, y pone una nota si su tono está fuera del margen del rol. | Cerrada (Oscar sigue la recomendación) | 2026-10-10 |
+
+## UX (paso B1)
+
+Propuestas de `ux.md` §1. Oscar sigue las recomendaciones el 2026-10-11 (preguntas de `ux.md` §11).
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 25 | El resultado se calcula al momento, sin botón "Generar"; no hay estado desactualizado ni pulso (C27 y C30 del curso no pasan a la app). Seis escalas de 30 pasos se recalculan en 1,5 ms (Node 22; en móvil se comprueba en C4). Con la decisión 30, las seis escalas de 30 pasos tardan 115 ms en el prototipo y de 22 a 25 ms con tablas (decisión 38). | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-10 |
+| 26 | El resultado usa siempre los últimos valores válidos; el campo con error dice con qué valor sigue el resultado y la exportación se bloquea mientras haya errores. N y convención se validan juntos; con nombres personalizados no válidos, el resultado sigue a N con "Names pending". | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-10 |
+| 27 | Pantalla: ajustes a la izquierda y resultado a la derecha en escritorio, una columna en móvil; tiras de todas las escalas a la vista, una tabla cada vez con pestañas y una lista única de avisos y notas con enlace a su fila. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-10 |
+| 28 | "Suggested" es una opción de los selectores de curva y de paleta de cada rol, para volver a la propuesta; el gráfico de la curva es una línea de tamaño fijo con N puntos. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-10 |
+| 29 | Se mantiene el máximo de 30 pasos de la decisión 17 hasta ver las pantallas en B3. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-10 |
+| 39 | Regla de contraste junto a las tiras con el texto de F26 y dos filas de marcas (White AA y Black AA) alineadas con los pasos (U9). Es lo que hace visible el valor del método y no obliga a abrir la tabla. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 40 | La sección "How it works" entra en la versión 1, breve y al final de la página: explica la escalera de contraste, el paso de la marca y la curva como forma del croma, con las fuentes y el crédito de las curvas de Tailwind CSS (MIT, A5). Motivo: el método no es el habitual, y saber por qué la marca cae en un paso o por qué un paso tiene su contraste ayuda a usarlo bien. | Cerrada (recomendación de Claude con los criterios de Oscar, 2026-10-11) | 2026-10-11 |
+| 41 | Se sigue la propuesta A del artifact "Wireframes de colorgods": ajustes al lado y resultado a la derecha en escritorio, una columna en móvil. Motivo: con cálculo al momento, el efecto de cada ajuste se ve sin desplazarse (U3), y es la que describe `ux.md`. La propuesta B queda como referencia. | Cerrada (recomendación de Claude con los criterios de Oscar, 2026-10-11) | 2026-10-11 |
+
+## Dirección del método (paso A6)
+
+Oscar pide lo mejor y lo más actual, acepta seguir las recomendaciones y pide reflejarlas en los documentos (2026-10-11). Base: `direccion.md` y `competencia.md`; scripts `comparacion/contraste.mjs`, `contraste2.mjs`, `tope.mjs` y `marca.mjs`; prototipo de referencia `comparacion/metodo-d.mjs`.
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 30 | El paso es un nivel de contraste (método D). Cada paso de todas las escalas (color, roles y neutros) tiene la misma luminancia relativa: la mediana, en esa posición, de las 17 paletas de color de Tailwind CSS. El croma sigue la curva elegida en la L del paso, con la proporción de croma de la decisión 4; el tono es el de la marca; la marca sustituye al paso de luminancia más cercana y conserva su hex y su contraste. Con N de 3 a 30 y los 13 colores de prueba, el contraste de un mismo paso difiere como mucho un 1,4 % entre colores (sin el paso de la marca, que difiere hasta un factor de 1,24, `a7.mjs` punto 9). Coste: más recorte (1.172 de 4.080 colores con algún paso recortado más del 20 %, frente a 828). | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 31 | La marca no se puede mover de paso: con la decisión 30, el nombre del paso es su contraste. La app explica por qué una marca oscura cae en un paso oscuro. Scale y ColorScale sí lo permiten. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 32 | Tope de croma opcional, desactivado por defecto: ningún paso supera el croma de la marca, sin cambiar su luminancia. Entra en la versión 1. Con `#0E4C4C` da una familia apagada; con `#33CC99` no cambia nada. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 33 | Giro de tono por pasos (Scale, ColorScale): fuera de la versión 1, candidata. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 34 | Exportación de la versión 1 sin cambios (DTCG en sRGB con hex para Figma, CSS y `@theme`). Candidatas: DTCG 2025.10 con `oklch` y `hex` de alternativa, CSS con `oklch()` y P3; antes, probar en C5 si la importación de Figma acepta `oklch`. Primera candidata después de la versión 1: revisar una escala existente pegando sus hex. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+
+## Funcionalidades con la dirección (paso A7)
+
+Propuestas de `funcionalidades.md` §6; Oscar sigue las recomendaciones el 2026-10-11. Medidas: `comparacion/a7.mjs` (salida en `a7-salida.txt`) y `a7b.mjs`.
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 35 | Aviso de marca en un extremo sobre la escalera: salta si la luminancia relativa de la marca está más cerca, en log Y, de la escalera en t = 0,1 que en t = 0,2, o en t = 0,9 que en t = 0,8. No depende de N ni de la curva. Con 11 pasos avisa exactamente cuando la marca cae en 50, 100, 900 o 950 (4.080 colores); con los 13 colores de prueba avisan los mismos que con la decisión 9. Sustituye a la 9. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 36 | Regla de contraste por paso (F26) junto a las tiras: desde qué paso el texto sobre blanco cumple AA y hasta cuál sobre negro, y lo mismo para 3, en todas las escalas visibles salvo el paso de la marca, que se dice aparte con su contraste. Con 11 pasos: blanco desde 700, negro hasta 600. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 37 | Colisión de la marca con un rol (decisión 21) medida con el color del rol de la misma luminancia relativa que la marca. Con los 13 colores da los mismos avisos que antes (danger con rojo puro y rosa pastel). El umbral 0,05 sigue provisional. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+| 38 | Tiempo de cálculo: se mantiene el cálculo al momento (decisión 25); C3 optimiza el método D (prototipo 115 ms, con tablas de 22 a 25 ms según la ejecución, para seis escalas de 30 pasos, en Node) y, si en C4 un móvil de gama media nota retraso, el cálculo pasa a segundo plano (Web Worker). | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+
+## Repositorio (paso C2)
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 42 | Licencia MIT, con Oscar Carballido como titular. El repositorio ya tenía un `LICENSE` MIT del commit inicial con el titular "ocarballido"; se cambia el titular por el nombre, como en la autoría del README. | Cerrada (Oscar) | 2026-10-12 |
+| 43 | Prefijo de las variables de la app: `--cg-` en vez de `--t101-`. Motivo: la app no lleva la marca de DesignToken101 (A5), y con el mismo prefijo las variables de los dos proyectos se confundirían en el código y en Figma. `terrazzo.config.mjs` ya usa `--cg-`; Oscar cambia el *code syntax* Web de las variables de ColorScaleUI a `--cg-` antes de exportarlas. | Cerrada (Oscar sigue la recomendación) | 2026-10-12 |
+| 44 | Documentos: la fuente es `docs/` del repositorio. Cuando el pull request de C2 se fusione en `main`, se borran las copias del Project y queda en él solo una nota que apunta al repositorio; antes no, porque hasta la fusión los documentos solo existen en una rama. Desde entonces, cada chat lee `docs/decisiones.md` y `docs/plan.md` del repositorio (W2). | Cerrada (Oscar sigue la recomendación) | 2026-10-12 |
+
+## Forma de trabajo
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| W1 | Se avanza por los pasos de `docs/plan.md`, en su orden: primero qué se quiere (funcionalidades por versión), luego UX, diseño en Figma y, al final, stack, repositorio y código. No se escribe código de la app hasta la fase C. | Cerrada | 2026-10-09 |
+| W2 | Un paso por chat. Cada chat empieza leyendo `docs/decisiones.md` y `docs/plan.md`, y termina actualizando los dos. | Provisional (propuesta con el plan) | 2026-10-09 |
+| W3 | Criterio para decidir, dicho por Oscar (2026-10-11): lo más lógico para la app, lo más lógico y de ayuda para los usuarios, y lo más actual en selección de escalas de color para sistemas de diseño y UI. Las recomendaciones de Claude se justifican con estos tres criterios. | Cerrada (Oscar) | 2026-10-11 |

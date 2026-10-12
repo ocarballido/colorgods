@@ -1,0 +1,84 @@
+{
+  "radius": {
+    "control": {
+      "$type": "dimension",
+      "$value": "{radius.200}",
+      "$description": "Botones, campos y chips",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:13:128",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--cg-radius-control)"
+        },
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:c7399e2288142032bf3f2c2875dc116e7306901e/-1:-1",
+          "targetVariableName": "radius/200",
+          "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    },
+    "container": {
+      "$type": "dimension",
+      "$value": "{radius.400}",
+      "$description": "Tarjetas, Callouts y bloques de código",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:13:129",
+        "com.figma.scopes": [
+          "CORNER_RADIUS"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--cg-radius-container)"
+        },
+        "com.figma.aliasData": {
+          "targetVariableId": "VariableID:40913dfbc4a07e1930d52553e00f889641dbdd90/-1:-1",
+          "targetVariableName": "radius/400",
+          "targetVariableSetId": "VariableCollectionId:d064d6b7d38f4a24c50cc6de0eb1a838769b9e17/-1:-1",
+          "targetVariableSetName": "Primitives"
+        }
+      }
+    }
+  },
+  "size": {
+    "content": {
+      "max-width": {
+        "$type": "dimension",
+        "$value": {
+          "value": 960,
+          "unit": "px"
+        },
+        "$description": "Ancho máximo del contenido de la lección: 960 px = 60rem (V27; antes 720 px). Incluye el padding horizontal (space/400) a cada lado: ≈ 928 px de texto (D20). Valor directo (excepción a la regla 6): no hay escala de tamaños.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:55:668",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--cg-size-content-max-width)"
+          }
+        }
+      }
+    },
+    "sidebar": {
+      "width": {
+        "$type": "dimension",
+        "$value": {
+          "value": 304,
+          "unit": "px"
+        },
+        "$description": "Ancho del sidebar en escritorio y del panel de navegación móvil: 304 px = 19rem (V16, V25). Valor directo (excepción a la regla 6): no hay escala de tamaños.",
+        "$extensions": {
+          "com.figma.variableId": "VariableID:75:302",
+          "com.figma.scopes": [
+            "WIDTH_HEIGHT"
+          ],
+          "com.figma.codeSyntax": {
+            "WEB": "var(--cg-size-sidebar-width)"
+          }
+        }
+      }
+    }
+  }
+}

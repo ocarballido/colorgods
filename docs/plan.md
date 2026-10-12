@@ -1,0 +1,52 @@
+# Escalas de color: Plan
+
+Pasos en orden lógico, para avanzar según el tiempo y los tokens disponibles. Cada paso dice qué sale, dónde queda, quién lo hace, de qué depende y su tamaño aproximado (**S**: un chat corto; **M**: un chat completo; **L**: varios chats).
+
+Regla de trabajo (W2, provisional): un paso por chat. El chat empieza leyendo `docs/decisiones.md` y este plan, y termina marcando el paso como hecho y registrando las decisiones. Así ningún chat necesita el historial de los anteriores.
+
+Estado: ✅ hecho · ◐ propuesto, pendiente de aprobación · ▶ siguiente · ○ pendiente.
+
+## Hecho
+
+| Paso | Resultado |
+|---|---|
+| ✅ 0 Comparación con Leonardo y Scale | `docs/investigacion-comparacion.md` y `docs/comparacion/compare.mjs`. Decisiones 1, 2 y 5 cerradas (2026-10-09). |
+| ✅ A1 Dónde cae la marca | `docs/investigacion-comparacion.md` §4 y `docs/comparacion/anclaje.mjs`. Decisión 4 cerrada con el método C; A3 sustituida (2026-10-09). |
+| ✅ A2 Nombres con N pasos | `docs/nombres.md` y `docs/comparacion/nombres.mjs`. Decisión 3 cerrada: Tailwind y SDS por posición redondeada a 50, Radix de 1 a N con nota, personalizada con validación (2026-10-09). |
+| ✅ A4 Nombre de la app | Decisión 7 cerrada: colorgods, en colorgods.com (2026-10-09). |
+| ✅ A3 Funcionalidades por versión | `docs/funcionalidades.md` y `docs/comparacion/avisos.mjs`, `limite.mjs` y `rango.mjs`. Aprobado por Oscar el 2026-10-10: decisiones 8 a 18 cerradas (entre otras, solo inglés, gráfico de la curva, N de 3 a 16, 19 o 30 según la convención y nota de pasos muy juntos). |
+| ✅ A5 Paletas semánticas | `docs/semanticas.md` y `docs/comparacion/roles.mjs`; revisión visual en el artifact "Semánticas de colorgods". Decisiones 19 a 24 (2026-10-10): entran en la versión 1 (F20 a F23 en `funcionalidades.md`); umbral de colisión provisional. |
+| ✅ A6 Dirección del método | `docs/direccion.md` y `docs/competencia.md`, con `docs/comparacion/contraste.mjs`, `contraste2.mjs`, `tope.mjs`, `marca.mjs`, `colorscale.mjs` y `scale-enlace.mjs`. Decisiones 30 a 34 cerradas (Oscar sigue la recomendación, 2026-10-11): el paso es un nivel de contraste en todas las escalas (método D), la marca no se mueve de paso, tope de croma opcional, sin giro de tono en la versión 1, exportación sin cambios. |
+
+## Fase A. Pendiente
+
+| Paso | Qué se hace | Sale | Quién | Depende de | Tamaño |
+|---|---|---|---|---|---|
+| ✅ A7 Funcionalidades con la dirección | Hecho el 2026-10-11: `funcionalidades.md` actualizado (§0 el método, F3, F7, F8, F10, F12.2 a F12.4, F13, F18, F21 a F23; nuevas F24 tope de croma, F25 mismo contraste por paso y F26 regla de contraste por paso), con `docs/comparacion/metodo-d.mjs`, `a7.mjs`, `a7b.mjs` y `a7-fixtures.json`; `semanticas.md` §6, `ux.md` (U9) y la propuesta A del artifact "Wireframes de colorgods". Oscar sigue las cuatro recomendaciones de `funcionalidades.md` §6: decisiones 35 a 38 cerradas. | `funcionalidades.md` actualizado | Claude propone, Oscar aprueba | A6 | M |
+
+## Fase B. UX y diseño
+
+| Paso | Qué se hace | Sale | Quién | Depende de | Tamaño |
+|---|---|---|---|---|---|
+| ✅ B1 UX | Flujo, estructura de la pantalla, estados, tablas, par de contraste, exportación con varias escalas, teclado y lector de pantalla (WCAG 2.2 AA), móvil, y si el resultado se calcula al momento o con un botón. Propuesta del 2026-10-10 en `docs/ux.md`: cálculo al momento, resultado con los últimos valores válidos, tiras de todas las escalas y una tabla por pestañas, lista única de avisos (decisiones 25 a 29, abiertas). Dos propuestas de wireframe (A: ajustes al lado; B: resultado primero con inspector del paso), escritorio y móvil, en el artifact "Wireframes de colorgods" (2026-10-10). El 2026-10-11 Oscar sigue las recomendaciones de `ux.md` §11 y se elige la propuesta A (decisiones 25 a 29, 39 a 41). Con A7 (2026-10-11) se añaden el tope de croma, la regla de contraste por paso junto a las tiras (U9) y los nuevos textos, en `ux.md` y en la propuesta A del artifact. | `docs/ux.md` con esquemas de pantalla | Claude propone, Oscar aprueba | A3, A5, A7 | M |
+| ✅ B2 Identidad y sistema de diseño en Figma | Hecho por Oscar (lo comunica el 2026-10-12). Archivo: https://www.figma.com/design/wsj9EF7WGWQJMknOlQud0m/ColorScaleUI ("ColorScaleUI"). Colores, tipografía, espaciado y componentes como variables y componentes de Figma; el sistema es casi idéntico al de DesignToken101, con cambios menores en algunos componentes (Oscar). Comprobado en C2 (2026-10-12): las variables se exportan como DTCG y Terrazzo las pasa a CSS sin errores. | Archivo de Figma | Oscar | A4, B1 | L |
+| ◐ B3 Pantallas en Figma | Oscar tiene las pantallas de escritorio, tableta y móvil (2026-10-12), en la página "Templates" del archivo de B2: nodos `2015-1923`, `2013-5591`, `2016-2486`, `2016-3788`, `2016-5582` y `2017-11147`. Antes de C4 queda: comprobar que están todos los estados de `ux.md` §8, revisar la decisión 29 (máximo de 30 pasos) y las medidas de las tiras, y, como `ux.md` solo describe escritorio y móvil, anotar en `ux.md` desde qué ancho se usa cada disposición. | Pantallas aprobadas | Oscar, con Claude | B2 | M |
+
+## Fase C. Proyecto y código
+
+| Paso | Qué se hace | Sale | Quién | Depende de | Tamaño |
+|---|---|---|---|---|---|
+| ✅ C1 Stack y publicación (decisión 6) | Hecho el 2026-10-12: `docs/stack.md`. Oscar acepta la propuesta, repositorio público y publicación en Vercel (en vez de GitHub Pages), con el dominio en CDMON. | Decisión 6 cerrada | Claude propone, Oscar decide | A3 | S |
+| ✅ C2 Repositorio | Oscar crea el repositorio público (hecho el 2026-10-12: github.com/ocarballido/colorgods) y elige la licencia. Se desarrolla en local; Vercel se conecta al final, en C6 (Oscar, 2026-10-12). Encargo a desarrollo: estructura con el stack de la decisión 6, licencia, `docs/` (se mueven aquí los documentos del Project), copia del motor y sus pruebas desde `f4885d7` con la cabecera de origen, `npm test && npm run build` como comprobación antes de cada cambio, y las variables de Figma (B2) en DTCG pasadas a CSS con Terrazzo. Comprobaciones: las 7 pruebas copiadas pasan; `npm run build` construye la página vacía; el CSS de Terrazzo tiene las variables de Figma; peso del JavaScript y el CSS comprimidos de la página vacía, para fijar el presupuesto (`stack.md` §4). **Estado (2026-10-12), rama `c2-repositorio`, pull request #1:** hechos la licencia (decisión 42), la estructura (`stack.md` §6), el motor y `figma-to-dtcg.mjs` con su cabecera, la configuración de Terrazzo con el prefijo `--cg-` (decisión 43), los 31 documentos del Project y el README. Comprobado en el ordenador de Oscar: `npm install` (95 paquetes, 0 vulnerabilidades); `npm test`, 7 de 7; `npm run build` sin errores; `npm run tokens` sin errores (6 archivos DTCG, 162 tokens, 195 variables `--cg-` en `tokens.css`). Peso de la página vacía, sin los tokens: JavaScript 67.714 B y CSS 1.402 B con gzip (`stack.md` §4). Con los tokens importados en `src/index.css`: JavaScript 67.714 B y CSS 2.969 B con gzip, base del presupuesto. El *code syntax* de `color/border/success/default` tenía tres guiones (`---cg-`); Oscar lo corrige en Figma y vuelve a exportar (el CSS no cambia). | Repositorio con las pruebas en verde | Oscar y Claude Code | C1 | S |
+| ○ C3 Motor a N pasos | Primero las pruebas y luego el cambio: `STEPS` fijo pasa a N pasos con nombres, escalera de luminancia, ancla y proporción de croma según la decisión 30, nombres según la 3, neutros según la 30, tope de croma según la 32 y aviso de extremo según la 35. Las pruebas de hex copiadas del curso se sustituyen (A3 sustituida). Comprobaciones: los criterios de F7, F8, F12.2 a F12.4, F21, F22, F24 a F26 de `funcionalidades.md`; con los 13 colores y N = 11, los hex de color, neutros y roles coinciden con `docs/comparacion/a7-fixtures.json` (generado por `metodo-d.mjs`); nombres como en la decisión 3; tiempo de cálculo según la decisión 38. | Motor generalizado | Claude Code | C2, A2, A5, A7 | M |
+| ○ C4 Interfaz | Por partes, un encargo por parte: entrada, tabla con contraste, par de contraste, avisos, roles semánticos, exportación. Cada encargo con solo sus comprobaciones (los criterios de `funcionalidades.md` y las de `ux.md` §10). | Interfaz completa | Claude Code | C3, B3 | L |
+| ○ C5 Exportaciones probadas | DTCG importado en Figma como en §7 del curso; CSS y `@theme` usados en una página de prueba, con al menos un nombre que no sea de la paleta de Tailwind (por ejemplo `bg-marca-150`) y, con N = 5, una clase de Tailwind que la escala no tiene (`bg-neutral-100`) para comprobar que `--color-neutral-*: initial;` la quita. Además, probar si la importación de Figma acepta DTCG con `colorSpace` `oklch` (decisión 34). | Prueba documentada | Oscar y Claude | C4 | M |
+| ○ C6 Pruebas y publicación | Guion de pruebas manuales (adaptado del bloque A del curso y de `ux.md` §10), accesibilidad, conexión del repositorio con Vercel (construcción `npm test && npm run build`), DNS de colorgods.com en CDMON, publicación de la versión 1 y enlace desde DesignToken101. | Versión 1 publicada | Oscar y Claude Code | C5 | M |
+
+## Notas
+
+- **Orden y paralelo.** C2 y C3 no dependen del diseño: si en algún momento hay más tiempo de desarrollo que de diseño, se pueden adelantar (C3 después de A7). Con la decisión 6 cerrada (2026-10-12), C2 se puede hacer ya; C4 espera a que B3 quede cerrado.
+- **Dónde viven los documentos.** Hasta C2, en el Project. Desde C2 (2026-10-12), en `docs/` del repositorio; las copias del Project se borran al fusionar C2 en `main` y queda una nota que apunta al repositorio (decisión 44).
+- **Ahorro de tokens.** Cada documento es corto y autosuficiente; los chats leen solo lo que su paso necesita. Las pruebas largas se hacen con scripts y se guardan las cifras, no las salidas completas.
+- **Curso y app con 11 pasos.** Desde la decisión 30, la app y DesignToken101 dan hex distintos con 11 pasos (distinta L y croma). Si algún día se quiere que coincidan, el cambio va en el curso (`build()` y `tests/fixtures/`), no en la app.
+- **Fuentes de A5.** Los repositorios de los sistemas de diseño se leyeron en GitHub (el registro de npm no es accesible desde el entorno); commits y archivos en `semanticas.md` §1.

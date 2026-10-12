@@ -1,0 +1,6 @@
+/* Tailwind solo busca clases en src/ (la ruta es relativa a este archivo), como en DesignToken101 (V44). */
+@import "tailwindcss" source(".");
+/* Capa 1: variables --cg-* con sus modos. Generado por `npm run tokens`. */
+@import "./styles/tokens.css";
+/* Capa 2: @theme inline de Tailwind que apunta a la capa 1. Generado por `npm run tokens`. */
+@import "./styles/theme.css";
