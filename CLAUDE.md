@@ -31,7 +31,7 @@ App web de una sola página que genera escalas tonales de color: N pasos (3 a 30
 
 ## Forma de trabajo
 
-- Un paso de `docs/plan.md` por sesión. Antes de empezar, lee `docs/decisiones.md` y `docs/plan.md`.
+- Un encargo por sesión: un paso de `docs/plan.md`, o una parte de un paso si el plan lo divide (C4 va por partes). Antes de empezar, lee `docs/decisiones.md` y `docs/plan.md`.
 - Una rama y un pull request por encargo. La skill `/encargo` recorre el proceso entero.
 - Antes de cada pull request: `npm test && npm run build` y `npm run lint`, sin errores (no hay CI en GitHub, decisión 52). Después, los revisores `revisor-codigo`, `revisor-seguridad` y, si cambia `src/` o `index.html`, `revisor-accesibilidad`.
 - Al terminar, actualiza la fila del paso en `docs/plan.md` y registra en `docs/decisiones.md`, con fecha, lo que decidas que no esté ya decidido.

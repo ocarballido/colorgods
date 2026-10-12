@@ -1,6 +1,6 @@
 ---
 name: encargo
-description: Lleva un encargo de desarrollo de colorgods de principio a fin, un paso de docs/plan.md por sesión, lee decisiones y plan, crea la rama, hace el trabajo, pasa las comprobaciones y los revisores, actualiza los documentos y prepara el pull request.
+description: Lleva un encargo de desarrollo de colorgods de principio a fin (un paso de docs/plan.md, o una parte si el plan lo divide), lee decisiones y plan, crea la rama, hace el trabajo, pasa las comprobaciones y los revisores, actualiza los documentos y prepara el pull request.
 argument-hint: <paso del plan, por ejemplo C4> <texto del encargo>
 disable-model-invocation: true
 ---

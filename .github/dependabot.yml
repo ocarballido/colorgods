@@ -14,5 +14,10 @@ updates:
       npm:
         patterns:
           - '*'
+      # Si se activan las actualizaciones de seguridad en GitHub, también llegan juntas en un pull request.
+      npm-seguridad:
+        applies-to: security-updates
+        patterns:
+          - '*'
     commit-message:
       prefix: 'Dependencias'

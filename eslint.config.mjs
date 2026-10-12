@@ -20,7 +20,7 @@ export default defineConfig(
   js.configs.recommended,
   tseslint.configs.recommended,
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
     extends: [
       react.configs.flat.recommended,
       react.configs.flat['jsx-runtime'],

@@ -1,24 +1,29 @@
 // PostToolUse (Edit, Write), en este orden para que las pruebas lean el archivo ya formateado:
 // 1. Prettier y ESLint sobre el archivo editado (decisión 50). Prettier respeta .prettierignore y ESLint sus ignores.
 // 2. Si el archivo está en tools/ o tests/, npm test.
-// Si ESLint o las pruebas fallan, sale con 2 y Claude recibe el error para corregirlo.
+// Todo se ejecuta en la copia de trabajo del archivo (la raíz o su worktree), para probar lo que se ha editado.
+// Si ESLint (errores o advertencias) o las pruebas fallan, sale con 2 y Claude recibe el error para corregirlo.
 import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
-import { RAIZ, avisarYSalir, leerEntrada, rutaRelativa } from './comun.mjs';
+import { RAIZ, avisarYSalir, leerEntrada, ubicar } from './comun.mjs';
 
 const entrada = await leerEntrada();
-const rel = rutaRelativa(entrada);
-if (!rel) process.exit(0);
+const sitio = ubicar(entrada);
+if (!sitio) process.exit(0);
+const { rel, base } = sitio;
 const archivo = entrada.tool_input.file_path;
-const ejecutar = (orden, args) => spawnSync(orden, args, { cwd: RAIZ, encoding: 'utf8' });
-const bin = (nombre) => path.join(RAIZ, 'node_modules', '.bin', nombre);
+const ejecutar = (orden, args) => spawnSync(orden, args, { cwd: base, encoding: 'utf8' });
+// Un worktree puede no tener node_modules: entonces se usan los de la raíz.
+const bin = (nombre) =>
+  [base, RAIZ].map((d) => path.join(d, 'node_modules', '.bin', nombre)).find((p) => fs.existsSync(p)) ?? nombre;
 
 const prettier = ejecutar(bin('prettier'), ['--write', '--ignore-unknown', '--log-level', 'warn', archivo]);
 if (prettier.error) avisarYSalir('No se pudo ejecutar Prettier (¿falta npm install?).', String(prettier.error));
 if (prettier.status !== 0) avisarYSalir(`Prettier no pudo formatear ${rel}:`, prettier.stderr + prettier.stdout);
 
 if (/\.(m|c)?(j|t)sx?$/.test(archivo)) {
-  const eslint = ejecutar(bin('eslint'), ['--no-warn-ignored', archivo]);
+  const eslint = ejecutar(bin('eslint'), ['--no-warn-ignored', '--max-warnings', '0', archivo]);
   if (eslint.error) avisarYSalir('No se pudo ejecutar ESLint (¿falta npm install?).', String(eslint.error));
   if (eslint.status !== 0)
     avisarYSalir(`ESLint encuentra problemas en ${rel}; corrígelos:`, eslint.stdout + eslint.stderr);
