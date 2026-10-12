@@ -1,0 +1,38 @@
+N 13: colores con nota 1 de 13; neutros no; rol red no
+N 14: colores con nota 1 de 13; neutros no; rol red no
+N 15: colores con nota 1 de 13; neutros no; rol red no
+N 16: colores con nota 1 de 13; neutros no; rol red no
+N 17: colores con nota 6 de 13; neutros no; rol red sí
+N 18: colores con nota 11 de 13; neutros sí; rol red sí
+N 19: colores con nota 11 de 13; neutros sí; rol red sí
+N 20: colores con nota 13 de 13; neutros sí; rol red sí
+rol red: A5 5 pasos (máx 4 %); método D 7 pasos (máx 21 %)
+rol amber: A5 11 pasos (máx 58 %); método D 11 pasos (máx 55 %)
+rol yellow: A5 11 pasos (máx 59 %); método D 11 pasos (máx 58 %)
+rol orange: A5 11 pasos (máx 34 %); método D 11 pasos (máx 34 %)
+rol green: A5 3 pasos (máx 10 %); método D 4 pasos (máx 11 %)
+rol emerald: A5 5 pasos (máx 11 %); método D 5 pasos (máx 11 %)
+rol blue: A5 7 pasos (máx 19 %); método D 9 pasos (máx 25 %)
+rol sky: A5 10 pasos (máx 18 %); método D 10 pasos (máx 18 %)
+Con tablas: seis escalas de 30 pasos en 24,8 ms; hex distintos de metodo-d.mjs: color 0 de 29, roles 1 de 120
+a) N 3: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 4: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 5: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 6: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 7: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 8: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 9: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 10: colores 0 de 13; roles 0 de 8; neutros 0 de 13
+a) N 11: colores 1 de 13; roles 0 de 8; neutros 0 de 13
+a) N 12: colores 1 de 13; roles 0 de 8; neutros 0 de 13
+a) N 13: colores 1 de 13; roles 0 de 8; neutros 0 de 13
+a) N 14: colores 1 de 13; roles 0 de 8; neutros 0 de 13
+a) N 15: colores 1 de 13; roles 0 de 8; neutros 0 de 13
+a) N 16: colores 1 de 13; roles 0 de 8; neutros 0 de 13
+a) N 17: colores 6 de 13; roles 3 de 8; neutros 0 de 13
+a) N 18: colores 11 de 13; roles 6 de 8; neutros 13 de 13
+a) N 19: colores 11 de 13; roles 6 de 8; neutros 13 de 13
+a) Crema, 11 pasos: salto entre la marca (50) y 100: 0,0134
+b) Con tope y con las curvas red, blue y yellow (13 colores) más los 8 roles, N de 3 a 30: mayor cociente entre contrastes del mismo paso 1,0147
+c) Nivel 4.5: sobre blanco desde 700; sobre negro hasta 600 (con y sin tope)
+c) Nivel 3: sobre blanco desde 600; sobre negro hasta 700 (con y sin tope)
