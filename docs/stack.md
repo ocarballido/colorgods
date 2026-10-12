@@ -50,18 +50,20 @@ Decidido por Oscar el 2026-10-12: Vercel en lugar de GitHub Pages. La propuesta 
 
 No se da cifra sin medirla: el registro de npm no es accesible desde este entorno. En C2, con la página vacía de Vite y React construida, se mide el JavaScript y el CSS (comprimidos) y se fija ahí el presupuesto de la versión 1. Si React pesa más de lo que se considere aceptable para la herramienta, se prueba Preact con `preact/compat`.
 
-**Medida de C2 (2026-10-12): pendiente.** El entorno de desarrollo de C2 tampoco llega al registro de npm ni a nodejs.org (la conexión se rechaza), así que no se pudo instalar nada ni construir. Se mide en el ordenador de Oscar, con Node 24, en la rama `c2-repositorio`:
+**Medida de C2 (2026-10-12).** Hecha por Oscar en su ordenador, en la rama `c2-repositorio`, con Vite 8.3.4, antes de importar los tokens en `src/index.css`. El entorno de desarrollo de C2 no llega al registro de npm, por eso se midió allí. Comando:
 
 ```sh
-npm install
 npm run build
 node -e "const fs=require('fs'),z=require('zlib'),p='dist/assets/';for(const f of fs.readdirSync(p).filter(f=>/\.(js|css)$/.test(f)))console.log(f,fs.statSync(p+f).size,'B;',z.gzipSync(fs.readFileSync(p+f),{level:9}).length,'B con gzip')"
 ```
 
-| Página vacía | Sin comprimir | gzip |
+| Página vacía (React 19, Tailwind CSS 4, sin tokens) | Sin comprimir | gzip (nivel 9) |
 |---|---|---|
-| JavaScript | Pendiente | Pendiente |
-| CSS | Pendiente | Pendiente |
+| JavaScript | 219.548 B | 67.714 B |
+| CSS | 4.198 B | 1.402 B |
+| HTML (dato de Vite) | 0,79 kB | 0,45 kB |
+
+El JavaScript es casi todo React y React DOM: la página solo pinta un `h1`. Es la base del presupuesto de la versión 1; la cifra del presupuesto se fija con la misma medida y los tokens importados. Para referencia, los archivos que genera `npm run tokens` pesan 21.313 B (`tokens.css`, 3.646 B con gzip) y 5.434 B (`theme.css`, 1.038 B con gzip), pero cuánto CSS llega a la página lo decide Tailwind al construir, así que hay que medirlo.
 
 ## 5. Decidido (2026-10-12)
 
@@ -76,7 +78,7 @@ node -e "const fs=require('fs'),z=require('zlib'),p='dist/assets/';for(const f o
 - **Plantilla:** `react-ts` de create-vite, leída en `vitejs/vite` (commit `40fa7d7`, `packages/create-vite/template-react-ts`): `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `.gitignore`, `src/main.tsx` y las versiones de `package.json`. No se copian el logo, los estilos de ejemplo ni oxlint: el encargo pide solo los scripts `dev`, `build`, `test` y `tokens`.
 - **Versiones** (comprobadas en las etiquetas de GitHub, porque npm no responde desde el entorno): Vite `^8.3.3` (la última etiqueta es v8.3.4), `@vitejs/plugin-react` `^6.1.2`, React y React DOM `^19.3.0`, TypeScript `~6.0.2` (la de la plantilla; el curso usa 7.0.2 con Next.js), Tailwind CSS y `@tailwindcss/vite` `^4.3.3` (etiqueta v4.3.3 de `tailwindlabs/tailwindcss`), Terrazzo `2.7.1` (CLI y plugin de CSS, fijos como en el curso). `engines.node`: `24.x`. Falta `package-lock.json`: lo crea el primer `npm install` y se sube con él.
 - **Tailwind CSS** entra con el plugin de Vite (`@tailwindcss/vite`), no con PostCSS como en el curso, que usa Next.js. `src/index.css` limita la búsqueda de clases a `src/` con `source(".")`, como V44 del curso.
-- **Tokens:** `tools/figma-to-dtcg.mjs` (y sus tipos), `tokens/tokens101.resolver.json` y `tokens/code-only.tokens.json` copiados sin cambios del curso; `terrazzo.config.mjs`, copiado con un solo cambio: el prefijo `--cg-` (decisión 43). El resolver espera las mismas colecciones que en el curso (`tokens/figma/README.md`); si ColorScaleUI tiene otras, se ajusta el resolver al ver la exportación. `src/index.css` importará `src/styles/tokens.css` y `src/styles/theme.css` cuando `npm run tokens` los genere.
+- **Tokens:** `tools/figma-to-dtcg.mjs` (y sus tipos), `tokens/tokens101.resolver.json` y `tokens/code-only.tokens.json` copiados sin cambios del curso; `terrazzo.config.mjs`, copiado con un solo cambio: el prefijo `--cg-` (decisión 43). El resolver espera las mismas colecciones que en el curso (`tokens/figma/README.md`); si ColorScaleUI tiene otras, se ajusta el resolver al ver la exportación. `src/index.css` importa `src/styles/tokens.css` y `src/styles/theme.css`, que genera `npm run tokens`.
 - **Prefijo:** el *code syntax* de las variables de ColorScaleUI era `--t101-` (leído en Figma el 2026-10-12, página Templates, nodo `2015-1923`). Con la decisión 43 pasa a `--cg-`, en el código ya y en Figma cuando Oscar lo cambie, antes de exportar.
 - **Copiado tal cual y a revisar:** `terrazzo.config.mjs` da a las fuentes primero las variables de `next/font` (`--font-inter`, `--font-jetbrains-mono`), que en Vite no existen y caen en el nombre del token; `code-only.tokens.json` incluye `duration.2000` para el pulso del resultado desactualizado, que la app no tiene (decisión 25).
 
