@@ -1,0 +1,18 @@
+# Dependabot (decisión 51): un pull request semanal con todas las actualizaciones de npm juntas.
+# Las alertas de seguridad no se activan desde este archivo: Settings → Advanced Security → Dependabot alerts.
+# Cada pull request de Dependabot se comprueba con `npm test && npm run build` en Claude Code antes de fusionarlo
+# (decisión 52).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: Europe/Madrid
+    groups:
+      npm:
+        patterns:
+          - '*'
+    commit-message:
+      prefix: 'Dependencias'

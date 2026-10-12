@@ -28,7 +28,11 @@ npm test          # pruebas del motor
 npm run tokens    # variables de Figma (tokens/figma/) a CSS (src/styles/)
 npm run dev       # servidor local
 npm run build     # página estática en dist/
+npm run lint      # ESLint
+npm run format    # Prettier
 ```
+
+El desarrollo se hace con Claude Code: las instrucciones están en [`CLAUDE.md`](CLAUDE.md) y la configuración compartida en `.claude/`. Para avisar de un fallo de seguridad, [`SECURITY.md`](SECURITY.md).
 
 ## Origen
 
