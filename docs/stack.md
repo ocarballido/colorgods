@@ -50,11 +50,34 @@ Decidido por Oscar el 2026-10-12: Vercel en lugar de GitHub Pages. La propuesta 
 
 No se da cifra sin medirla: el registro de npm no es accesible desde este entorno. En C2, con la página vacía de Vite y React construida, se mide el JavaScript y el CSS (comprimidos) y se fija ahí el presupuesto de la versión 1. Si React pesa más de lo que se considere aceptable para la herramienta, se prueba Preact con `preact/compat`.
 
+**Medida de C2 (2026-10-12): pendiente.** El entorno de desarrollo de C2 tampoco llega al registro de npm ni a nodejs.org (la conexión se rechaza), así que no se pudo instalar nada ni construir. Se mide en el ordenador de Oscar, con Node 24, en la rama `c2-repositorio`:
+
+```sh
+npm install
+npm run build
+node -e "const fs=require('fs'),z=require('zlib'),p='dist/assets/';for(const f of fs.readdirSync(p).filter(f=>/\.(js|css)$/.test(f)))console.log(f,fs.statSync(p+f).size,'B;',z.gzipSync(fs.readFileSync(p+f),{level:9}).length,'B con gzip')"
+```
+
+| Página vacía | Sin comprimir | gzip |
+|---|---|---|
+| JavaScript | Pendiente | Pendiente |
+| CSS | Pendiente | Pendiente |
+
 ## 5. Decidido (2026-10-12)
 
 1. Se acepta la propuesta (Vite, React, TypeScript, Tailwind CSS 4 con Terrazzo, Node 24, pruebas con `node --test` y Playwright con axe-core).
 2. El repositorio será público: github.com/ocarballido/colorgods (creado el 2026-10-12).
 3. El dominio está registrado en CDMON; la publicación será en Vercel y los DNS se configuran cuando haya algo que publicar.
+
+## 6. Montaje del repositorio (paso C2)
+
+2026-10-12. Lo que se ha puesto y de dónde sale.
+
+- **Plantilla:** `react-ts` de create-vite, leída en `vitejs/vite` (commit `40fa7d7`, `packages/create-vite/template-react-ts`): `tsconfig.json`, `tsconfig.app.json`, `tsconfig.node.json`, `.gitignore`, `src/main.tsx` y las versiones de `package.json`. No se copian el logo, los estilos de ejemplo ni oxlint: el encargo pide solo los scripts `dev`, `build`, `test` y `tokens`.
+- **Versiones** (comprobadas en las etiquetas de GitHub, porque npm no responde desde el entorno): Vite `^8.3.3` (la última etiqueta es v8.3.4), `@vitejs/plugin-react` `^6.1.2`, React y React DOM `^19.3.0`, TypeScript `~6.0.2` (la de la plantilla; el curso usa 7.0.2 con Next.js), Tailwind CSS y `@tailwindcss/vite` `^4.3.3` (etiqueta v4.3.3 de `tailwindlabs/tailwindcss`), Terrazzo `2.7.1` (CLI y plugin de CSS, fijos como en el curso). `engines.node`: `24.x`. Falta `package-lock.json`: lo crea el primer `npm install` y se sube con él.
+- **Tailwind CSS** entra con el plugin de Vite (`@tailwindcss/vite`), no con PostCSS como en el curso, que usa Next.js. `src/index.css` limita la búsqueda de clases a `src/` con `source(".")`, como V44 del curso.
+- **Tokens:** `tools/figma-to-dtcg.mjs` (y sus tipos), `terrazzo.config.mjs`, `tokens/tokens101.resolver.json` y `tokens/code-only.tokens.json` copiados sin cambios del curso. El resolver espera las mismas colecciones que en el curso (`tokens/figma/README.md`); si ColorScaleUI tiene otras, se ajusta el resolver al ver la exportación. `src/index.css` importará `src/styles/tokens.css` y `src/styles/theme.css` cuando `npm run tokens` los genere.
+- **Copiado tal cual y a revisar:** el prefijo de las variables es `--t101-`, porque así está el *code syntax* de las variables de ColorScaleUI (leído en Figma el 2026-10-12, página Templates, nodo `2015-1923`); `terrazzo.config.mjs` da a las fuentes primero las variables de `next/font` (`--font-inter`, `--font-jetbrains-mono`), que en Vite no existen y caen en el nombre del token; `code-only.tokens.json` incluye `duration.2000` para el pulso del resultado desactualizado, que la app no tiene (decisión 25).
 
 ## Fuentes
 

@@ -4,14 +4,14 @@ Qué se ha decidido, en una línea por decisión. Si algo aquí contradice una c
 
 Estados: **Cerrada** (no se reabre sin motivo) · **Provisional** (puede cambiar antes de publicar) · **Sustituida** · **Abierta**.
 
-Mientras no exista el repositorio de la app, este archivo vive en el Project; al crearlo, pasa a `docs/decisiones.md` del repositorio.
+Desde C2 (2026-10-12), este archivo vive en `docs/decisiones.md` del repositorio github.com/ocarballido/colorgods; qué se hace con las copias del Project lo decide Oscar.
 
 ## Tomadas en el traspaso
 
 | ID | Decisión | Estado | Fecha |
 |---|---|---|---|
-| A1 | La app es un proyecto aparte de DesignToken101, con repositorio propio (`color-scales`, nombre provisional; con la decisión 7, el nombre natural es `colorgods`, se confirma en C2); DesignToken101 sigue con 11 pasos (T22, D46). | Cerrada | 2026-10-09 |
-| A2 | Se copian `tools/scales.mjs`, `tools/scales.d.mts`, `tests/scales.test.mjs` y `tests/fixtures/` de DesignToken101 en el commit `f4885d7`, citando el origen en la cabecera de cada archivo; la interfaz se escribe nueva. | Cerrada | 2026-10-09 |
+| A1 | La app es un proyecto aparte de DesignToken101, con repositorio propio (`color-scales`, nombre provisional; con la decisión 7, el nombre natural es `colorgods`, se confirma en C2); DesignToken101 sigue con 11 pasos (T22, D46). | Cerrada. Nombre confirmado en C2: `colorgods` (Oscar crea el repositorio el 2026-10-12) | 2026-10-09 |
+| A2 | Se copian `tools/scales.mjs`, `tools/scales.d.mts`, `tests/scales.test.mjs` y `tests/fixtures/` de DesignToken101 en el commit `f4885d7`, citando el origen en la cabecera de cada archivo; la interfaz se escribe nueva. | Cerrada. Hecho en C2 (2026-10-12): los JSON no admiten comentarios y su origen va en `tests/fixtures/ORIGEN.md`; `tests/fixtures/figma-export-prueba.zip` no se copia porque solo lo usa `tests/zip.test.mjs`, que no es del motor | 2026-10-09 |
 | A3 | Con 11 pasos y nombres de Tailwind, la app da los mismos hex que el curso (las pruebas copiadas lo comprueban). | Sustituida por la decisión 4: con 11 pasos, la app da la misma L en cada paso que el curso, pero el croma puede cambiar (8 de los 13 colores de prueba, hasta 0,046 en oklab). El curso no se cambia por ahora. Con la decisión 30, tampoco la L es la del curso. | 2026-10-09 |
 | A4 | N pasos se obtienen interpolando cada curva con PCHIP (Fritsch y Carlson) y tomando N muestras regulares. | Cerrada | 2026-10-09 |
 | A5 | No se lleva la marca de DesignToken101 ni sus lecciones; las curvas se citan como datos de Tailwind CSS (MIT). | Cerrada | 2026-10-09 |
@@ -87,6 +87,12 @@ Propuestas de `funcionalidades.md` §6; Oscar sigue las recomendaciones el 2026-
 | 36 | Regla de contraste por paso (F26) junto a las tiras: desde qué paso el texto sobre blanco cumple AA y hasta cuál sobre negro, y lo mismo para 3, en todas las escalas visibles salvo el paso de la marca, que se dice aparte con su contraste. Con 11 pasos: blanco desde 700, negro hasta 600. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
 | 37 | Colisión de la marca con un rol (decisión 21) medida con el color del rol de la misma luminancia relativa que la marca. Con los 13 colores da los mismos avisos que antes (danger con rojo puro y rosa pastel). El umbral 0,05 sigue provisional. | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
 | 38 | Tiempo de cálculo: se mantiene el cálculo al momento (decisión 25); C3 optimiza el método D (prototipo 115 ms, con tablas de 22 a 25 ms según la ejecución, para seis escalas de 30 pasos, en Node) y, si en C4 un móvil de gama media nota retraso, el cálculo pasa a segundo plano (Web Worker). | Cerrada (Oscar sigue la recomendación, 2026-10-11) | 2026-10-11 |
+
+## Repositorio (paso C2)
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 42 | Licencia MIT, con Oscar Carballido como titular. El repositorio ya tenía un `LICENSE` MIT del commit inicial con el titular "ocarballido"; se cambia el titular por el nombre, como en la autoría del README. | Cerrada (Oscar) | 2026-10-12 |
 
 ## Forma de trabajo
 
