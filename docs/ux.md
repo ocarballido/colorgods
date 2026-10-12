@@ -92,13 +92,13 @@ Esquema, no diseño: los valores entre llaves son ilustrativos.
 |---|---|---|---|
 | 1024 px o más | Dos columnas: ajustes (360 px) y resultado | De 32 px a 1024 hasta 80 px a 1480 | 896 px a 1480; 696 px a 1280 |
 | Menos de 1024 px | Una columna: ajustes primero, como en "Móvil" | 24 px (tableta, 744 en Figma) | 632 px a 744 |
-| Menos de 640 px | Una columna, con los cambios de móvil de abajo | 16 px | 328 px a 360 |
+| Menos de 640 px | Una columna, con los cambios de móvil de abajo | 16 px | 328 px a 360, en filas de 8 muestras |
 
 El panel lateral que tapaba el resultado (pantallas "MenuOpen") no se usa. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
 
 ### Móvil
 
-Una columna, en este orden: ajustes, resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works". Arriba de los ajustes, un enlace "Skip to result" (y, en el resultado, "Back to settings"), porque con cálculo al momento el usuario va a ir y volver. Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px: el nombre de cada escala y el de cada fila de la regla ("White AA", "Black AA") van encima, no a la izquierda; los dos selectores del par y el botón "Swap" se apilan; cada aviso lleva "Show in table" debajo; y los botones de exportar se apilan.
+Una columna, en este orden: ajustes, resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works". Arriba de los ajustes, un enlace "Skip to result" (y, en el resultado, "Back to settings"), porque con cálculo al momento el usuario va a ir y volver. Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Desde 640 px, las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px (decisión 60): las tiras no se desplazan, se parten en filas de 8 muestras con el nombre de la escala encima; no hay filas de checks de la regla, y el nombre de cada paso va dentro de su muestra, en negro o en blanco, el que cumpla AA con ella; el texto de F26 sigue encima de las tiras. Además, los dos selectores del par y el botón "Swap" se apilan, cada aviso lleva "Show in table" debajo y los botones de cada grupo de acciones (resumen y exportar) van uno debajo de otro, a todo el ancho.
 
 ## 4. Comportamiento general
 
@@ -148,11 +148,11 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 ### 6.3. Regla de contraste y tiras (U9)
 
 - **Encima de las tiras**, el texto de F26 ("Same contrast at every step in every scale. Text on white: 700 and darker. Text on black: 600 and lighter (AA)." y, en una línea más discreta, el nivel 3 para texto grande y componentes), que se recalcula con N, la convención y los roles activos.
-- **Dos filas de marcas** alineadas con las columnas de los pasos: "White AA" y "Black AA", con "✓" en los pasos que cumplen en todas las escalas y nada en los demás. Cada marca tiene texto para el lector de pantalla (las filas se leen como una lista: "White AA: 700, 800, 900, 950"). El nivel 3 (texto grande y componentes) va en el texto, no en filas, para no cargar la vista.
+- **Dos filas de marcas** (desde 640 px; en móvil, ver §3) alineadas con las columnas de los pasos: "White AA" y "Black AA", con "✓" en los pasos que cumplen en todas las escalas y nada en los demás. Cada marca tiene texto para el lector de pantalla (las filas se leen como una lista: "White AA: 700, 800, 900, 950"). El nivel 3 (texto grande y componentes) va en el texto, no en filas, para no cargar la vista.
 - **Tiras:** una fila por escala, en el orden color, danger, warning, success, info, neutros: el nombre de la paleta y N muestras de claro a oscuro.
 - La muestra de la marca lleva una marca visual y, en texto, "Your color: 600, 4.23 with white" junto a la tira (F7, F26, 1.4.1): su contraste es el suyo, no el de la fila de marcas.
 - Las muestras no son interactivas. Cada tira se lee como una imagen con un texto alternativo corto ("blue, 11 steps from 50 to 950; your color is 600"): los valores están en la tabla.
-- Cada muestra mide como mínimo 24 px de ancho (cabe la marca de la regla, de 20 px, y un nombre de tres cifras) y 64 px de alto. Si no caben, la tira tiene su propio desplazamiento horizontal, compartido con las filas de marcas. Caben 37 muestras a 1480, 29 a 1280, 26 a 744 y 13 a 360 (decisión 60).
+- Cada muestra mide como mínimo 24 px de ancho (cabe la marca de la regla, de 20 px, y un nombre de tres cifras) y 64 px de alto. Si no caben, la tira tiene su propio desplazamiento horizontal, compartido con las filas de marcas. Caben 37 muestras a 1480, 29 a 1280 y 26 a 744 (decisión 60). En móvil, filas de 8 muestras (ver "Móvil" en §3).
 - Debajo de las tiras, una línea dice qué marca la marca visual: "✓ marks your color: blue 600. It keeps your exact color, so its contrast is its own: 4.23 with white, 4.95 with black. It isn't counted in the rule above."
 
 
@@ -197,6 +197,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 | Radix | Nota de F13 debajo de la convención; la ayuda de pasos dice "3 to 30 with Radix names". | "Convención Radix" |
 | Nombres personalizados | Campo de nombres con su error y las acciones de rellenar; con nombres no válidos, la tabla dice "Names pending". | "Nombres personalizados" |
 | Copiado | "Link copied" o "Copied" unos segundos, anunciado. | "Copiado" |
+| Muchos pasos en móvil | Filas de 8 muestras con el nombre de cada paso dentro, sin filas de checks. | "30 pasos en móvil" |
 
 ## 9. Teclado y lector de pantalla (WCAG 2.2 AA)
 
