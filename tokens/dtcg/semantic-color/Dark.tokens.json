@@ -636,7 +636,7 @@
               "STROKE"
             ],
             "com.figma.codeSyntax": {
-              "WEB": "var(---cg-color-border-success-default)"
+              "WEB": "var(--cg-color-border-success-default)"
             },
             "com.figma.aliasData": {
               "targetVariableId": "VariableID:28b6279658a314b84174e0ae61cd6a33029e7a28/-1:-1",
