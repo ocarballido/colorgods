@@ -27,7 +27,13 @@ const variableName = (token) => `--cg-${token.id.replace(/\./g, '-')}`;
 
 // Tokens que cambian con cada modo (el resto se escribe una sola vez en :root).
 const THEME_TOKENS = ['color.background.**', 'color.text.**', 'color.border.**'];
-const LAYOUT_TOKENS = ['font-size.heading.**', 'font-size.body.**', 'font-size.label.**', 'font-size.caption.**', 'font-size.code.**'];
+const LAYOUT_TOKENS = [
+  'font-size.heading.**',
+  'font-size.body.**',
+  'font-size.label.**',
+  'font-size.caption.**',
+  'font-size.code.**',
+];
 
 export default defineConfig({
   tokens: ['./tokens/tokens101.resolver.json'],
@@ -95,11 +101,14 @@ function tailwindTheme() {
     [/^color\.(white|black|emerald|neutral|red|amber|blue)(\.|$)/, () => null],
     [/^color\.background\.(.+)$/, (m, id) => [[`--background-color-${m[1].replace(/\./g, '-')}`, ref(id)]]],
     [/^color\.text\.(.+)$/, (m, id) => [[`--text-color-${m[1].replace(/\./g, '-')}`, ref(id)]]],
-    [/^color\.border\.focus$/, (m, id) => [
-      ['--border-color-focus', ref(id)],
-      ['--outline-color-focus', ref(id)],
-      ['--ring-color-focus', ref(id)],
-    ]],
+    [
+      /^color\.border\.focus$/,
+      (m, id) => [
+        ['--border-color-focus', ref(id)],
+        ['--outline-color-focus', ref(id)],
+        ['--ring-color-focus', ref(id)],
+      ],
+    ],
     [/^color\.border\.(.+)$/, (m, id) => [[`--border-color-${m[1].replace(/\./g, '-')}`, ref(id)]]],
     [/^space\.(.+)$/, (m, id) => [[`--spacing-${m[1].replace(/\./g, '-')}`, ref(id)]]],
     [/^radius\.(.+)$/, (m, id) => [[`--radius-${m[1]}`, ref(id)]]],
@@ -109,9 +118,10 @@ function tailwindTheme() {
     [/^font-size\.\d+$/, () => null],
     [/^font-size\.(.+)$/, (m, id) => [[`--text-${m[1].replace(/\./g, '-')}`, ref(id)]]],
     [/^font-weight\.(.+)$/, (m, id) => [[`--font-weight-${m[1]}`, ref(id)]]],
-    [/^font-family\.(sans|mono)$/, (m, id) => [
-      [`--font-${m[1]}`, `var(${NEXT_FONT_VARIABLES[m[1]]}, ${ref(id)}), ${FONT_FALLBACKS[m[1]]}`],
-    ]],
+    [
+      /^font-family\.(sans|mono)$/,
+      (m, id) => [[`--font-${m[1]}`, `var(${NEXT_FONT_VARIABLES[m[1]]}, ${ref(id)}), ${FONT_FALLBACKS[m[1]]}`]],
+    ],
     [/^line-height\.(.+)$/, (m, id) => [[`--leading-${m[1]}`, ref(id)]]],
     // --container-* da max-w-* y w-* (https://tailwindcss.com/docs/max-width).
     [/^size\.content\.max-width$/, (m, id) => [['--container-content', ref(id)]]],

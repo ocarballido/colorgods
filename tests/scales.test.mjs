@@ -8,9 +8,34 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {
-  build, colorScale, paletteScale, neutralScale, isExtreme, nearestStep, proposeRoles, contrastRule, truncate2,
-  stepNames, checkCustomNames, fillNames, parseSteps, MAX_STEPS, ROLES, ROLE_PALETTES,
-  parseColor, parseTint, isPaletteName, suggest, toFigmaTokens, rgbToOklch, hexToRgb, hexs, contrast, TW_HUES, TW_CURVES, ACHROMATIC,
+  build,
+  colorScale,
+  paletteScale,
+  neutralScale,
+  isExtreme,
+  nearestStep,
+  proposeRoles,
+  contrastRule,
+  truncate2,
+  stepNames,
+  checkCustomNames,
+  fillNames,
+  parseSteps,
+  MAX_STEPS,
+  ROLES,
+  ROLE_PALETTES,
+  parseColor,
+  parseTint,
+  isPaletteName,
+  suggest,
+  toFigmaTokens,
+  rgbToOklch,
+  hexToRgb,
+  hexs,
+  contrast,
+  TW_HUES,
+  TW_CURVES,
+  ACHROMATIC,
 } from '../tools/scales.mjs';
 
 const fixtures = JSON.parse(fs.readFileSync(new URL('../docs/comparacion/a7-fixtures.json', import.meta.url), 'utf8'));
@@ -24,7 +49,8 @@ const monotone = (s) => L(s).every((l, i, a) => i === 0 || a[i - 1] > l);
 const unique = (s) => new Set(hexOf(s)).size === s.steps.length;
 // Barrido de A7: 16 valores por canal (0, 17 … 255), 4.096 colores; 4.080 con croma.
 const SWEEP = [];
-for (let r = 0; r < 256; r += 17) for (let g = 0; g < 256; g += 17) for (let b = 0; b < 256; b += 17) SWEEP.push(hexs([r / 255, g / 255, b / 255]));
+for (let r = 0; r < 256; r += 17)
+  for (let g = 0; g < 256; g += 17) for (let b = 0; b < 256; b += 17) SWEEP.push(hexs([r / 255, g / 255, b / 255]));
 const chromatic = (h) => rgbToOklch(...hexToRgb(h))[1] > ACHROMATIC;
 
 // --- Hex de referencia (decisión 30) --------------------------------------------------------------
@@ -94,7 +120,12 @@ test('F12.2: aviso de extremo sobre la escalera (decisión 35)', () => {
   const warned = BRANDS.filter(isExtreme);
   assert.deepEqual(warned, ['#1A2B5C', '#111418', '#F5F5DC']); // azul marino, casi negro y crema
   for (const N of [3, 5, 11, 16, 30]) {
-    for (const h of BRANDS) assert.equal(build(h, { steps: N, names: 'radix' }).warnings.some((w) => w.code === 'extreme'), warned.includes(h), `${h} N ${N}`);
+    for (const h of BRANDS)
+      assert.equal(
+        build(h, { steps: N, names: 'radix' }).warnings.some((w) => w.code === 'extreme'),
+        warned.includes(h),
+        `${h} N ${N}`,
+      );
   }
   const sweep = SWEEP.filter(chromatic);
   assert.equal(sweep.length, 4080);
@@ -111,7 +142,10 @@ test('F12.2: aviso de extremo sobre la escalera (decisión 35)', () => {
 test('F12.3: recorte del azul puro con N = 11 y de amber', () => {
   const out = build('#0000FF');
   const w = out.warnings.find((x) => x.code === 'clipped' && x.scale === 'color');
-  assert.deepEqual(w.steps.map((s) => s.name), ['50', '100', '200', '300', '400', '500', '600', '700', '900']);
+  assert.deepEqual(
+    w.steps.map((s) => s.name),
+    ['50', '100', '200', '300', '400', '500', '600', '700', '900'],
+  );
   assert.equal(Math.max(...w.steps.map((s) => s.clip)), 47);
   assert.equal(out.color[3].clip, w.steps[3].clip);
   const amber = paletteScale('amber', 11).steps.filter((s) => s.clip);
@@ -123,15 +157,28 @@ test('F12.4: pasos muy juntos con la L del motor', () => {
   const near = (s) => L(s).some((l, i, a) => i > 0 && a[i - 1] - l < 0.014);
   const expected = { 10: [0, 0, 0], 11: [1, 0, 0], 16: [1, 0, 0], 17: [6, 3, 0], 18: [11, 6, 13], 19: [11, 6, 13] };
   for (let N = 3; N <= 19; N++) {
-    const got = [BRANDS.filter((h) => near(colorScale(h, N))).length, PALS.filter((p) => near(paletteScale(p, N))).length, BRANDS.filter((h) => near(neutralScale(h, N))).length];
+    const got = [
+      BRANDS.filter((h) => near(colorScale(h, N))).length,
+      PALS.filter((p) => near(paletteScale(p, N))).length,
+      BRANDS.filter((h) => near(neutralScale(h, N))).length,
+    ];
     assert.deepEqual(got, expected[N] ?? (N < 10 ? [0, 0, 0] : [1, 0, 0]), `N ${N}`);
   }
   for (const N of [20, 30]) {
-    assert.ok(BRANDS.every((h) => near(colorScale(h, N)) && near(neutralScale(h, N))), `N ${N}`);
-    assert.ok(PALS.every((p) => near(paletteScale(p, N))), `N ${N}`);
+    assert.ok(
+      BRANDS.every((h) => near(colorScale(h, N)) && near(neutralScale(h, N))),
+      `N ${N}`,
+    );
+    assert.ok(
+      PALS.every((p) => near(paletteScale(p, N))),
+      `N ${N}`,
+    );
   }
   const cream = build('#F5F5DC');
-  assert.deepEqual(cream.warnings.find((x) => x.code === 'close'), { code: 'close', scale: 'color', pairs: [['50', '100']] });
+  assert.deepEqual(
+    cream.warnings.find((x) => x.code === 'close'),
+    { code: 'close', scale: 'color', pairs: [['50', '100']] },
+  );
 });
 
 // --- F21 y F22 ------------------------------------------------------------------------------------
@@ -145,9 +192,13 @@ test('F21 y F22: paletas propuestas y colisión con la marca, 13 colores', () =>
     assert.deepEqual(warned, ['#FF0000', '#F8C8DC'].includes(h) ? ['danger'] : [], h);
   }
   const out = build('#FF0000', { roles: { danger: null, info: null } });
-  assert.deepEqual(out.warnings.filter((w) => w.code.startsWith('role')), [{ code: 'role-collision', role: 'danger', palette: 'red' }]);
+  assert.deepEqual(
+    out.warnings.filter((w) => w.code.startsWith('role')),
+    [{ code: 'role-collision', role: 'danger', palette: 'red' }],
+  );
   assert.deepEqual(Object.keys(out.roles), ['danger', 'info']);
-  for (const p of PALS) assert.equal(TW11[paletteScale(p, 11).steps.findIndex((s) => contrast(hexToRgb(s.hex), W) >= 4.5)], '700', p);
+  for (const p of PALS)
+    assert.equal(TW11[paletteScale(p, 11).steps.findIndex((s) => contrast(hexToRgb(s.hex), W) >= 4.5)], '700', p);
 });
 
 test('F21 y F22: barrido de A7 (3.402 colores con croma y fuera de los extremos)', () => {
@@ -172,7 +223,10 @@ test('F21: una paleta elegida por el usuario se mantiene', () => {
   assert.equal(p.warning.palette, 'yellow');
   assert.equal(p.warning.chosen, true);
   const out = build('#33CC99', { roles: { warning: 'yellow' } });
-  assert.deepEqual(out.roles.warning.map((s) => s.hex), hexOf(paletteScale('yellow', 11)));
+  assert.deepEqual(
+    out.roles.warning.map((s) => s.hex),
+    hexOf(paletteScale('yellow', 11)),
+  );
   assert.throws(() => build('#33CC99', { roles: { danger: 'blue' } }), /danger/);
 });
 
@@ -223,7 +277,13 @@ test('F26: regla de contraste por paso', () => {
   const fb = build('#1877F2');
   assert.equal(fb.rule.brand.step, '600');
   assert.equal(truncate2(fb.rule.brand.white), 4.23);
-  assert.deepEqual([fb.rule.aa, fb.rule.large], [{ white: '700', black: '600' }, { white: '600', black: '700' }]);
+  assert.deepEqual(
+    [fb.rule.aa, fb.rule.large],
+    [
+      { white: '700', black: '600' },
+      { white: '600', black: '700' },
+    ],
+  );
   assert.equal(truncate2(contrast(hexToRgb('#0078D7'), W)), 4.49);
 });
 
@@ -235,13 +295,19 @@ test('nombres: Tailwind, SDS y Radix', () => {
   assert.deepEqual(stepNames(5, 'radix'), ['1', '2', '3', '4', '5']);
   assert.deepEqual(stepNames(3, 'tailwind'), ['50', '500', '950']);
   assert.deepEqual(stepNames(8, 'tailwind'), ['50', '150', '300', '450', '550', '700', '850', '950']);
-  for (const [conv, first, last] of [['tailwind', '50', '950'], ['sds', '100', '1000']]) {
+  for (const [conv, first, last] of [
+    ['tailwind', '50', '950'],
+    ['sds', '100', '1000'],
+  ]) {
     for (let N = 3; N <= MAX_STEPS[conv]; N++) {
       const n = stepNames(N, conv);
       assert.equal(new Set(n).size, N, `${conv} N ${N}`);
       assert.deepEqual([n[0], n.at(-1)], [first, last]);
     }
-    assert.ok(new Set(stepNames(MAX_STEPS[conv] + 1, conv)).size < MAX_STEPS[conv] + 1, `${conv}: el máximo es el último sin repetidos`);
+    assert.ok(
+      new Set(stepNames(MAX_STEPS[conv] + 1, conv)).size < MAX_STEPS[conv] + 1,
+      `${conv}: el máximo es el último sin repetidos`,
+    );
   }
   assert.deepEqual(MAX_STEPS, { tailwind: 16, sds: 19, radix: 30, custom: 30 });
   assert.equal(stepNames(30, 'radix').at(-1), '30');
@@ -260,14 +326,21 @@ test('nombres: N y nombres personalizados', () => {
   assert.deepEqual(checkCustomNames(['a', 'b'], 3), { code: 'count', have: 2, need: 3 });
   assert.deepEqual(checkCustomNames(['a', 'b c', 'd'], 3), { code: 'char', name: 'b c' });
   assert.deepEqual(checkCustomNames(['a', 'B', 'b'], 3), { code: 'duplicate', names: ['B', 'b'] });
-  assert.deepEqual(build('#33CC99', { steps: 3, names: ['a', 'b', 'c'] }).color.map((s) => s.name), ['a', 'b', 'c']);
+  assert.deepEqual(
+    build('#33CC99', { steps: 3, names: ['a', 'b', 'c'] }).color.map((s) => s.name),
+    ['a', 'b', 'c'],
+  );
   assert.throws(() => build('#33CC99', { steps: 3, names: ['a', 'a', 'c'] }), /names/);
   assert.throws(() => build('#33CC99', { steps: 17 }), /steps/);
 });
 
 test('build: nombres en todas las escalas y paso de la marca', () => {
   const out = build('#1877F2', { steps: 10, names: 'sds', roles: { success: null } });
-  for (const s of [out.color, out.neutral, out.roles.success]) assert.deepEqual(s.map((x) => x.name), stepNames(10, 'sds'));
+  for (const s of [out.color, out.neutral, out.roles.success])
+    assert.deepEqual(
+      s.map((x) => x.name),
+      stepNames(10, 'sds'),
+    );
   assert.equal(out.input.anchorStep, out.color.find((s) => s.anchor).name);
   assert.equal(out.color.find((s) => s.anchor).hex, '#1877F2');
 });
@@ -275,10 +348,19 @@ test('build: nombres en todas las escalas y paso de la marca', () => {
 // --- Entrada, nombre de paleta, curva propuesta y Figma --------------------------------------------
 
 test('entrada: hex, RGB y HSL dan el mismo hex', () => {
-  for (const input of ['#33CC99', '33cc99', '#3c9', 'rgb(51, 204, 153)', '51 204 153', 'hsl(160 60% 50%)', 'hsl(160, 60%, 50%)']) {
+  for (const input of [
+    '#33CC99',
+    '33cc99',
+    '#3c9',
+    'rgb(51, 204, 153)',
+    '51 204 153',
+    'hsl(160 60% 50%)',
+    'hsl(160, 60%, 50%)',
+  ]) {
     assert.equal(parseColor(input), '#33CC99', input);
   }
-  for (const input of ['', '#33CC9', 'rgb(300, 0, 0)', 'hsl(160 160% 50%)', 'verde']) assert.equal(parseColor(input), null, input);
+  for (const input of ['', '#33CC9', 'rgb(300, 0, 0)', 'hsl(160 160% 50%)', 'verde'])
+    assert.equal(parseColor(input), null, input);
 });
 
 test('tinte y nombre de paleta (F4, F5)', () => {

@@ -9,7 +9,14 @@ export type Role = 'danger' | 'warning' | 'success' | 'info';
 
 // Paso de una escala sin nombre. clip: % de croma que quita el ajuste a sRGB (0 si no recorta). anchor: el de la marca.
 export type Step = { hex: string; oklch: Oklch; clip: number; anchor?: true };
-export type ColorScale = { curve: string; chromaRatio: number; anchor: number; achromatic: boolean; extreme: boolean; steps: Step[] };
+export type ColorScale = {
+  curve: string;
+  chromaRatio: number;
+  anchor: number;
+  achromatic: boolean;
+  extreme: boolean;
+  steps: Step[];
+};
 export type PlainScale = { steps: Step[] };
 export type NamedStep = Step & { name: string };
 
@@ -86,7 +93,10 @@ export function colorScale(hex: string, N: number, options?: { curve?: string; c
 export function paletteScale(palette: string, N: number): PlainScale;
 export function neutralScale(hex: string, N: number, tint?: number): PlainScale;
 export function proposeRoles(hex: string, chosen?: Partial<Record<Role, string>>): Record<Role, RoleProposal>;
-export function contrastRule(scales: { steps: { hex: string }[]; anchor?: number }[], level?: number): { white: number; black: number };
+export function contrastRule(
+  scales: { steps: { hex: string }[]; anchor?: number }[],
+  level?: number,
+): { white: number; black: number };
 export function build(hex: string, options?: BuildOptions): Scales;
 export function oklchText(oklch: Oklch): string;
 export function toFigmaTokens(scales: Scales, options: { name: string }): string;

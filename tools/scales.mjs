@@ -22,23 +22,227 @@ const TW_GRAY_C = [0.002, 0.003, 0.006, 0.01, 0.022, 0.027, 0.03, 0.034, 0.033, 
 // Curvas de referencia: L y C de cada paso en las 17 paletas de color de Tailwind CSS 4.3.3
 // (packages/tailwindcss/theme.css, etiqueta v4.3.3). Las mismas que TW_CURVES en tools/scales.py del curso.
 export const TW_CURVES = {
-  red: [[0.971, 0.013], [0.936, 0.032], [0.885, 0.062], [0.808, 0.114], [0.704, 0.191], [0.637, 0.237], [0.577, 0.245], [0.505, 0.213], [0.444, 0.177], [0.396, 0.141], [0.258, 0.092]],
-  orange: [[0.98, 0.016], [0.954, 0.038], [0.901, 0.076], [0.837, 0.128], [0.75, 0.183], [0.705, 0.213], [0.646, 0.222], [0.553, 0.195], [0.47, 0.157], [0.408, 0.123], [0.266, 0.079]],
-  amber: [[0.987, 0.022], [0.962, 0.059], [0.924, 0.12], [0.879, 0.169], [0.828, 0.189], [0.769, 0.188], [0.666, 0.179], [0.555, 0.163], [0.473, 0.137], [0.414, 0.112], [0.279, 0.077]],
-  yellow: [[0.987, 0.026], [0.973, 0.071], [0.945, 0.129], [0.905, 0.182], [0.852, 0.199], [0.795, 0.184], [0.681, 0.162], [0.554, 0.135], [0.476, 0.114], [0.421, 0.095], [0.286, 0.066]],
-  lime: [[0.986, 0.031], [0.967, 0.067], [0.938, 0.127], [0.897, 0.196], [0.841, 0.238], [0.768, 0.233], [0.648, 0.2], [0.532, 0.157], [0.453, 0.124], [0.405, 0.101], [0.274, 0.072]],
-  green: [[0.982, 0.018], [0.962, 0.044], [0.925, 0.084], [0.871, 0.15], [0.792, 0.209], [0.723, 0.219], [0.627, 0.194], [0.527, 0.154], [0.448, 0.119], [0.393, 0.095], [0.266, 0.065]],
-  emerald: [[0.979, 0.021], [0.95, 0.052], [0.905, 0.093], [0.845, 0.143], [0.765, 0.177], [0.696, 0.17], [0.596, 0.145], [0.508, 0.118], [0.432, 0.095], [0.378, 0.077], [0.262, 0.051]],
-  teal: [[0.984, 0.014], [0.953, 0.051], [0.91, 0.096], [0.855, 0.138], [0.777, 0.152], [0.704, 0.14], [0.6, 0.118], [0.511, 0.096], [0.437, 0.078], [0.386, 0.063], [0.277, 0.046]],
-  cyan: [[0.984, 0.019], [0.956, 0.045], [0.917, 0.08], [0.865, 0.127], [0.789, 0.154], [0.715, 0.143], [0.609, 0.126], [0.52, 0.105], [0.45, 0.085], [0.398, 0.07], [0.302, 0.056]],
-  sky: [[0.977, 0.013], [0.951, 0.026], [0.901, 0.058], [0.828, 0.111], [0.746, 0.16], [0.685, 0.169], [0.588, 0.158], [0.5, 0.134], [0.443, 0.11], [0.391, 0.09], [0.293, 0.066]],
-  blue: [[0.97, 0.014], [0.932, 0.032], [0.882, 0.059], [0.809, 0.105], [0.707, 0.165], [0.623, 0.214], [0.546, 0.245], [0.488, 0.243], [0.424, 0.199], [0.379, 0.146], [0.282, 0.091]],
-  indigo: [[0.962, 0.018], [0.93, 0.034], [0.87, 0.065], [0.785, 0.115], [0.673, 0.182], [0.585, 0.233], [0.511, 0.262], [0.457, 0.24], [0.398, 0.195], [0.359, 0.144], [0.257, 0.09]],
-  violet: [[0.969, 0.016], [0.943, 0.029], [0.894, 0.057], [0.811, 0.111], [0.702, 0.183], [0.606, 0.25], [0.541, 0.281], [0.491, 0.27], [0.432, 0.232], [0.38, 0.189], [0.283, 0.141]],
-  purple: [[0.977, 0.014], [0.946, 0.033], [0.902, 0.063], [0.827, 0.119], [0.714, 0.203], [0.627, 0.265], [0.558, 0.288], [0.496, 0.265], [0.438, 0.218], [0.381, 0.176], [0.291, 0.149]],
-  fuchsia: [[0.977, 0.017], [0.952, 0.037], [0.903, 0.076], [0.833, 0.145], [0.74, 0.238], [0.667, 0.295], [0.591, 0.293], [0.518, 0.253], [0.452, 0.211], [0.401, 0.17], [0.293, 0.136]],
-  pink: [[0.971, 0.014], [0.948, 0.028], [0.899, 0.061], [0.823, 0.12], [0.718, 0.202], [0.656, 0.241], [0.592, 0.249], [0.525, 0.223], [0.459, 0.187], [0.408, 0.153], [0.284, 0.109]],
-  rose: [[0.969, 0.015], [0.941, 0.03], [0.892, 0.058], [0.81, 0.117], [0.712, 0.194], [0.645, 0.246], [0.586, 0.253], [0.514, 0.222], [0.455, 0.188], [0.41, 0.159], [0.271, 0.105]],
+  red: [
+    [0.971, 0.013],
+    [0.936, 0.032],
+    [0.885, 0.062],
+    [0.808, 0.114],
+    [0.704, 0.191],
+    [0.637, 0.237],
+    [0.577, 0.245],
+    [0.505, 0.213],
+    [0.444, 0.177],
+    [0.396, 0.141],
+    [0.258, 0.092],
+  ],
+  orange: [
+    [0.98, 0.016],
+    [0.954, 0.038],
+    [0.901, 0.076],
+    [0.837, 0.128],
+    [0.75, 0.183],
+    [0.705, 0.213],
+    [0.646, 0.222],
+    [0.553, 0.195],
+    [0.47, 0.157],
+    [0.408, 0.123],
+    [0.266, 0.079],
+  ],
+  amber: [
+    [0.987, 0.022],
+    [0.962, 0.059],
+    [0.924, 0.12],
+    [0.879, 0.169],
+    [0.828, 0.189],
+    [0.769, 0.188],
+    [0.666, 0.179],
+    [0.555, 0.163],
+    [0.473, 0.137],
+    [0.414, 0.112],
+    [0.279, 0.077],
+  ],
+  yellow: [
+    [0.987, 0.026],
+    [0.973, 0.071],
+    [0.945, 0.129],
+    [0.905, 0.182],
+    [0.852, 0.199],
+    [0.795, 0.184],
+    [0.681, 0.162],
+    [0.554, 0.135],
+    [0.476, 0.114],
+    [0.421, 0.095],
+    [0.286, 0.066],
+  ],
+  lime: [
+    [0.986, 0.031],
+    [0.967, 0.067],
+    [0.938, 0.127],
+    [0.897, 0.196],
+    [0.841, 0.238],
+    [0.768, 0.233],
+    [0.648, 0.2],
+    [0.532, 0.157],
+    [0.453, 0.124],
+    [0.405, 0.101],
+    [0.274, 0.072],
+  ],
+  green: [
+    [0.982, 0.018],
+    [0.962, 0.044],
+    [0.925, 0.084],
+    [0.871, 0.15],
+    [0.792, 0.209],
+    [0.723, 0.219],
+    [0.627, 0.194],
+    [0.527, 0.154],
+    [0.448, 0.119],
+    [0.393, 0.095],
+    [0.266, 0.065],
+  ],
+  emerald: [
+    [0.979, 0.021],
+    [0.95, 0.052],
+    [0.905, 0.093],
+    [0.845, 0.143],
+    [0.765, 0.177],
+    [0.696, 0.17],
+    [0.596, 0.145],
+    [0.508, 0.118],
+    [0.432, 0.095],
+    [0.378, 0.077],
+    [0.262, 0.051],
+  ],
+  teal: [
+    [0.984, 0.014],
+    [0.953, 0.051],
+    [0.91, 0.096],
+    [0.855, 0.138],
+    [0.777, 0.152],
+    [0.704, 0.14],
+    [0.6, 0.118],
+    [0.511, 0.096],
+    [0.437, 0.078],
+    [0.386, 0.063],
+    [0.277, 0.046],
+  ],
+  cyan: [
+    [0.984, 0.019],
+    [0.956, 0.045],
+    [0.917, 0.08],
+    [0.865, 0.127],
+    [0.789, 0.154],
+    [0.715, 0.143],
+    [0.609, 0.126],
+    [0.52, 0.105],
+    [0.45, 0.085],
+    [0.398, 0.07],
+    [0.302, 0.056],
+  ],
+  sky: [
+    [0.977, 0.013],
+    [0.951, 0.026],
+    [0.901, 0.058],
+    [0.828, 0.111],
+    [0.746, 0.16],
+    [0.685, 0.169],
+    [0.588, 0.158],
+    [0.5, 0.134],
+    [0.443, 0.11],
+    [0.391, 0.09],
+    [0.293, 0.066],
+  ],
+  blue: [
+    [0.97, 0.014],
+    [0.932, 0.032],
+    [0.882, 0.059],
+    [0.809, 0.105],
+    [0.707, 0.165],
+    [0.623, 0.214],
+    [0.546, 0.245],
+    [0.488, 0.243],
+    [0.424, 0.199],
+    [0.379, 0.146],
+    [0.282, 0.091],
+  ],
+  indigo: [
+    [0.962, 0.018],
+    [0.93, 0.034],
+    [0.87, 0.065],
+    [0.785, 0.115],
+    [0.673, 0.182],
+    [0.585, 0.233],
+    [0.511, 0.262],
+    [0.457, 0.24],
+    [0.398, 0.195],
+    [0.359, 0.144],
+    [0.257, 0.09],
+  ],
+  violet: [
+    [0.969, 0.016],
+    [0.943, 0.029],
+    [0.894, 0.057],
+    [0.811, 0.111],
+    [0.702, 0.183],
+    [0.606, 0.25],
+    [0.541, 0.281],
+    [0.491, 0.27],
+    [0.432, 0.232],
+    [0.38, 0.189],
+    [0.283, 0.141],
+  ],
+  purple: [
+    [0.977, 0.014],
+    [0.946, 0.033],
+    [0.902, 0.063],
+    [0.827, 0.119],
+    [0.714, 0.203],
+    [0.627, 0.265],
+    [0.558, 0.288],
+    [0.496, 0.265],
+    [0.438, 0.218],
+    [0.381, 0.176],
+    [0.291, 0.149],
+  ],
+  fuchsia: [
+    [0.977, 0.017],
+    [0.952, 0.037],
+    [0.903, 0.076],
+    [0.833, 0.145],
+    [0.74, 0.238],
+    [0.667, 0.295],
+    [0.591, 0.293],
+    [0.518, 0.253],
+    [0.452, 0.211],
+    [0.401, 0.17],
+    [0.293, 0.136],
+  ],
+  pink: [
+    [0.971, 0.014],
+    [0.948, 0.028],
+    [0.899, 0.061],
+    [0.823, 0.12],
+    [0.718, 0.202],
+    [0.656, 0.241],
+    [0.592, 0.249],
+    [0.525, 0.223],
+    [0.459, 0.187],
+    [0.408, 0.153],
+    [0.284, 0.109],
+  ],
+  rose: [
+    [0.969, 0.015],
+    [0.941, 0.03],
+    [0.892, 0.058],
+    [0.81, 0.117],
+    [0.712, 0.194],
+    [0.645, 0.246],
+    [0.586, 0.253],
+    [0.514, 0.222],
+    [0.455, 0.188],
+    [0.41, 0.159],
+    [0.271, 0.105],
+  ],
 };
 
 // CSS Color 4: con C <= 0.000004 el tono de oklch no tiene efecto (powerless hue).
@@ -113,7 +317,15 @@ export function oklchToRgbGamut(L, C, H) {
   return [lin.map((x) => Math.min(1, Math.max(0, linToSrgb(x)))), used];
 }
 
-export const hexs = (rgb) => `#${rgb.map((x) => pyRound(x * 255).toString(16).toUpperCase().padStart(2, '0')).join('')}`;
+export const hexs = (rgb) =>
+  `#${rgb
+    .map((x) =>
+      pyRound(x * 255)
+        .toString(16)
+        .toUpperCase()
+        .padStart(2, '0'),
+    )
+    .join('')}`;
 export const hexToRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255);
 // Luminancia relativa de WCAG 2.2.
 export const luminance = (rgb) => {
@@ -136,7 +348,9 @@ const round = (x, digits) => Math.round(x * 10 ** digits) / 10 ** digits;
 // ("hsl(160 60% 50%)" o "hsl(160, 60%, 50%)"). Devuelve el hex en mayúsculas o null.
 // La escala se calcula siempre desde el hex: es el valor que se guarda en Figma (T22, decisión 9 del curso).
 export function parseColor(input) {
-  const text = String(input ?? '').trim().toLowerCase();
+  const text = String(input ?? '')
+    .trim()
+    .toLowerCase();
   let m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/.exec(text);
   if (m) {
     const h = m[1].length === 3 ? [...m[1]].map((c) => c + c).join('') : m[1];
@@ -146,7 +360,8 @@ export function parseColor(input) {
   m = /^(?:rgb\(\s*([^)]*)\)|(\d[\d\s,.]*))$/.exec(text);
   if (m) {
     const parts = nums(m[1] ?? m[2]).map(Number);
-    if (parts.length === 3 && parts.every((v) => Number.isFinite(v) && v >= 0 && v <= 255)) return hexs(parts.map((v) => v / 255));
+    if (parts.length === 3 && parts.every((v) => Number.isFinite(v) && v >= 0 && v <= 255))
+      return hexs(parts.map((v) => v / 255));
     return null;
   }
   m = /^hsl\(\s*([^)]*)\)$/.exec(text);
@@ -176,7 +391,12 @@ function hslToRgb(h, l, s) {
 
 // Roles semánticos (decisiones 19 a 22): paletas del margen de cada rol, la primera es la de por defecto.
 export const ROLES = ['danger', 'warning', 'success', 'info'];
-export const ROLE_PALETTES = { danger: ['red'], warning: ['amber', 'orange', 'yellow'], success: ['green', 'emerald'], info: ['blue', 'sky'] };
+export const ROLE_PALETTES = {
+  danger: ['red'],
+  warning: ['amber', 'orange', 'yellow'],
+  success: ['green', 'emerald'],
+  info: ['blue', 'sky'],
+};
 
 // Nombre de una paleta (F5): minúsculas, kebab-case por segmento, y ni "neutral" ni el nombre de un rol.
 export function isPaletteName(name) {
@@ -185,7 +405,9 @@ export function isPaletteName(name) {
 
 // Tinte de los neutros: número de 0 a 1 (D45 del curso).
 export function parseTint(input) {
-  const text = String(input ?? '').trim().replace(',', '.');
+  const text = String(input ?? '')
+    .trim()
+    .replace(',', '.');
   if (!/^\d+(\.\d+)?$/.test(text)) return null;
   const value = Number(text);
   return value >= 0 && value <= 1 ? value : null;
@@ -343,7 +565,11 @@ function solve(target, chroma, H) {
   const L = root((l) => Yof(l, chroma(l), H) - target, 0, 1);
   const want = chroma(L);
   const [rgb, used] = oklchToRgbGamut(L, want, H);
-  return { hex: hexs(rgb), oklch: [L, used, H], clip: want > 0 && used < want - 1e-9 ? Math.round(100 * (1 - used / want)) : 0 };
+  return {
+    hex: hexs(rgb),
+    oklch: [L, used, H],
+    clip: want > 0 && used < want - 1e-9 ? Math.round(100 * (1 - used / want)) : 0,
+  };
 }
 
 // Paso de la escalera más cercano a la Y de un hex (en log Y), con los empates hacia el más claro.
@@ -383,7 +609,9 @@ export function colorScale(hex, N, { curve, cap = false } = {}) {
     return cap ? Math.min(x, aC) : x;
   };
   const lad = ladder(N);
-  const steps = lad.map((y, i) => (i === anchor ? { hex, oklch: [aL, aC, aH], clip: 0, anchor: true } : solve(y, chroma, aH)));
+  const steps = lad.map((y, i) =>
+    i === anchor ? { hex, oklch: [aL, aC, aH], clip: 0, anchor: true } : solve(y, chroma, aH),
+  );
   return { curve, chromaRatio: ratio, anchor, achromatic, extreme: isExtreme(hex), steps };
 }
 
@@ -444,7 +672,8 @@ export function proposeRoles(hex, chosen = {}) {
     if (out[r]) continue;
     const others = Object.values(out).map((o) => o.palette);
     const fits = (p) =>
-      (!checkBrand || r === 'info' || brandDistance(p) >= COLLISION) && others.every((q) => deltaE(center(p), center(q)) >= COLLISION);
+      (!checkBrand || r === 'info' || brandDistance(p) >= COLLISION) &&
+      others.every((q) => deltaE(center(p), center(q)) >= COLLISION);
     const [def, ...rest] = ROLE_PALETTES[r];
     if (fits(def)) out[r] = { palette: def };
     else {
@@ -490,10 +719,15 @@ const MIN_GAP = 0.014; // salto de L más pequeño de las paletas de Tailwind CS
  *   { code: 'role-collision', role, palette }     la marca colisiona con el rol y no hay alternativa (F22)
  * scale es 'color', 'neutral' o el nombre de un rol.
  */
-export function build(hex, { steps: N = 11, names = 'tailwind', curve = null, cap = false, tint = 0.5, roles = {} } = {}) {
+export function build(
+  hex,
+  { steps: N = 11, names = 'tailwind', curve = null, cap = false, tint = 0.5, roles = {} } = {},
+) {
   const convention = Array.isArray(names) ? 'custom' : names;
-  if (!Number.isInteger(N) || N < MIN_STEPS || N > (MAX_STEPS[convention] ?? 0)) throw new Error(`Invalid steps for ${convention}: ${N}`);
-  if (Array.isArray(names) && checkCustomNames(names, N)) throw new Error(`Invalid custom names: ${JSON.stringify(checkCustomNames(names, N))}`);
+  if (!Number.isInteger(N) || N < MIN_STEPS || N > (MAX_STEPS[convention] ?? 0))
+    throw new Error(`Invalid steps for ${convention}: ${N}`);
+  if (Array.isArray(names) && checkCustomNames(names, N))
+    throw new Error(`Invalid custom names: ${JSON.stringify(checkCustomNames(names, N))}`);
   for (const [r, p] of Object.entries(roles)) {
     if (!ROLES.includes(r)) throw new Error(`Unknown role: ${r}`);
     if (p != null && !ROLE_PALETTES[r].includes(p)) throw new Error(`Palette ${p} is not in the ${r} range`);
@@ -517,7 +751,8 @@ export function build(hex, { steps: N = 11, names = 'tailwind', curve = null, ca
   }
   for (const [scale, s] of visible) {
     const pairs = [];
-    for (let i = 1; i < N; i++) if (s.steps[i - 1].oklch[0] - s.steps[i].oklch[0] < MIN_GAP) pairs.push([label[i - 1], label[i]]);
+    for (let i = 1; i < N; i++)
+      if (s.steps[i - 1].oklch[0] - s.steps[i].oklch[0] < MIN_GAP) pairs.push([label[i - 1], label[i]]);
     if (pairs.length) warnings.push({ code: 'close', scale, pairs });
   }
   for (const r of active) {
@@ -586,9 +821,23 @@ export function toFigmaTokens(scales, { name }) {
 // Tono (H de oklch) del paso 500 de cada paleta en el CSS fuente de Tailwind CSS 4.3.3
 // (packages/tailwindcss/theme.css), comprobado el 2026-10-08.
 export const TW_HUES = {
-  red: 25.331, orange: 47.604, amber: 70.08, yellow: 86.047, lime: 130.85, green: 149.579,
-  emerald: 162.48, teal: 182.503, cyan: 215.221, sky: 237.323, blue: 259.815, indigo: 277.117,
-  violet: 292.717, purple: 303.9, fuchsia: 322.15, pink: 354.308, rose: 16.439,
+  red: 25.331,
+  orange: 47.604,
+  amber: 70.08,
+  yellow: 86.047,
+  lime: 130.85,
+  green: 149.579,
+  emerald: 162.48,
+  teal: 182.503,
+  cyan: 215.221,
+  sky: 237.323,
+  blue: 259.815,
+  indigo: 277.117,
+  violet: 292.717,
+  purple: 303.9,
+  fuchsia: 322.15,
+  pink: 354.308,
+  rose: 16.439,
 };
 
 /**
@@ -600,6 +849,8 @@ export function suggest(hex) {
   const [, C, H] = rgbToOklch(...hexToRgb(hex));
   if (C <= ACHROMATIC) return { curve: 'green', name: 'gray' };
   const distance = (h) => Math.min(Math.abs(h - H), 360 - Math.abs(h - H));
-  const curve = Object.keys(TW_HUES).reduce((best, key) => (distance(TW_HUES[key]) < distance(TW_HUES[best]) ? key : best));
+  const curve = Object.keys(TW_HUES).reduce((best, key) =>
+    distance(TW_HUES[key]) < distance(TW_HUES[best]) ? key : best,
+  );
   return { curve, name: curve };
 }
