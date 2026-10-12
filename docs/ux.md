@@ -4,6 +4,8 @@
 
 **Actualización del 2026-10-11 (paso A7).** Con el método D (decisión 30), el mismo paso tiene el mismo contraste en todas las escalas. Se añaden la regla de contraste por paso junto a las tiras (F26, §6.3), el tope de croma en los ajustes (F24), el nuevo sentido de la curva (solo la forma del croma, F3) y el nuevo texto de F10; cambian el tiempo de cálculo de U1 y los ejemplos. Con el método D, `#1877F2` cae en el paso 600, no en el 500.
 
+**Actualización del 2026-10-12 (paso B3).** Las pantallas están en Figma, archivo ColorScaleUI, página "Templates": secciones "B3 · Revisión (Claude, 2026-10-12)" (escritorio con las dos pestañas de ajustes, tableta y móvil) y "B3 · Estados (ux.md §8)". Cambian: los anchos de cada disposición (§3.1, decisión 58), los ajustes en dos pestañas (decisión 61), las medidas de las tiras (§6.3, decisión 60) y la tabla de estados (§8, con su pantalla). El resto sigue igual.
+
 Este documento dice qué hay en la pantalla, en qué orden y cómo se comporta. Cómo se ve (colores, tipografía, medidas) es de B2 y B3; los textos de la interfaz son en inglés (decisión 13) y los de aquí son borradores.
 
 ## 1. Lo que se propone, en corto
@@ -17,7 +19,7 @@ Este documento dice qué hay en la pantalla, en qué orden y cómo se comporta. 
 | U5 | **Avisos y notas en una lista única** encima de las tiras, cada uno con el nombre de su escala y un enlace a su fila. | Con las tablas en pestañas, un aviso de una pestaña oculta no se vería. |
 | U6 | **"Suggested" como opción** en los selectores de curva y de paleta de cada rol. | Es la forma de volver a la propuesta después de elegir otra; en el curso, elegir la opción sugerida la fijaba. |
 | U7 | **El gráfico de la curva (F3) es una línea de tamaño fijo con N puntos**, no una barra por paso. | Con 30 pasos, las barras del curso (una fila de 24 px por paso) medirían más de 700 px. |
-| U8 | **Se mantiene el máximo de 30 pasos** (decisión 17). | Con una tabla cada vez (U4), 30 filas son una tabla larga pero única. Se revisa con las pantallas en B3. |
+| U8 | **Se mantiene el máximo de 30 pasos** (decisión 17, revisada en B3 con la 60). | Con una tabla cada vez (U4), 30 filas son una tabla larga pero única. Con muestras de al menos 24 px, los 11 pasos por defecto caben en todos los anchos (§6.3). |
 | U9 | **La regla de contraste por paso (F26) va junto a las tiras**, con una fila que marca en cada paso si el texto sobre blanco y sobre negro cumple AA, y el paso de la marca dicho aparte con su contraste. | Es lo que diferencia a la app (`direccion.md`): que el número del paso diga el contraste en todas las escalas. Tiene que verse sin abrir nada. |
 
 ## 2. Flujo
@@ -84,9 +86,19 @@ Esquema, no diseño: los valores entre llaves son ilustrativos.
 - **Columna de resultado:** el resto del ancho. El resumen de arriba (color, N, convención, curva) sigue a lo calculado, no a lo escrito: con un error, dice con qué valores sigue (U2).
 - **"How it works"**: sección breve al final de la página con el método (§0 de `funcionalidades.md`: la escalera de contraste, la mediana de las paletas de Tailwind CSS, la marca en el paso de contraste más cercano, la curva como forma del croma y el tope), las fuentes, el crédito de las curvas (A5) y el enlace a DesignToken101 (C6). El texto es de B3.
 
+### 3.1. Anchos (B3, decisión 58)
+
+| Ancho de la ventana | Disposición | Margen lateral del resultado | Ancho de la tira (sin nombres) |
+|---|---|---|---|
+| 1024 px o más | Dos columnas: ajustes (360 px) y resultado | De 32 px a 1024 hasta 80 px a 1480 | 896 px a 1480; 696 px a 1280 |
+| Menos de 1024 px | Una columna: ajustes primero, como en "Móvil" | 24 px (tableta, 744 en Figma) | 632 px a 744 |
+| Menos de 640 px | Una columna, con los cambios de móvil de abajo | 16 px | 328 px a 360 |
+
+El panel lateral que tapaba el resultado (pantallas "MenuOpen") no se usa. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
+
 ### Móvil
 
-Una columna, en este orden: ajustes, resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works". Arriba de los ajustes, un enlace "Skip to result" (y, en el resultado, "Back to settings"), porque con cálculo al momento el usuario va a ir y volver. Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben.
+Una columna, en este orden: ajustes, resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works". Arriba de los ajustes, un enlace "Skip to result" (y, en el resultado, "Back to settings"), porque con cálculo al momento el usuario va a ir y volver. Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px: el nombre de cada escala y el de cada fila de la regla ("White AA", "Black AA") van encima, no a la izquierda; los dos selectores del par y el botón "Swap" se apilan; cada aviso lleva "Show in table" debajo; y los botones de exportar se apilan.
 
 ## 4. Comportamiento general
 
@@ -140,7 +152,9 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 - **Tiras:** una fila por escala, en el orden color, danger, warning, success, info, neutros: el nombre de la paleta y N muestras de claro a oscuro.
 - La muestra de la marca lleva una marca visual y, en texto, "Your color: 600, 4.23 with white" junto a la tira (F7, F26, 1.4.1): su contraste es el suyo, no el de la fila de marcas.
 - Las muestras no son interactivas. Cada tira se lee como una imagen con un texto alternativo corto ("blue, 11 steps from 50 to 950; your color is 600"): los valores están en la tabla.
-- Con muchos pasos, la tira tiene un ancho mínimo por muestra y, si no cabe, su propio desplazamiento horizontal, compartido con las filas de marcas (B3 fija las medidas).
+- Cada muestra mide como mínimo 24 px de ancho (cabe la marca de la regla, de 20 px, y un nombre de tres cifras) y 64 px de alto. Si no caben, la tira tiene su propio desplazamiento horizontal, compartido con las filas de marcas. Caben 37 muestras a 1480, 29 a 1280, 26 a 744 y 13 a 360 (decisión 60).
+- Debajo de las tiras, una línea dice qué marca la marca visual: "✓ marks your color: blue 600. It keeps your exact color, so its contrast is its own: 4.23 with white, 4.95 with black. It isn't counted in the rule above."
+
 
 ### 6.4. Par de contraste (F11)
 
@@ -168,18 +182,21 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 ## 8. Estados
 
-| Estado | Qué se ve |
-|---|---|
-| Inicio | Valores por defecto o de la URL, resultado calculado, sin errores. Valores no válidos de la URL: se ignoran en silencio (F18). |
-| Error de entrada | Error junto al campo, "The result still uses…" y, en Exportar, la lista de errores en vez de la vista previa. El resultado no se atenúa. |
-| Avisos | Lista de §6.2; en la tabla, el número en la pestaña; en los roles, también junto a su selector. |
-| Recorte | Nota en la lista y porcentaje en la columna de recorte de cada paso. |
-| Tope de croma | Casilla marcada; gráfico con la línea del croma de la marca; "· chroma cap" en el resumen. La regla de F26 no cambia. |
-| Rol activado | Su selector, su tira, su pestaña, sus opciones en el par, en la regla de F26 y en la exportación. |
-| Rol con paleta cambiada por colisión | Selector en "Suggested (orange)" y la nota de F22 debajo. |
-| Rol con color propio | Campo de color; avisos y notas de F23 debajo. Un color no válido, error de F1 junto al rol. |
-| Sin croma | Aviso F12.1; nota en el tinte; tira del color en gris; sin aviso de extremo ni comprobación de colisión (F22). |
-| Copiado | "Link copied" o "Copied" unos segundos, anunciado. |
+| Estado | Qué se ve | En Figma (página "Templates") |
+|---|---|---|
+| Inicio | Valores por defecto o de la URL, resultado calculado, sin errores. Valores no válidos de la URL: se ignoran en silencio (F18). | "B3 · Revisión": escritorio, tableta y móvil |
+| Error de entrada | Error junto al campo, "The result still uses…" y, en Exportar, la lista de errores en vez de la vista previa. El resultado no se atenúa. | "B3 · Estados": "Error de entrada" y "Exportación bloqueada" |
+| Avisos | Lista de §6.2, avisos antes que notas; en la tabla, el número en la pestaña; en los roles, también junto a su selector. | "Avisos" (`#1A2B5C`) |
+| Recorte | Nota en la lista y porcentaje en la columna de recorte de cada paso. | "B3 · Revisión" (con los valores por defecto ya hay recorte) |
+| Tope de croma | Casilla marcada; gráfico con la línea del croma de la marca; "· chroma cap" en el resumen. La regla de F26 no cambia. | "Tope de croma" (`#0E4C4C`, 10 pasos) |
+| Rol activado | Su selector, su tira, su pestaña, sus opciones en el par, en la regla de F26 y en la exportación. | "B3 · Revisión": escritorio, pestaña "Semantic palettes" |
+| Rol con paleta cambiada por colisión | Selector en "Suggested (orange)" y la nota de F22 debajo. | "Rol con paleta cambiada" (`#F59E0B`) |
+| Colisión sin alternativa | Aviso de F22 debajo del selector del rol y en la lista. | "Colisión sin alternativa" (`#DC2626`) |
+| Rol con color propio | Campo de color; avisos y notas de F23 debajo. Un color no válido, error de F1 junto al rol. | "Rol con color propio" |
+| Sin croma | Aviso F12.1; nota en el tinte; tira del color en gris; sin aviso de extremo ni comprobación de colisión (F22). | "Sin croma" (`#808080`) |
+| Radix | Nota de F13 debajo de la convención; la ayuda de pasos dice "3 to 30 with Radix names". | "Convención Radix" |
+| Nombres personalizados | Campo de nombres con su error y las acciones de rellenar; con nombres no válidos, la tabla dice "Names pending". | "Nombres personalizados" |
+| Copiado | "Link copied" o "Copied" unos segundos, anunciado. | "Copiado" |
 
 ## 9. Teclado y lector de pantalla (WCAG 2.2 AA)
 
