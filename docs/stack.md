@@ -70,7 +70,7 @@ node -e "const fs=require('fs'),z=require('zlib'),p='dist/assets/';for(const f o
 | JavaScript | 219.548 B | 67.714 B |
 | CSS | 14.275 B | 2.969 B |
 
-El JavaScript no cambia; el CSS sube 1.567 B con gzip por las variables de los tokens. Esta es la base del presupuesto de la versión 1: unos 70,7 kB de JavaScript y CSS con gzip para la página vacía.
+El JavaScript no cambia; el CSS sube 1.567 B con gzip por las variables de los tokens. Esta es la base del presupuesto de la versión 1: unos 70,7 kB de JavaScript y CSS con gzip para la página vacía. **Presupuesto (decisión 45, 2026-10-12): 100 kB con gzip** para todo el JavaScript y el CSS, medido con este mismo comando en C4.
 
 El JavaScript es casi todo React y React DOM: la página solo pinta un `h1`. Para referencia, los archivos que genera `npm run tokens` pesan 21.313 B (`tokens.css`, 3.646 B con gzip) y 5.434 B (`theme.css`, 1.038 B con gzip), pero cuánto CSS llega a la página lo decide Tailwind al construir, así que hay que medirlo.
 
