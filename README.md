@@ -32,7 +32,7 @@ npm run build     # página estática en dist/
 
 ## Origen
 
-Nace de la herramienta "Generar escalas" de [DesignToken101](https://github.com/ocarballido/design-tokens-101). El motor, sus pruebas, `figma-to-dtcg.mjs` y la configuración de Terrazzo se copian de ese repositorio en el commit `f4885d7`, con el origen en la cabecera de cada archivo. Las curvas de referencia son datos de [Tailwind CSS](https://tailwindcss.com) (MIT).
+Nace de la herramienta "Generar escalas" de [DesignToken101](https://github.com/ocarballido/design-tokens-101). El motor, sus pruebas, `figma-to-dtcg.mjs` y la configuración de Terrazzo se copian de ese repositorio en el commit `f4885d7`, con el origen en la cabecera de cada archivo. El motor se reescribe después para N pasos con el mismo contraste en cada paso, y sus pruebas son nuevas (paso C3). Las curvas de referencia son datos de [Tailwind CSS](https://tailwindcss.com) (MIT).
 
 ## Autoría
 
