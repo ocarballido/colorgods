@@ -18,7 +18,6 @@ const BRANDS = Object.keys(fixtures.colors); // los 13 colores de prueba
 const PALS = Object.keys(fixtures.roles); // las 8 paletas de rol
 const TW11 = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
 const W = [1, 1, 1];
-const K = [0, 0, 0];
 const L = (s) => s.steps.map((x) => x.oklch[0]);
 const hexOf = (s) => s.steps.map((x) => x.hex);
 const monotone = (s) => L(s).every((l, i, a) => i === 0 || a[i - 1] > l);

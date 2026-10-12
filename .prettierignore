@@ -1,0 +1,12 @@
+# Documentos y medidas: no se formatean (docs/comparacion/ guarda medidas).
+docs/
+# Variables exportadas de Figma y su paso a DTCG: se regeneran, no se editan.
+tokens/
+# Generados por `npm run tokens`.
+src/styles/tokens.css
+src/styles/theme.css
+# Markdown en español con tablas compactas, como docs/.
+*.md
+dist/
+package-lock.json
+LICENSE
