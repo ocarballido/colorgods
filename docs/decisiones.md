@@ -196,6 +196,12 @@ Tomadas al escribir la parte 5 de C4 (rama `c4-exportacion`); cada una dice su m
 | 89 | Texto de F10 con un color propio en un rol: la decisión 83 lo dejaba como estaba ("except your color’s step"), que queda corto porque ese paso también conserva su color; el encargo de la parte 5 pide arreglarlo. Con colores propios dice "except the steps of your color, your danger color and your info color, which keep your exact colors." Sin ellos, el texto de siempre. `funcionalidades.md` §3 corregido. | Cerrada | 2026-10-13 |
 | 90 | Peso tras la parte 5: 98.602 B con gzip (JavaScript 92.707 B, CSS 5.895 B; `stack.md` §4), 2.759 B más que la parte 4, dentro de los 100 kB de la decisión 45. Quedan unos 1,4 kB. | Cerrada (medida) | 2026-10-13 |
 
+## Exportaciones probadas (paso C5)
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 91 | La exportación DTCG para Figma sigue en sRGB con `hex` (F14, decisión 34). Prueba de C5 (`pruebas-exportacion.md` §2): `Value.tokens.json` importa con sus 44 variables; los mismos colores con `colorSpace` `oklch`, con `hex` de alternativa o sin él, dan "Encountered errors importing 44 tokens" (Oscar, en Figma, 2026-10-13). La candidata DTCG con `oklch` de la decisión 34 queda bloqueada mientras la importación de Figma no lo acepte; se puede repetir la prueba con `docs/comparacion/c5/`. CSS y `@theme` (F15, F16) funcionan con Tailwind CSS 4.3.3 (§1). | Cerrada (medida) | 2026-10-13 |
+
 ## Forma de trabajo
 
 | ID | Decisión | Estado | Fecha |
