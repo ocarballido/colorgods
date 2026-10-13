@@ -1,0 +1,141 @@
+# Formatos de F1
+"#1877F2" -> #1877F2
+"rgb(24 119 242)" -> #1877F2
+"rgb(24, 119, 242)" -> #1877F2
+"hsl(214 89.2% 52.2%)" -> #1877F2
+"24 119 242" -> #1877F2
+"#17F" -> #1177FF
+"#33CC9" -> null
+
+## Por defecto: #1877F2 {"steps":11}
+propuesta: { curve: 'blue', name: 'blue' } | curva usada: blue | paso de la marca: 600
+nombres: 50 100 200 300 400 500 600 700 800 900 950
+regla AA: { white: '700', black: '600' } | 3: { white: '600', black: '700' } | marca: { step: '600', white: 4.234102032628293, black: 4.95972932115771 }
+paletas de los roles: {}
+avisos y notas: 1 note
+  nota | blue: in steps 50, 700 and 800 the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: blue 50
+región de estado: Scales updated: 11 steps, 0 warnings, 1 note.
+neutral 950: #23272E | blue 50: #F3F8FF
+par por defecto: {
+  text: {
+    value: 'color:6',
+    hex: '#1877F2',
+    name: 'blue 600',
+    label: 'blue 600 (your color)'
+  },
+  bg: { value: 'white', hex: '#FFFFFF', name: 'white', label: 'White' },
+  ratio: 4.234102032628293,
+  passes: [ false, false, true, false, true ],
+  caption: 'Blue 600 on white. Passes 2 of 5 levels.',
+  spoken: '4.23:1. Blue 600 on white. Passes 2 of 5 levels: Large text AA 3, UI components 3.'
+}
+par con Black de fondo (V4): 4.95:1. Blue 600 on black. Passes 4 of 5 levels: Normal text AA 4.5, Large text AA 3, Large text AAA 4.5, UI components 3.
+par con Swap tras Black (V4): 4.95:1. Black on blue 600. Passes 4 of 5 levels: Normal text AA 4.5, Large text AA 3, Large text AAA 4.5, UI components 3.
+
+## Por defecto con danger y warning (G1): #1877F2 {"steps":11,"roles":{"danger":null,"warning":null}}
+propuesta: { curve: 'blue', name: 'blue' } | curva usada: blue | paso de la marca: 600
+nombres: 50 100 200 300 400 500 600 700 800 900 950
+regla AA: { white: '700', black: '600' } | 3: { white: '600', black: '700' } | marca: { step: '600', white: 4.234102032628293, black: 4.95972932115771 }
+paletas de los roles: { danger: 'red', warning: 'amber' }
+avisos y notas: 3 notes
+  nota | blue: in steps 50, 700 and 800 the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: blue 50
+  nota | danger: in 7 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: danger 50
+  nota | warning: in all 11 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). If the clip is large, try another palette. | Show in table: warning 50
+región de estado: Scales updated: 11 steps, 2 semantic palettes, 0 warnings, 3 notes.
+danger 50: #FFF6F4 | blue 600: #1877F2 | neutral 950: #23272E
+
+## V2: 12 pasos: #1877F2 {"steps":12}
+propuesta: { curve: 'blue', name: 'blue' } | curva usada: blue | paso de la marca: 650
+nombres: 50 100 200 250 350 450 550 650 750 800 900 950
+regla AA: { white: '650', black: '550' } | 3: { white: '550', black: '750' } | marca: { step: '650', white: 4.234102032628293, black: 4.95972932115771 }
+paletas de los roles: {}
+avisos y notas: 1 note
+  nota | blue: in steps 50, 750 and 800 the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: blue 50
+región de estado: Scales updated: 12 steps, 0 warnings, 1 note.
+
+## V2: #1A2B5C con 12 pasos: #1A2B5C {"steps":12}
+propuesta: { curve: 'blue', name: 'blue' } | curva usada: blue | paso de la marca: 950
+nombres: 50 100 200 250 350 450 550 650 750 800 900 950
+regla AA: { white: '650', black: '550' } | 3: { white: '550', black: '750' } | marca: { step: '950', white: 13.600908163973527, black: 1.5440145427660041 }
+paletas de los roles: {}
+avisos y notas: 1 warning, 1 note
+  aviso | blue: Your color is very dark: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve. | Show in table: blue 950
+  nota | blue: in step 50 the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: blue 50
+región de estado: Scales updated: 12 steps, 1 warning, 1 note.
+
+## Sin croma: #808080 {"steps":11}
+propuesta: { curve: 'green', name: 'gray' } | curva usada: green | paso de la marca: 600
+nombres: 50 100 200 300 400 500 600 700 800 900 950
+regla AA: { white: '700', black: '600' } | 3: { white: '600', black: '700' } | marca: { step: '600', white: 3.9494396480491156, black: 5.317210002277984 }
+paletas de los roles: {}
+avisos y notas: 1 warning
+  aviso | gray: Your color has no chroma, so it has no hue: the scale comes out gray and the neutrals have no tint. 
+región de estado: Scales updated: 11 steps, 1 warning, 0 notes.
+
+## Extremo: #1A2B5C {"steps":11}
+propuesta: { curve: 'blue', name: 'blue' } | curva usada: blue | paso de la marca: 950
+nombres: 50 100 200 300 400 500 600 700 800 900 950
+regla AA: { white: '700', black: '600' } | 3: { white: '600', black: '700' } | marca: { step: '950', white: 13.600908163973527, black: 1.5440145427660041 }
+paletas de los roles: {}
+avisos y notas: 1 warning, 1 note
+  aviso | blue: Your color is very dark: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve. | Show in table: blue 950
+  nota | blue: in step 50 the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: blue 50
+región de estado: Scales updated: 11 steps, 1 warning, 1 note.
+
+## Recorte: #0000FF {"steps":11}
+propuesta: { curve: 'blue', name: 'blue' } | curva usada: blue | paso de la marca: 800
+nombres: 50 100 200 300 400 500 600 700 800 900 950
+regla AA: { white: '700', black: '600' } | 3: { white: '600', black: '700' } | marca: { step: '800', white: 8.592471358428805, black: 2.444 }
+paletas de los roles: {}
+avisos y notas: 1 note
+  nota | blue: in 9 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: blue 50
+región de estado: Scales updated: 11 steps, 0 warnings, 1 note.
+
+## Pasos muy juntos: #F5F5DC {"steps":11}
+propuesta: { curve: 'yellow', name: 'yellow' } | curva usada: yellow | paso de la marca: 50
+nombres: 50 100 200 300 400 500 600 700 800 900 950
+regla AA: { white: '700', black: '600' } | 3: { white: '600', black: '700' } | marca: { step: '50', white: 1.1066073948178137, black: 18.976919997410043 }
+paletas de los roles: {}
+avisos y notas: 1 warning, 1 note
+  aviso | yellow: Your color is very light: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve. | Show in table: yellow 50
+  nota | yellow: steps 50 and 100 are very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart. | Show in table: yellow 50
+región de estado: Scales updated: 11 steps, 1 warning, 1 note.
+
+## Rojo: #F40009 {"steps":11}
+propuesta: { curve: 'red', name: 'red' } | curva usada: red | paso de la marca: 600
+nombres: 50 100 200 300 400 500 600 700 800 900 950
+regla AA: { white: '700', black: '600' } | 3: { white: '600', black: '700' } | marca: { step: '600', white: 4.329393492313434, black: 4.850563950189369 }
+paletas de los roles: {}
+avisos y notas: 1 note
+  nota | red: in 7 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: red 50
+región de estado: Scales updated: 11 steps, 0 warnings, 1 note.
+
+## Tope de croma: #0E4C4C {"steps":10,"cap":true}
+propuesta: { curve: 'teal', name: 'teal' } | curva usada: teal | paso de la marca: 900
+nombres: 50 100 200 350 450 550 650 800 900 950
+regla AA: { white: '650', black: '550' } | 3: { white: '550', black: '650' } | marca: { step: '900', white: 9.736603925082642, black: 2.1568095160882037 }
+paletas de los roles: {}
+avisos y notas: 1 warning
+  aviso | teal: Your color is very dark: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve. | Show in table: teal 900
+región de estado: Scales updated: 10 steps, 1 warning, 0 notes.
+
+## Comprobación 7: seis escalas de 30 pasos: #1877F2 {"steps":30,"names":"radix","roles":{"danger":null,"warning":null,"success":null,"info":null}}
+propuesta: { curve: 'blue', name: 'blue' } | curva usada: blue | paso de la marca: 19
+nombres: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30
+regla AA: { white: '20', black: '19' } | 3: { white: '17', black: '23' } | marca: { step: '19', white: 4.234102032628293, black: 4.95972932115771 }
+paletas de los roles: { danger: 'red', warning: 'amber', success: 'green', info: 'blue' }
+avisos y notas: 11 notes
+  nota | blue: in 8 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: blue 1
+  nota | danger: in 17 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: danger 1
+  nota | warning: in all 30 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). If the clip is large, try another palette. | Show in table: warning 1
+  nota | success: in 11 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: success 11
+  nota | info: in 22 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). | Show in table: info 1
+  nota | blue: steps 1 and 2, 2 and 3, and 3 and 4 are very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart. | Show in table: blue 1
+  nota | danger: 4 pairs of neighboring steps are very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart. | Show in table: danger 1
+  nota | warning: steps 1 and 2, 2 and 3, and 3 and 4 are very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart. | Show in table: warning 1
+  nota | success: steps 1 and 2, 2 and 3, and 3 and 4 are very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart. | Show in table: success 1
+  nota | info: steps 1 and 2, 2 and 3, and 3 and 4 are very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart. | Show in table: info 1
+  nota | neutral: steps 1 and 2, 2 and 3, and 3 and 4 are very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart. | Show in table: neutral 1
+región de estado: Scales updated: 30 steps, 4 semantic palettes, 0 warnings, 11 notes.
+escalas: blue 30, danger 30, warning 30, success 30, info 30, neutral 30
+tinte 0, neutral último: #272727
