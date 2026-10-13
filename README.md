@@ -40,7 +40,7 @@ Nace de la herramienta "Generar escalas" de [DesignToken101](https://github.com/
 
 ## Fuentes tipográficas
 
-La página sirve sus propias fuentes en woff2, sin peticiones a otros dominios. Las dos tienen la licencia SIL Open Font License 1.1, cuyo texto está junto a los archivos, en `src/assets/fonts/`:
+La página sirve sus propias fuentes en woff2, sin peticiones a otros dominios. Las dos tienen la licencia SIL Open Font License 1.1, cuyo texto está junto a los archivos, en `src/assets/fonts/`, y se publica con la página en `public/fonts/` (`/fonts/Inter-OFL.txt` y `/fonts/JetBrainsMono-OFL.txt`):
 
 - [Inter](https://github.com/rsms/inter), variable (pesos 100 a 900), subconjunto latino. Copyright 2016 The Inter Project Authors. Licencia: `src/assets/fonts/OFL-Inter.txt`.
 - [JetBrains Mono](https://github.com/JetBrains/JetBrainsMono) 400, subconjunto latino. Copyright 2020 The JetBrains Mono Project Authors. Licencia: `src/assets/fonts/OFL-JetBrainsMono.txt`.
