@@ -61,7 +61,10 @@ export function ChromaChart({ steps, cap, brandChroma }: Props) {
         </svg>
         <div className="grid" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
           {steps.map((s, i) => (
-            <span key={s.name} className="truncate text-center text-caption-default leading-snug text-neutral-default">
+            <span
+              key={s.name}
+              className="text-center text-caption-default leading-snug whitespace-nowrap text-neutral-default"
+            >
               {showLabel(i) ? s.name : ''}
             </span>
           ))}

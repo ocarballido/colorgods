@@ -4,7 +4,10 @@ import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'r
 import { build, suggest } from '../tools/scales.mjs';
 import { MainColorPanel } from './components/MainColorPanel';
 import { ResultSummary } from './components/ResultSummary';
-import { SettingsTabs } from './components/SettingsTabs';
+import { ScaleStrips } from './components/ScaleStrips';
+import { ScaleTables } from './components/ScaleTables';
+import { visibleScales } from './components/scaleData';
+import { Tabs } from './components/Tabs';
 import { HowItWorks, SiteFooter, SiteHeader } from './components/SiteChrome';
 import { StatusRegion } from './components/StatusRegion';
 import { initialSettings, namesLabel, reducer, stepsError, type Field } from './settings';
@@ -83,6 +86,8 @@ export default function App() {
     () => build(color, { steps: valid.steps, names: valid.names, curve, cap, tint }),
     [color, valid, curve, cap, tint],
   );
+  const colorName = settings.name ?? suggested.name;
+  const scales = useMemo(() => visibleScales(result, colorName), [result, colorName]);
   // Errores que aparecen en un campo sin el foco (al cambiar de convención o de N): se dicen con el resumen.
   const stepsErr = settings.touched.steps && stepsError(settings);
   const extra = [
@@ -111,7 +116,9 @@ export default function App() {
             Skip to result
           </a>
           <div className="rounded-container border border-neutral-default bg-neutral-default p-400">
-            <SettingsTabs
+            <Tabs
+              label="Settings"
+              fill
               selected={tab}
               onSelect={setTab}
               tabs={[
@@ -145,7 +152,7 @@ export default function App() {
         </section>
         <div className="min-w-0 flex-1 px-400 py-600 sm:px-600 lg:px-[clamp(2rem,calc(10.526vw_-_4.737rem),5rem)]">
           <div className="mx-auto flex max-w-content flex-col gap-600">
-            <section id="result" aria-labelledby="result-heading" tabIndex={-1} className="flex flex-col gap-400">
+            <section id="result" aria-labelledby="result-heading" tabIndex={-1} className="flex flex-col gap-600">
               <a href="#settings" className={skipClass}>
                 Back to settings
               </a>
@@ -153,6 +160,8 @@ export default function App() {
                 Result
               </h2>
               <ResultSummary settings={settings} result={result} />
+              <ScaleStrips scales={scales} rule={result.rule} colorName={colorName} />
+              <ScaleTables scales={scales} result={result} pending={valid.pending} />
             </section>
             <StatusRegion result={result} extra={extra} />
             <HowItWorks />

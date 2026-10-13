@@ -28,6 +28,8 @@ export type Settings = {
   color: string;
   // null: el nombre propuesto por suggest(), que se ve en el campo hasta que el usuario escribe (F5).
   nameText: string | null;
+  // Último nombre válido (null: el propuesto). Lo usan las tiras, las tablas y, después, la exportación.
+  name: string | null;
   stepsText: string;
   convention: Convention;
   customText: string;
@@ -74,6 +76,7 @@ export const initialSettings: Settings = {
   colorText: DEFAULT_COLOR,
   color: DEFAULT_COLOR,
   nameText: null,
+  name: null,
   stepsText: '11',
   convention: 'tailwind',
   customText: '',
@@ -129,8 +132,8 @@ export function reducer(s: Settings, a: Action): Settings {
       return hex ? touch(next, 'color', false) : next;
     }
     case 'name': {
-      const next = { ...s, nameText: a.text };
-      return isPaletteName(a.text) ? touch(next, 'name', false) : next;
+      if (!isPaletteName(a.text)) return { ...s, nameText: a.text };
+      return touch({ ...s, nameText: a.text, name: a.text }, 'name', false);
     }
     case 'steps': {
       // Con nombres personalizados, cambiar N puede dejar los nombres cortos o largos: el error se ve ya (ux.md §10.4).
