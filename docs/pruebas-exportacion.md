@@ -45,4 +45,12 @@ Pasos, en un archivo de Figma de prueba (como "Generar escalas" del curso, compr
 2. Comprueba tres variables contra la tabla de la app: `color/blue/600` `#1877F2`, `color/danger/50` `#FFF6F4` y `color/neutral/950` `#23272E`; y que están marcadas como *Hide from publishing*.
 3. Repite con `Oklch.tokens.json` y con `OklchNoHex.tokens.json`, cada uno en su colección. Apunta si importa, si da error y, si importa, el valor de `color/blue/600` (tiene que ser `#1877F2`) y el de `color/blue/50` (`#F3F8FF`).
 
-Resultado: pendiente.
+Resultado (Oscar, 2026-10-13, en un archivo de Figma nuevo; cada archivo en su colección nueva, creada antes de arrastrarlo, como dice la ayuda de Figma, "Modes for variables"):
+
+| Archivo | Resultado |
+|---|---|
+| `Value.tokens.json` | Importa: una colección con las 44 variables en los grupos esperados. F14 cumple. |
+| `Oklch.tokens.json` | No importa: "Encountered errors importing 44 tokens". |
+| `OklchNoHex.tokens.json` | No importa: el mismo error. |
+
+Figma rechaza `colorSpace` `oklch` aunque el valor lleve `hex` de alternativa. Se mantiene la exportación en sRGB con `hex` (decisión 91).
