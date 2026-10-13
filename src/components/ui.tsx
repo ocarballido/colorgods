@@ -105,17 +105,26 @@ type ButtonProps = {
   // aria-disabled y no disabled: un botón deshabilitado pierde el foco y el foco no se mueve al calcular (ux.md §9).
   inactive?: boolean;
   label?: string;
+  // Variante primary de ColorScaleUI (fondo de acento). El borde transparente se ve con colores forzados.
+  primary?: boolean;
   className?: string;
 };
 
-export function Button({ children, onClick, inactive, label, className = '' }: ButtonProps) {
+export const buttonClass = (primary?: boolean) =>
+  `inline-flex min-h-[38px] min-w-[44px] items-center justify-center rounded-control border px-400 py-200 text-center text-label-default font-500 leading-snug ${
+    primary
+      ? 'border-transparent bg-accent-strong-default text-on-accent hover:bg-accent-strong-hover active:bg-accent-strong-active'
+      : 'border-neutral-strong text-neutral-default hover:bg-neutral-hover active:bg-neutral-active aria-disabled:cursor-not-allowed aria-disabled:text-neutral-subtle aria-disabled:hover:bg-transparent'
+  }`;
+
+export function Button({ children, onClick, inactive, label, primary, className = '' }: ButtonProps) {
   return (
     <button
       type="button"
       aria-label={label}
       aria-disabled={inactive || undefined}
       onClick={() => !inactive && onClick()}
-      className={`inline-flex min-h-[38px] min-w-[44px] items-center justify-center rounded-control border border-neutral-strong px-400 py-200 text-label-default font-500 leading-snug text-neutral-default hover:bg-neutral-hover active:bg-neutral-active aria-disabled:cursor-not-allowed aria-disabled:text-neutral-subtle aria-disabled:hover:bg-transparent ${className}`}
+      className={`${buttonClass(primary)} ${className}`}
     >
       {children}
     </button>

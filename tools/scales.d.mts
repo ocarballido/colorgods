@@ -106,4 +106,6 @@ export function contrastRule(
 export function build(hex: string, options?: BuildOptions): Scales;
 export function oklchText(oklch: Oklch): string;
 export function toFigmaTokens(scales: Scales, options: { name: string }): string;
+export function toCss(scales: Scales, options: { name: string }): string;
+export function toTheme(scales: Scales, options: { name: string }): string;
 export function suggest(hex: string): { curve: string; name: string };

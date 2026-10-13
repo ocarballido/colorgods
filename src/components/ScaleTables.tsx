@@ -2,11 +2,8 @@
 // horizontal en un contenedor enfocable con nombre, y las dos primeras columnas se quedan fijas al desplazar.
 import type { Oklch } from '../../tools/scales.mjs';
 import type { Notice } from './noticeData';
-import { BLACK, WHITE, contrastWith, ratioText, tabLabel, type Scale } from './scaleData';
+import { BLACK, WHITE, contrastWith, f10, ratioText, tabLabel, type Scale } from './scaleData';
 import { Tabs } from './Tabs';
-
-const F10 =
-  'Every scale has the same contrast at each step, except your color’s step, which keeps your exact color. See the rule above the scales, or check any pair below.';
 
 // oklch() con 3, 3 y 1 decimales fijos, como en Figma (0.020, no 0.02).
 const oklch = ([L, C, H]: Oklch) => `${L.toFixed(3)} ${C.toFixed(3)} ${H.toFixed(1)}`;
@@ -107,7 +104,7 @@ export function ScaleTables({ scales, list, pending, selected, onSelect }: Props
           label: tabLabel(scale, list),
           panel: (
             <div className="flex flex-col gap-400">
-              <p className="text-caption-default leading-snug">{F10}</p>
+              <p className="text-caption-default leading-snug">{f10(scales)}</p>
               <ScaleTable scale={scale} pending={pending} />
             </div>
           ),

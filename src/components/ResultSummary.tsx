@@ -1,8 +1,14 @@
-// Resumen del resultado (ux.md §6.1): sigue a lo calculado, no a lo escrito (U2). "Copy link" llega con F18.
+// Resumen del resultado (ux.md §6.1): sigue a lo calculado, no a lo escrito (U2). "Copy link" copia el enlace con los
+// ajustes (F18) y confirma con "Link copied" en el botón y en una región de estado; "Go to export" lleva a Exportar.
 import type { Scales } from '../../tools/scales.mjs';
 import { namesLabel, type Settings } from '../settings';
+import { useCopy } from '../useCopy';
+import { Button, buttonClass } from './ui';
 
-export function ResultSummary({ settings: s, result }: { settings: Settings; result: Scales }) {
+type Props = { settings: Settings; result: Scales; link: () => string };
+
+export function ResultSummary({ settings: s, result, link }: Props) {
+  const [copied, copy] = useCopy('Link copied', 'Couldn’t copy the link');
   const v = s.valid;
   const items = [
     `Scales for ${result.input.hex}`,
@@ -30,6 +36,17 @@ export function ResultSummary({ settings: s, result }: { settings: Settings; res
           </li>
         ))}
       </ul>
+      <div className="flex flex-col gap-200 sm:flex-row">
+        <Button className="sm:flex-1" onClick={() => copy(link())}>
+          {copied || 'Copy link'}
+        </Button>
+        <a href="#export" className={`${buttonClass(true)} sm:flex-1`}>
+          Go to export
+        </a>
+      </div>
+      <p role="status" className="sr-only">
+        {copied}
+      </p>
     </section>
   );
 }

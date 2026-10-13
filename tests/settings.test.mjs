@@ -14,7 +14,9 @@ import {
   namesError,
   multipleError,
   roleOptions,
+  blockingErrors,
 } from '../src/settings.ts';
+import { f10, visibleScales } from '../src/components/scaleData.ts';
 
 const run = (actions, from = initialSettings) => actions.reduce(reducer, from);
 const calc = (s) =>
@@ -203,4 +205,44 @@ test('roles: activar, elegir paleta y color propio con su último valor válido 
   assert.deepEqual(roleOptions(s.roles), { danger: null });
   assert.equal(s.roles.danger.colorText, 'rgb(255, 77, 128)');
   assert.deepEqual(Object.keys(build(s.color, { roles: roleOptions(s.roles) }).roles), ['danger']);
+});
+
+test('exportación bloqueada: errores de F1, F2, F5, F6.1 y F23 con su campo; showErrors los muestra todos (ux.md §4)', () => {
+  assert.deepEqual(blockingErrors(initialSettings, 'blue'), []);
+  const s = run([
+    { type: 'color', text: '#33CC9' },
+    { type: 'name', text: 'Bad' },
+    { type: 'convention', convention: 'custom' },
+    { type: 'custom', text: 'a b' },
+    { type: 'role', role: 'danger', on: true },
+    { type: 'roleChoice', role: 'danger', choice: 'custom', fill: '#FF0000' },
+    { type: 'roleColor', role: 'danger', text: 'nope' },
+    // Un rol activo con paleta no bloquea.
+    { type: 'role', role: 'info', on: true },
+  ]);
+  const errors = blockingErrors(s, 'blue');
+  assert.deepEqual(
+    errors.map((e) => e.id),
+    ['color', 'palette-name', 'custom-names', 'role-danger-color'],
+  );
+  assert.equal(errors[0].text, 'Your color: use hex, RGB or HSL, like #1877F2.');
+  assert.equal(errors[3].text, 'danger color: use hex, RGB or HSL, like #1877F2.');
+  assert.deepEqual(
+    blockingErrors(run([{ type: 'steps', text: '40' }]), 'blue').map((e) => e.id),
+    ['steps'],
+  );
+  const shown = reducer(s, { type: 'showErrors' });
+  assert.equal(shown.touched.color && shown.touched.name && shown.touched.steps && shown.touched.names, true);
+  assert.equal(shown.roles.danger.touched, true);
+  // El resultado no cambia al mostrar los errores.
+  assert.deepEqual(calc(shown), calc(s));
+});
+
+test('F10: con un color propio en un rol, el texto nombra también su paso (decisión 83)', () => {
+  const scales = (roles) => visibleScales(build('#1877F2', { roles }), 'blue');
+  assert.match(f10(scales({ danger: null })), /except your color’s step, which keeps your exact color\./);
+  assert.match(
+    f10(scales({ danger: { color: '#DC2626' }, info: { color: '#0EA5E9' } })),
+    /except the steps of your color, your danger color and your info color, which keep your exact colors\./,
+  );
 });
