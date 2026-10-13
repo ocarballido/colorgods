@@ -788,7 +788,8 @@ export function build(
   };
 }
 
-// Las tres cifras de oklch como las muestra la tabla: 0.755 0.145 165.4
+// Las tres cifras de oklch redondeadas, sin ceros finales: 0.755 0.145 165.4. La tabla de la interfaz las muestra con
+// 3, 3 y 1 decimales fijos (src/components/ScaleTables.tsx).
 export const oklchText = ([L, C, H]) => `${round(L, 3)} ${round(C, 3)} ${round(H, 1)}`;
 
 // --- Archivo para Figma (F14) -------------------------------------------------------------------

@@ -150,7 +150,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 - **Encima de las tiras**, el texto de F26 ("Same contrast at every step in every scale. Text on white: 700 and darker. Text on black: 600 and lighter (AA)." y, en una línea más discreta, el nivel 3 para texto grande y componentes), que se recalcula con N, la convención y los roles activos.
 - **Dos filas de marcas** (desde 640 px; en móvil, ver §3) alineadas con las columnas de los pasos: "White AA" y "Black AA", con "✓" en los pasos que cumplen en todas las escalas y nada en los demás. Cada marca tiene texto para el lector de pantalla (las filas se leen como una lista: "White AA: 700, 800, 900, 950"). El nivel 3 (texto grande y componentes) va en el texto, no en filas, para no cargar la vista.
 - **Tiras:** una fila por escala, en el orden color, danger, warning, success, info, neutros: el nombre de la paleta y N muestras de claro a oscuro.
-- La muestra de la marca lleva una marca visual y, en texto, "Your color: 600, 4.23 with white" junto a la tira (F7, F26, 1.4.1): su contraste es el suyo, no el de la fila de marcas.
+- La muestra de la marca lleva una marca visual (✓) y su contraste se dice en texto en la línea de debajo de las tiras (F7, F26, 1.4.1): su contraste es el suyo, no el de la fila de marcas. (Corregido en C4, parte 2, decisión 73: decía "Your color: 600, 4.23 with white" junto a la tira, lo mismo que la línea de debajo; se sigue Figma, que solo tiene la línea.)
 - Las muestras no son interactivas. Cada tira se lee como una imagen con un texto alternativo corto ("blue, 11 steps from 50 to 950; your color is 600"): los valores están en la tabla.
 - Cada muestra mide como mínimo 24 px de ancho (cabe la marca de la regla, de 20 px, y un nombre de tres cifras) y 64 px de alto. Si no caben, la tira tiene su propio desplazamiento horizontal, compartido con las filas de marcas. Caben 37 muestras a 1480, 29 a 1280 y 26 a 744 (decisión 60). En móvil, filas de 8 muestras (ver "Móvil" en §3).
 - Debajo de las tiras, una línea dice qué marca la marca visual: "✓ marks your color: blue 600. It keeps your exact color, so its contrast is its own: 4.23 with white, 4.95 with black. It isn't counted in the rule above."
@@ -205,7 +205,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 - **Campos:** etiqueta visible, ayuda y error asociados con `aria-describedby`; `aria-invalid` con error.
 - **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
 - **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, y los enlaces de saltar.
-- **Color:** la marca, los roles, los avisos, los niveles de contraste y las marcas de la regla llevan texto (F19, 1.4.1). Las muestras de color tienen borde para verse sobre cualquier fondo (C21 del curso).
+- **Color:** la marca, los roles, los avisos, los niveles de contraste y las marcas de la regla llevan texto (F19, 1.4.1). Las muestras de color no tienen borde, como en Figma; con colores forzados llevan un contorno del sistema. Oscar asume el riesgo el 2026-10-13: el paso más claro casi no se distingue del blanco (decisión 75, que sustituye al borde de C21 del curso).
 - **Objetivos:** todos los controles de al menos 24 × 24 px (2.5.8).
 - **Colores forzados:** bordes, foco, casillas, las marcas de la regla y el paso de la marca visibles.
 
@@ -220,7 +220,7 @@ Además de los criterios de `funcionalidades.md`:
 5. "Suggested" en la curva: elegir `green`, cambiar el color (la curva se queda en `green`), volver a "Suggested" (la curva sigue al color).
 6. "Show in table" de un aviso de danger con la pestaña de blue abierta: se abre danger y el foco va a la fila.
 7. Recalcular con seis escalas de 30 pasos en un móvil de gama media sin retraso perceptible (U1); si lo hay, el cálculo pasa a segundo plano.
-8. Con `#1877F2` y 11 pasos: la regla dice "Text on white: 700 and darker" y "Your color: 600, 4.23 with white"; al cambiar de curva o activar el tope, la regla no cambia y la tira del color sí.
+8. Con `#1877F2` y 11 pasos: la regla dice "Text on white: 700 and darker" y la línea de debajo de las tiras, "✓ marks your color: blue 600 … 4.23 with white" (decisión 73); al cambiar de curva o activar el tope, la regla no cambia y la tira del color sí.
 9. Con `#0E4C4C` y 10 pasos, activar el tope: el gráfico baja a la línea del croma de la marca y "· chroma cap" aparece en el resumen y en la URL.
 
 ## 11. Preguntas para Oscar
