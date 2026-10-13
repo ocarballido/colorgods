@@ -37,9 +37,9 @@ export function HowItWorks() {
         How it works
       </h2>
       <p>
-        Each step is a contrast level, the same in every scale: at each step, blue, danger, warning and neutral have the
-        same luminance, so the same contrast with white and black. The levels are the median of the 17 Tailwind CSS
-        color palettes.
+        Each step is a contrast level, the same in every scale: at each step, your color’s scale, the semantic palettes
+        and the neutrals have the same luminance, so the same contrast with white and black. The levels are the median
+        of the 17 Tailwind CSS color palettes.
       </p>
       <p>
         Your color keeps its exact value and goes on the step with the closest contrast. That step keeps its own
