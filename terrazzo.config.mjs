@@ -1,5 +1,6 @@
 // Origen: github.com/ocarballido/design-tokens-101, commit f4885d7, terrazzo.config.mjs.
-// Adaptado en colorgods: prefijo de las variables --cg- en vez de --t101- (decisión 43, 2026-10-12). El resto, como el original.
+// Adaptado en colorgods: prefijo de las variables --cg- en vez de --t101- (decisión 43, 2026-10-12) y, en C6,
+// --font-sans y --font-mono sin las variables de next/font. El resto, como el original.
 
 // Genera las dos capas de tokens de la web (docs/paso-7-tokens.md, V06–V11):
 //   src/styles/tokens.css  capa 1: variables --cg-* con sus modos (plugin-css de Terrazzo)
@@ -90,10 +91,8 @@ function tailwindTheme() {
     sans: 'ui-sans-serif, system-ui, sans-serif',
     mono: 'ui-monospace, monospace',
   }; // V11
-  // V13: next/font sirve la fuente con un nombre propio y lo publica en una variable CSS
-  // (https://nextjs.org/docs/app/api-reference/components/font#css-variables).
-  // Va primero; si no existe, se usa el nombre del token.
-  const NEXT_FONT_VARIABLES = { sans: '--font-inter', mono: '--font-jetbrains-mono' };
+  // En colorgods no hay next/font (V13 del curso): las fuentes se sirven con @font-face en src/index.css
+  // con el mismo nombre que el token ("Inter", "JetBrains Mono"), así que --font-* apunta directamente a él (C6).
 
   const ref = (id) => `var(--cg-${id.replace(/\./g, '-')})`;
   const rules = [
@@ -118,10 +117,7 @@ function tailwindTheme() {
     [/^font-size\.\d+$/, () => null],
     [/^font-size\.(.+)$/, (m, id) => [[`--text-${m[1].replace(/\./g, '-')}`, ref(id)]]],
     [/^font-weight\.(.+)$/, (m, id) => [[`--font-weight-${m[1]}`, ref(id)]]],
-    [
-      /^font-family\.(sans|mono)$/,
-      (m, id) => [[`--font-${m[1]}`, `var(${NEXT_FONT_VARIABLES[m[1]]}, ${ref(id)}), ${FONT_FALLBACKS[m[1]]}`]],
-    ],
+    [/^font-family\.(sans|mono)$/, (m, id) => [[`--font-${m[1]}`, `${ref(id)}, ${FONT_FALLBACKS[m[1]]}`]]],
     [/^line-height\.(.+)$/, (m, id) => [[`--leading-${m[1]}`, ref(id)]]],
     // --container-* da max-w-* y w-* (https://tailwindcss.com/docs/max-width).
     [/^size\.content\.max-width$/, (m, id) => [['--container-content', ref(id)]]],

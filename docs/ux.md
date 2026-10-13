@@ -201,7 +201,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 ## 9. Teclado y lector de pantalla (WCAG 2.2 AA)
 
-- **Orden:** enlace para saltar al contenido, ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Encabezados: h1 (colorgods y lo que hace), h2 Settings, Result, Export, How it works; h3 dentro de Result.
+- **Orden:** "How it works" de la cabecera y el enlace para saltar al resultado (decisión 67), ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Encabezados: h1 (colorgods y lo que hace), h2 Settings, Result, Export, How it works; h3 dentro de Result.
 - **Campos:** etiqueta visible, ayuda y error asociados con `aria-describedby`; `aria-invalid` con error.
 - **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes"; con roles activos, "11 steps, 2 semantic palettes, …") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
 - **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, y los enlaces de saltar.
@@ -221,7 +221,7 @@ Además de los criterios de `funcionalidades.md`:
 6. "Show in table" de un aviso de danger con la pestaña de blue abierta: se abre danger y el foco va a la fila.
 7. Recalcular con seis escalas de 30 pasos en un móvil de gama media sin retraso perceptible (U1); si lo hay, el cálculo pasa a segundo plano.
 8. Con `#1877F2` y 11 pasos: la regla dice "Text on white: 700 and darker" y la línea de debajo de las tiras, "✓ marks your color: blue 600 … 4.23 with white" (decisión 73); al cambiar de curva o activar el tope, la regla no cambia y la tira del color sí.
-9. Con `#0E4C4C` y 10 pasos, activar el tope: el gráfico baja a la línea del croma de la marca y "· chroma cap" aparece en el resumen y en la URL.
+9. Con `#0E4C4C` y 10 pasos, activar el tope: el gráfico baja a la línea del croma de la marca y "Chroma cap" aparece en el resumen (una celda, decisión 68) y `cap=1` en la URL.
 
 ## 11. Preguntas para Oscar
 
