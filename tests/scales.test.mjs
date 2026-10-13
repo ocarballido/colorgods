@@ -262,6 +262,17 @@ test('F23: colisión con la marca, roles parecidos y fuera de margen (criterios 
     { code: 'roles-close', role: 'warning', other: 'danger' },
     { code: 'role-hue', role: 'warning', min: 43, max: 90 },
   ]);
+  // Dos colores propios parecidos a danger: un aviso por par, cada uno en su rol.
+  assert.deepEqual(
+    roleWarnings(
+      build('#1877F2', { roles: { danger: null, warning: { color: '#EF4444' }, success: { color: '#EF4444' } } }),
+    ).filter((w) => w.code === 'roles-close'),
+    [
+      { code: 'roles-close', role: 'warning', other: 'danger' },
+      { code: 'roles-close', role: 'warning', other: 'success' },
+      { code: 'roles-close', role: 'success', other: 'danger' },
+    ],
+  );
   // Sin danger activo no hay con quién parecerse.
   assert.deepEqual(roleWarnings(build('#1877F2', { roles: { warning: { color: '#EF4444' } } })), [
     { code: 'role-hue', role: 'warning', min: 43, max: 90 },

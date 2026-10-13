@@ -781,28 +781,34 @@ export function build(
   }
   // Color propio (F23, decisión 24): la app no lo cambia; avisa si colisiona con la marca (regla de F22, sin info) o
   // si su paso central dista menos de 0,05 del de otro rol activo, y pone una nota si su tono está fuera del margen.
-  const model = (r) => colorModel(custom[r], suggest(custom[r]).curve, false);
-  const centerOf = (r) =>
-    custom[r] ? solve(ladderAt(0.5), model(r).chroma, model(r).oklch[2]).hex : center(proposal[r].palette);
+  const models = {};
+  const centers = {};
+  for (const r of active) {
+    if (custom[r]) {
+      const m = (models[r] = colorModel(custom[r], suggest(custom[r]).curve, false));
+      centers[r] = solve(ladderAt(0.5), m.chroma, m.oklch[2]).hex;
+    } else centers[r] = center(proposal[r].palette);
+  }
   const checkBrand = !color.achromatic && !color.extreme;
   for (const r of active) {
     const p = proposal[r];
-    if (!custom[r]) {
+    const m = models[r];
+    if (!m) {
       if (p.changed) warnings.push({ code: 'role-changed', role: r, from: p.changed, to: p.palette });
       if (p.collision) warnings.push({ code: 'role-collision', role: r, palette: p.palette });
       continue;
     }
-    const m = model(r);
     if (checkBrand && r !== 'info' && deltaE(solve(Yhex(hex), m.chroma, m.oklch[2]).hex, hex) < COLLISION)
       warnings.push({ code: 'role-custom-collision', role: r });
     // Cada par se dice una vez: con dos colores propios, en el primero.
     for (const q of active)
       if (
         q !== r &&
-        !(custom[q] && active.indexOf(q) < active.indexOf(r)) &&
-        deltaE(centerOf(r), centerOf(q)) < COLLISION
+        !(models[q] && active.indexOf(q) < active.indexOf(r)) &&
+        deltaE(centers[r], centers[q]) < COLLISION
       )
         warnings.push({ code: 'roles-close', role: r, other: q });
+    // Un color sin croma (C = 0) también da la nota de fuera de margen: no tiene tono (decisión 84).
     const [min, max] = ROLE_HUES[r];
     const hue = Math.round(m.oklch[2]);
     if (m.achromatic || hue < min || hue > max) warnings.push({ code: 'role-hue', role: r, min, max });

@@ -3,7 +3,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { build } from '../tools/scales.mjs';
-import { measure } from '../src/components/pairData.ts';
+import { lostScale, measure } from '../src/components/pairData.ts';
 
 const scales = (hex, options) => {
   const r = build(hex, options);
@@ -40,4 +40,13 @@ test('el par sigue en la posición k al cambiar N o la convención; con menos pa
   const five = measure(pick, scales('#1877F2', { steps: 5 }));
   assert.equal(five.text.value, 'color:4');
   assert.equal(five.bg.value, 'neutral:4');
+});
+
+test('al desactivar un rol que estaba en el par, se dice cuál y el par vuelve al de por defecto (ux.md §6.4)', () => {
+  const s = scales('#1877F2', { steps: 11 });
+  assert.equal(lostScale({ text: 'danger:6', bg: 'white' }, s), 'danger');
+  assert.equal(lostScale({ text: 'color:6', bg: 'warning:2' }, s), 'warning');
+  assert.equal(lostScale({ text: 'white', bg: 'black' }, s), undefined);
+  assert.equal(lostScale({ text: null, bg: 'neutral:3' }, s), undefined);
+  assert.equal(measure({ text: null, bg: null }, s).caption, 'Blue 600 on white. Passes 2 of 5 levels.');
 });

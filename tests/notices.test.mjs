@@ -150,10 +150,10 @@ test('F22: #FF0000 y rosa pastel dan el aviso de danger, también para su select
 
 test('F23: colisión con la marca, roles parecidos y fuera de margen, con la fila del color propio', () => {
   const same = withRoles('#FF0000', { danger: { color: '#FF0000' } }).list;
-  assert.match(
-    same.find((x) => x.key === 'role-custom-collision:danger').body,
-    /^This danger color is close to your color/,
-  );
+  const sameN = same.find((x) => x.key === 'role-custom-collision:danger');
+  assert.match(sameN.body, /^This danger color is close to your color/);
+  // La colisión se mide a la luminancia de la marca: lleva a la fila del paso de la marca.
+  assert.equal(sameN.at, 'danger 600');
   const { r, list } = withRoles('#1877F2', { danger: { color: '#FF4D80' } });
   const hue = list.find((x) => x.key === 'role-hue:danger');
   assert.equal(hue.body, 'Design systems don’t use this hue for danger: they use 21° to 30° (OKLCH hue).');
@@ -162,10 +162,10 @@ test('F23: colisión con la marca, roles parecidos y fuera de margen, con la fil
     r.roles.danger.findIndex((s) => s.anchor),
   );
   const close = withRoles('#1877F2', { danger: null, warning: { color: '#EF4444' } }).list;
-  const n = close.find((x) => x.key === 'roles-close:warning');
+  const n = close.find((x) => x.key === 'roles-close:warning:danger');
   assert.equal(
     n.text,
-    'warning: warning and danger are very close in color. Choose colors that are easier to tell apart.',
+    'warning: Warning and danger are very close in color. Choose colors that are easier to tell apart.',
   );
   assert.deepEqual(n.roles, ['warning', 'danger']);
   assert.equal(n.at, 'warning 500');

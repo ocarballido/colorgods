@@ -64,7 +64,12 @@ export function ContrastPair({ scales }: { scales: Scale[] }) {
             />
           </div>
         </div>
-        {said.reset && said.scales === scales && <p className={hintClass}>{said.text}</p>}
+        {/* Visible y oculto al lector: ya lo dice la región viva de abajo. */}
+        {said.reset && said.scales === scales && (
+          <p aria-hidden="true" className={hintClass}>
+            {said.text}
+          </p>
+        )}
         <div className="flex flex-col gap-400 lg:flex-row lg:items-start">
           <div className="flex flex-col gap-400 overflow-hidden rounded-control border border-neutral-default p-400 lg:flex-1 lg:self-stretch">
             <p className="text-heading-2 font-600 leading-tight">{ratioText(m.ratio)}:1</p>

@@ -5,7 +5,7 @@ import { useMemo, type Dispatch } from 'react';
 import { ROLES, ROLE_PALETTES, proposeRoles, type Role, type Scales } from '../../tools/scales.mjs';
 import { colorError, roleOptions, type Action, type Settings } from '../settings';
 import type { Notice } from './noticeData';
-import { Callout, Select, TextField } from './ui';
+import { Callout, Select, TextField, hintClass } from './ui';
 
 type Props = {
   settings: Settings;
@@ -16,12 +16,13 @@ type Props = {
 };
 
 export function SemanticPanel({ settings: s, dispatch, onBlur, result, list }: Props) {
-  // Paleta propuesta de cada rol con las elegidas por el usuario, para "Suggested (…)" (F21, decisión 47).
-  const proposal = useMemo(() => {
-    const chosen = Object.fromEntries(
-      Object.entries(roleOptions(s.roles)).filter((e): e is [Role, string] => typeof e[1] === 'string'),
+  // Paleta propuesta de cada rol para "Suggested (…)" (F21, U6): con las elegidas en los demás roles (decisión 47) y
+  // sin la suya, que es lo que se usaría al volver a "Suggested".
+  const suggested = useMemo(() => {
+    const chosen = Object.entries(roleOptions(s.roles)).filter((e): e is [Role, string] => typeof e[1] === 'string');
+    return Object.fromEntries(
+      ROLES.map((r) => [r, proposeRoles(s.color, Object.fromEntries(chosen.filter(([q]) => q !== r)))[r].palette]),
     );
-    return proposeRoles(s.color, chosen);
   }, [s.color, s.roles]);
   // La muestra es el paso del rol en la posición del de la marca: el mismo contraste que tu color (decisión 83).
   const brand = result.color.findIndex((x) => x.anchor);
@@ -36,6 +37,8 @@ export function SemanticPanel({ settings: s, dispatch, onBlur, result, list }: P
         const notes = list.filter((n) => n.roles?.includes(r));
         const noteId = (i: number) => `${r}-note-${i}`;
         const err = rs.touched ? colorError(rs) : null;
+        // Avisos del rol y la línea "Using …", que describen el selector y el campo (ux.md §9).
+        const described = [...notes.map((_, i) => noteId(i)), !err && `${r}-using`].filter(Boolean).join(' ');
         return (
           <div
             key={r}
@@ -60,9 +63,9 @@ export function SemanticPanel({ settings: s, dispatch, onBlur, result, list }: P
                     </>
                   }
                   value={rs.choice}
-                  extraDescribedBy={notes.map((_, i) => noteId(i)).join(' ') || undefined}
+                  extraDescribedBy={described}
                   options={[
-                    { value: '', label: `Suggested (${proposal[r].palette})` },
+                    { value: '', label: `Suggested (${suggested[r]})` },
                     ...ROLE_PALETTES[r].map((p) => ({ value: p, label: p })),
                     { value: 'custom', label: 'Custom color' },
                   ]}
@@ -78,12 +81,19 @@ export function SemanticPanel({ settings: s, dispatch, onBlur, result, list }: P
                     still={`The result still uses ${rs.color}.`}
                     onChange={(text) => dispatch({ type: 'roleColor', role: r, text })}
                     onBlur={() => onBlur(r)}
+                    extraDescribedBy={described}
                   />
                 )}
                 <div
-                  className="h-[56px] rounded-control border border-neutral-default"
+                  className="swatches h-[56px] rounded-control border border-neutral-default forced-color-adjust-none"
                   style={{ background: swatch }}
                 />
+                {/* El color de la muestra en texto (1.1.1, 1.4.1); con error lo dice "The result still uses…". */}
+                {!err && (
+                  <p id={`${r}-using`} className={hintClass}>
+                    Using {swatch}
+                  </p>
+                )}
                 {notes.map((n, i) => (
                   <Callout key={n.key} id={noteId(i)} variant={n.warning ? 'warning' : 'note'}>
                     {n.body}

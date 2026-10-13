@@ -12,8 +12,8 @@ export function ResultSummary({ settings: s, result }: { settings: Settings; res
     // Sin croma, el motor calcula los neutros con tinte 0 (F12.1): el resumen dice lo calculado.
     result.warnings.some((w) => w.code === 'achromatic') ? 'Tint 0 (no hue)' : `Tint ${s.tint}`,
     ...(s.cap ? ['Chroma cap'] : []),
-    // Roles activos (F20): "danger, warning".
-    ...(Object.keys(result.roles).length ? [Object.keys(result.roles).join(', ')] : []),
+    // Roles activos (F20): "Roles: danger, warning".
+    ...(Object.keys(result.roles).length ? [`Roles: ${Object.keys(result.roles).join(', ')}`] : []),
   ];
   return (
     <section aria-labelledby="summary-heading" className="flex flex-col gap-200">

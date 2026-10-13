@@ -26,7 +26,8 @@ const list = (names: string[]) =>
 const icon = (r: string) => `Don’t rely on color alone: show ${r} messages with an icon and text.`;
 
 // brand: índice del paso de la marca. Los avisos de un rol llevan a la fila donde se miden: la del paso de la marca
-// (colisión, F22), la del color propio (F23) o la del paso central (roles parecidos).
+// (colisiones con la marca, F22 y F23), la del color propio (fuera de margen, F23) o la del paso central (roles
+// parecidos; con N par, el más claro de los dos centrales).
 function describe(w: ScaleWarning, scale: Scale, brand: number): Omit<Notice, 'key' | 'scale' | 'text'> | null {
   const names = scale.steps.map((s) => s.name);
   const anchor = scale.steps.findIndex((s) => s.anchor);
@@ -95,13 +96,13 @@ function describe(w: ScaleWarning, scale: Scale, brand: number): Omit<Notice, 'k
       return {
         warning: true,
         body: `This ${r} color is close to your color, so people may confuse them. ${icon(r)}`,
-        row: anchor,
+        row: brand,
         roles: [r],
       };
     case 'roles-close':
       return {
         warning: true,
-        body: `${r} and ${w.other} are very close in color. Choose colors that are easier to tell apart.`,
+        body: `${r[0].toUpperCase()}${r.slice(1)} and ${w.other} are very close in color. Choose colors that are easier to tell apart.`,
         row: (names.length - 1) >> 1,
         roles: [r, w.other],
       };
@@ -125,7 +126,9 @@ export function notices(result: Scales, scales: Scale[]): Notice[] {
     const d = scale && describe(w, scale, brand);
     if (!d) continue;
     const at = d.row === undefined ? undefined : `${scale.name} ${scale.steps[d.row].name}`;
-    out.push({ ...d, key: `${w.code}:${id}`, scale: id, text: `${scale.name}: ${d.body}`, at });
+    // Roles parecidos puede salir varias veces en un rol, una por cada otro rol: la clave lleva los dos.
+    const key = `${w.code}:${id}${'other' in w ? `:${w.other}` : ''}`;
+    out.push({ ...d, key, scale: id, text: `${scale.name}: ${d.body}`, at });
   }
   return [...out.filter((n) => n.warning), ...out.filter((n) => !n.warning)];
 }
