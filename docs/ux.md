@@ -136,7 +136,7 @@ En este orden (el del teclado):
 
 ### 6.1. Resumen
 
-Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names · curve blue · tint 0.5", "· chroma cap" si está activado y "· Roles: danger, warning" con roles activos, decisión 83), "Copy link" y un enlace a la exportación. "Copy link" confirma con "Link copied", anunciado (F17, F18).
+Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names · curve blue · tint 0.5", "· chroma cap" si está activado y "· Roles: danger, warning" con roles activos, decisión 83; en la app, una fila de celdas, decisión 68), "Copy link" y un enlace a la exportación ("Go to export", decisión 88). "Copy link" confirma con "Link copied", anunciado (F17, F18).
 
 ### 6.2. Avisos y notas (U5)
 
@@ -176,7 +176,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 - Grupo de opciones: "DTCG for Figma" (F14), "CSS" (F15), "Tailwind @theme" (F16). Por defecto, DTCG.
 - Vista previa del archivo en un bloque de código de solo lectura, con su propio desplazamiento y el nombre del archivo encima.
-- "Download" (con el nombre del archivo en el botón) y "Copy". Copy confirma con "Copied", anunciado (F17).
+- "Download" (con el nombre del archivo en el botón) y "Copy". Copy confirma con "Copied", anunciado (F17). Archivos: `Value.tokens.json`, `colors.css` y `theme.css`; el CodeBlock lleva también el botón de copiar de Figma en su cabecera (decisión 86).
 - Con errores, ver §4 "Exportación bloqueada".
 - Se exportan todas las escalas visibles en las tiras (color, roles activos, neutros), con los N pasos (decisiones 11 y 15).
 
