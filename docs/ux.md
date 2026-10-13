@@ -205,7 +205,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 - **Campos:** etiqueta visible, ayuda y error asociados con `aria-describedby`; `aria-invalid` con error.
 - **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
 - **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, y los enlaces de saltar.
-- **Color:** la marca, los roles, los avisos, los niveles de contraste y las marcas de la regla llevan texto (F19, 1.4.1). Las muestras de color tienen borde para verse sobre cualquier fondo (C21 del curso).
+- **Color:** la marca, los roles, los avisos, los niveles de contraste y las marcas de la regla llevan texto (F19, 1.4.1). Las muestras de color no tienen borde, como en Figma; con colores forzados llevan un contorno del sistema. Oscar asume el riesgo el 2026-10-13: el paso más claro casi no se distingue del blanco (decisión 75, que sustituye al borde de C21 del curso).
 - **Objetivos:** todos los controles de al menos 24 × 24 px (2.5.8).
 - **Colores forzados:** bordes, foco, casillas, las marcas de la regla y el paso de la marca visibles.
 
