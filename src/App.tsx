@@ -1,11 +1,15 @@
-// Página de colorgods (C4, parte 1: estructura y entrada). Dos columnas desde 1024 px y una por debajo (decisión 58).
+// Página de colorgods (C4: estructura y entrada, tiras y tablas, avisos y par de contraste). Dos columnas desde 1024 px y una por debajo (decisión 58).
 // El resultado se calcula al momento con build() del motor y los últimos valores válidos (U1, U2).
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import { build, suggest } from '../tools/scales.mjs';
+import { ContrastPair } from './components/ContrastPair';
 import { MainColorPanel } from './components/MainColorPanel';
+import { Notices } from './components/Notices';
+import { notices, type Notice } from './components/noticeData';
 import { ResultSummary } from './components/ResultSummary';
 import { ScaleStrips } from './components/ScaleStrips';
-import { ScaleTables } from './components/ScaleTables';
+import { ScaleTables, rowId } from './components/ScaleTables';
 import { visibleScales } from './components/scaleData';
 import { Tabs } from './components/Tabs';
 import { HowItWorks, SiteFooter, SiteHeader } from './components/SiteChrome';
@@ -88,6 +92,13 @@ export default function App() {
   );
   const colorName = settings.name ?? suggested.name;
   const scales = useMemo(() => visibleScales(result, colorName), [result, colorName]);
+  const list = useMemo(() => notices(result, scales), [result, scales]);
+  // Pestaña de la tabla abierta, por escala. "Show in table" la cambia y lleva el foco a la fila (ux.md §6.2 y §9).
+  const [table, setTable] = useState('color');
+  const showInTable = (n: Notice) => {
+    flushSync(() => setTable(n.scale));
+    document.getElementById(rowId(n.scale, n.row!))?.focus();
+  };
   // Errores que aparecen en un campo sin el foco (al cambiar de convención o de N): se dicen con el resumen.
   const stepsErr = settings.touched.steps && stepsError(settings);
   const extra = [
@@ -160,10 +171,12 @@ export default function App() {
                 Result
               </h2>
               <ResultSummary settings={settings} result={result} />
+              <Notices list={list} onShow={showInTable} />
               <ScaleStrips scales={scales} rule={result.rule} colorName={colorName} />
-              <ScaleTables scales={scales} result={result} pending={valid.pending} />
+              <ContrastPair scales={scales} />
+              <ScaleTables scales={scales} list={list} pending={valid.pending} selected={table} onSelect={setTable} />
             </section>
-            <StatusRegion result={result} extra={extra} />
+            <StatusRegion result={result} list={list} extra={extra} />
             <HowItWorks />
           </div>
         </div>

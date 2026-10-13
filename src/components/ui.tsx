@@ -1,7 +1,7 @@
 // Controles básicos con el aspecto de los componentes de ColorScaleUI (TextField, Button, Select, Callout).
 // Etiqueta visible; ayuda, error y estado asociados con aria-describedby; aria-invalid con error (ux.md §9).
 import type { ReactNode } from 'react';
-import { ChevronDown, CircleAlert, Info } from './icons';
+import { ChevronDown, CircleAlert, Info, TriangleAlert } from './icons';
 
 const describedBy = (...ids: (string | false | null | undefined)[]) => ids.filter(Boolean).join(' ') || undefined;
 
@@ -122,16 +122,27 @@ export function Button({ children, onClick, inactive, label, className = '' }: B
   );
 }
 
+type Option = { value: string; label: string };
+
 type SelectProps = {
   id: string;
   label: string;
   hint?: string;
   value: string;
-  options: { value: string; label: string }[];
+  options: Option[];
+  // Opciones agrupadas con optgroup, después de las sueltas (el par de contraste, ux.md §6.4).
+  groups?: { label: string; options: Option[] }[];
   onChange: (value: string) => void;
 };
 
-export function Select({ id, label, hint, value, options, onChange }: SelectProps) {
+const optionList = (options: Option[]) =>
+  options.map((o) => (
+    <option key={o.value} value={o.value}>
+      {o.label}
+    </option>
+  ));
+
+export function Select({ id, label, hint, value, options, groups = [], onChange }: SelectProps) {
   const hintId = hint && `${id}-hint`;
   return (
     <div className="flex flex-col gap-100">
@@ -151,10 +162,11 @@ export function Select({ id, label, hint, value, options, onChange }: SelectProp
           onChange={(e) => onChange(e.target.value)}
           className={`${fieldClass} appearance-none pr-800`}
         >
-          {options.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
+          {optionList(options)}
+          {groups.map((g) => (
+            <optgroup key={g.label} label={g.label}>
+              {optionList(g.options)}
+            </optgroup>
           ))}
         </select>
         <ChevronDown className="pointer-events-none absolute top-1/2 right-300 -translate-y-1/2 text-neutral-subtle" />
@@ -163,17 +175,52 @@ export function Select({ id, label, hint, value, options, onChange }: SelectProp
   );
 }
 
-export function Callout({ id, children }: { id?: string; children: ReactNode }) {
+// Callout de ColorScaleUI: note (info) o warning. La etiqueta "Note" o "Warning" es el texto del icono (1.4.1).
+const CALLOUT = {
+  note: { Icon: Info, label: 'Note', box: 'border-info-default bg-info-subtle', text: 'text-info-default' },
+  warning: {
+    Icon: TriangleAlert,
+    label: 'Warning',
+    box: 'border-warning-default bg-warning-subtle',
+    text: 'text-warning-default',
+  },
+};
+
+export function Callout({
+  id,
+  variant = 'note',
+  className = '',
+  children,
+}: {
+  id?: string;
+  variant?: keyof typeof CALLOUT;
+  className?: string;
+  children: ReactNode;
+}) {
+  const { Icon, label, box, text } = CALLOUT[variant];
   return (
     <div
       id={id}
-      className="flex items-start gap-400 rounded-container border border-info-default bg-info-subtle p-400 text-neutral-default"
+      className={`flex items-start gap-400 rounded-container border p-400 text-neutral-default ${box} ${className}`}
     >
-      <Info className="shrink-0 text-info-default" />
+      <Icon className={`shrink-0 ${text}`} />
       <div className="flex flex-col gap-200">
-        <p className="text-label-default font-500 leading-snug text-info-default">Note</p>
+        <p className={`text-label-default font-500 leading-snug ${text}`}>{label}</p>
         <p className="text-body-default leading-normal">{children}</p>
       </div>
     </div>
+  );
+}
+
+// TestBadge de ColorScaleUI: "PASS" o "FAIL" en mayúsculas solo con CSS, para que el lector lea la palabra.
+export function TestBadge({ pass }: { pass: boolean }) {
+  return (
+    <span
+      className={`rounded-100 px-100 py-050 text-caption-default leading-snug font-600 tracking-[1.2px] uppercase ${
+        pass ? 'bg-success-subtle text-accent-default' : 'bg-danger-subtle text-danger-default'
+      }`}
+    >
+      {pass ? 'Pass' : 'Fail'}
+    </span>
   );
 }

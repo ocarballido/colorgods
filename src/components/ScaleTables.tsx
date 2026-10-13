@@ -1,7 +1,7 @@
 // Tablas (F9, F10, U4, ux.md §6.5): una por escala, elegida con pestañas. Cada tabla tiene su propio desplazamiento
 // horizontal en un contenedor enfocable con nombre, y las dos primeras columnas se quedan fijas al desplazar.
-import { useState } from 'react';
-import type { Oklch, Scales } from '../../tools/scales.mjs';
+import type { Oklch } from '../../tools/scales.mjs';
+import type { Notice } from './noticeData';
 import { BLACK, WHITE, contrastWith, ratioText, tabLabel, type Scale } from './scaleData';
 import { Tabs } from './Tabs';
 
@@ -51,8 +51,9 @@ function ScaleTable({ scale, pending }: { scale: Scale; pending: boolean }) {
           </tr>
         </thead>
         <tbody>
-          {scale.steps.map((s) => (
-            <tr key={s.name}>
+          {/* Cada fila recibe el foco con "Show in table" (ux.md §6.5), no con Tab. */}
+          {scale.steps.map((s, k) => (
+            <tr key={s.name} id={rowId(scale.id, k)} tabIndex={-1}>
               <th scope="row" className={`${cell} ${stick1} bg-neutral-default text-left font-400`}>
                 {s.name}
                 {s.anchor && ' · Your color'}
@@ -77,11 +78,21 @@ function ScaleTable({ scale, pending }: { scale: Scale; pending: boolean }) {
   );
 }
 
-export function ScaleTables({ scales, result, pending }: { scales: Scale[]; result: Scales; pending: boolean }) {
+export const rowId = (scale: string, k: number) => `row-${scale}-${k}`;
+
+type Props = {
+  scales: Scale[];
+  list: Notice[];
+  pending: boolean;
+  // Escala de la pestaña abierta: la cambia también "Show in table" (App).
+  selected: string;
+  onSelect: (scale: string) => void;
+};
+
+export function ScaleTables({ scales, list, pending, selected, onSelect }: Props) {
   const tabId = (scale: Scale) => `table-${scale.id}`;
-  const [selected, setSelected] = useState(tabId(scales[0]));
   // Si la escala elegida deja de verse (un rol desactivado, en otra parte de C4), se vuelve a la primera.
-  const current = scales.some((s) => tabId(s) === selected) ? selected : tabId(scales[0]);
+  const current = tabId(scales.find((s) => s.id === selected) ?? scales[0]);
   return (
     <section aria-labelledby="tables-heading" className="flex flex-col gap-200">
       <h3 id="tables-heading" className="text-heading-4 font-600 leading-snug">
@@ -90,10 +101,10 @@ export function ScaleTables({ scales, result, pending }: { scales: Scale[]; resu
       <Tabs
         label="Tables"
         selected={current}
-        onSelect={setSelected}
+        onSelect={(id) => onSelect(id.slice('table-'.length))}
         tabs={scales.map((scale) => ({
           id: tabId(scale),
-          label: tabLabel(result, scale),
+          label: tabLabel(scale, list),
           panel: (
             <div className="flex flex-col gap-400">
               <p className="text-caption-default leading-snug">{F10}</p>

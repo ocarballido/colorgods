@@ -56,3 +56,23 @@ export const Check = ({ size = 20, className }: IconProps) =>
     ],
     20,
   );
+
+// triangle-alert tal como lo publica Lucide (lucide-static 0.460.0, unpkg.com): trazo de 2 px en vez del contorno
+// relleno de Figma, misma forma. El contorno pesaba 1.090 B con gzip (decisión 80).
+export const TriangleAlert = ({ size = 24, className }: IconProps) => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01" />
+  </svg>
+);

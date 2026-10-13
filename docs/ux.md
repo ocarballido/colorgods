@@ -141,7 +141,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 ### 6.2. Avisos y notas (U5)
 
 - Una lista, en este orden: avisos (sin croma, extremo, colisiones de roles y roles parecidos) y luego notas (recorte, pasos muy juntos, rol cambiado, fuera de margen). Cada elemento empieza con el nombre de la escala y lleva un icono con texto alternativo ("Warning" o "Note"), no solo color.
-- Los que nombran pasos llevan "Show in table": selecciona la pestaña de esa escala y lleva el foco a la primera fila nombrada.
+- Los que señalan una fila llevan "Show in table": selecciona la pestaña de esa escala y lleva el foco a la primera fila nombrada; el aviso de extremo, a la fila de la marca, como en Figma; el de sin croma no lo lleva (decisión 78).
 - Sin avisos ni notas, la sección no aparece.
 - Casos de F12 con los colores de prueba: `#808080` da solo el aviso sin croma (F12.1); `#1A2B5C` da el aviso de extremo con cualquier N (F12.2), y con él se sugiere el tope de croma; `#0000FF` con 11 pasos da la nota de recorte en 9 pasos (F12.3); `#F5F5DC` con 11 pasos da la nota de pasos muy juntos (F12.4).
 
@@ -162,7 +162,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 - Una muestra con texto normal y texto grande en el par, el ratio truncado a dos decimales (decisión 12) y los cinco niveles de F11 con "Pass" o "Fail" en texto.
 - El resultado del par está en una región `aria-live="polite"`: al cambiar un selector, se anuncia el ratio y cuántos niveles cumple.
 - Si se desactiva un rol cuyo paso está en el par, el par vuelve al de por defecto y se dice ("The pair was reset because danger was turned off").
-- Si un cambio de N o de convención cambia el nombre del paso elegido, el par se queda en la misma posición de la escala (el paso k) y el selector muestra el nombre nuevo.
+- Si un cambio de N o de convención cambia el nombre del paso elegido, el par se queda en la misma posición de la escala (el paso k) y el selector muestra el nombre nuevo. Si N baja por debajo de k, el par va al último paso (decisión 81).
 
 ### 6.5. Tablas (U4)
 
