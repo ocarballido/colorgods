@@ -1,5 +1,7 @@
 // Iconos de Lucide (lucide.dev, licencia ISC), con los trazos de ColorScaleUI (B2). En línea y con currentColor
 // para que tomen el color del texto, también en modo oscuro y con colores forzados. Decorativos: aria-hidden.
+import type { ReactNode } from 'react';
+
 type IconProps = { size?: number; className?: string };
 
 const svg = (size: number, className: string | undefined, d: string[], box = 24) => (
@@ -57,9 +59,9 @@ export const Check = ({ size = 20, className }: IconProps) =>
     20,
   );
 
-// triangle-alert tal como lo publica Lucide (lucide-static 0.460.0, unpkg.com): trazo de 2 px en vez del contorno
-// relleno de Figma, misma forma. El contorno pesaba 1.090 B con gzip (decisión 80).
-export const TriangleAlert = ({ size = 24, className }: IconProps) => (
+// Iconos tal como los publica Lucide (lucide-static 0.460.0, unpkg.com): trazo de 2 px en vez del contorno relleno de
+// Figma, misma forma. El contorno de triangle-alert pesaba 1.090 B con gzip (decisión 80).
+const stroked = (size: number, className: string | undefined, children: ReactNode) => (
   <svg
     aria-hidden="true"
     focusable="false"
@@ -73,6 +75,23 @@ export const TriangleAlert = ({ size = 24, className }: IconProps) => (
     strokeLinejoin="round"
     className={className}
   >
-    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01" />
+    {children}
   </svg>
 );
+
+export const TriangleAlert = ({ size = 24, className }: IconProps) =>
+  stroked(
+    size,
+    className,
+    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01" />,
+  );
+
+export const Copy = ({ size = 24, className }: IconProps) =>
+  stroked(
+    size,
+    className,
+    <>
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </>,
+  );

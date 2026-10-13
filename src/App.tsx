@@ -1,9 +1,11 @@
-// Página de colorgods (C4: estructura y entrada, tiras y tablas, avisos y par de contraste, paletas semánticas). Dos columnas desde 1024 px y una por debajo (decisión 58).
+// Página de colorgods (C4: estructura y entrada, tiras y tablas, avisos y par de contraste, paletas semánticas,
+// exportación y ajustes en la URL). Dos columnas desde 1024 px y una por debajo (decisión 58).
 // El resultado se calcula al momento con build() del motor y los últimos valores válidos (U1, U2).
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { build, suggest, type Role } from '../tools/scales.mjs';
 import { ContrastPair } from './components/ContrastPair';
+import { ExportSection } from './components/ExportSection';
 import { MainColorPanel } from './components/MainColorPanel';
 import { Notices } from './components/Notices';
 import { notices, type Notice } from './components/noticeData';
@@ -15,7 +17,8 @@ import { visibleScales } from './components/scaleData';
 import { Tabs } from './components/Tabs';
 import { HowItWorks, SiteFooter, SiteHeader } from './components/SiteChrome';
 import { StatusRegion } from './components/StatusRegion';
-import { initialSettings, namesLabel, reducer, roleOptions, stepsError, type Field } from './settings';
+import { blockingErrors, namesLabel, reducer, roleOptions, stepsError, type Field } from './settings';
+import { searchFromSettings, settingsFromSearch } from './url';
 
 // Enlaces de saltar: visibles en una columna; en dos columnas, solo con el foco (decisión 58).
 const skipClass =
@@ -60,6 +63,21 @@ function usePointerSafeBlur<T>(onBlur: (field: T) => void) {
   );
 }
 
+// Ajustes en la URL (F18, ux.md §4): history.replaceState tras una pausa en los cambios, sin entradas en el historial.
+// Al abrir la página no se toca la URL hasta el primer cambio; desde entonces se escribe siempre, también al volver a
+// los ajustes del principio (revisión de la parte 5).
+const URL_DELAY = 500;
+const writeSearch = (search: string) => history.replaceState(history.state, '', `?${search}${location.hash}`);
+function useSearchInUrl(search: string) {
+  const first = useRef<string | null>(search);
+  useEffect(() => {
+    if (search === first.current) return;
+    first.current = null;
+    const timer = setTimeout(() => writeSearch(search), URL_DELAY);
+    return () => clearTimeout(timer);
+  }, [search]);
+}
+
 // La columna de ajustes se queda fija al desplazar solo si cabe entera en la ventana (ux.md §3).
 function useFitsInWindow() {
   const ref = useRef<HTMLElement>(null);
@@ -81,7 +99,8 @@ function useFitsInWindow() {
 }
 
 export default function App() {
-  const [settings, dispatch] = useReducer(reducer, initialSettings);
+  // Al abrir, los ajustes de la URL, cada uno validado antes de llegar al motor (src/url.ts).
+  const [settings, dispatch] = useReducer(reducer, location.search, settingsFromSearch);
   const [tab, setTab] = useState('main');
   const [settingsRef, fits] = useFitsInWindow();
   const onBlur = usePointerSafeBlur(useCallback((field: Field) => dispatch({ type: 'blur', field }), []));
@@ -94,6 +113,18 @@ export default function App() {
     [color, valid, curve, cap, tint, roles],
   );
   const colorName = settings.name ?? suggested.name;
+  const search = useMemo(() => searchFromSettings(settings), [settings]);
+  useSearchInUrl(search);
+  const link = () => {
+    writeSearch(search);
+    return `${location.origin}${location.pathname}?${search}`;
+  };
+  const errors = blockingErrors(settings, suggested.name);
+  // Enlace del resumen de errores: abre la pestaña de ajustes del campo y le da el foco (ux.md §4).
+  const goTo = (id: string) => {
+    flushSync(() => setTab(id.startsWith('role-') ? 'semantic' : 'main'));
+    document.getElementById(id)?.focus();
+  };
   const scales = useMemo(() => visibleScales(result, colorName), [result, colorName]);
   const list = useMemo(() => notices(result, scales), [result, scales]);
   // Pestaña de la tabla abierta, por escala. "Show in table" la cambia y lleva el foco a la fila (ux.md §6.2 y §9).
@@ -175,12 +206,19 @@ export default function App() {
               <h2 id="result-heading" className="sr-only">
                 Result
               </h2>
-              <ResultSummary settings={settings} result={result} />
+              <ResultSummary settings={settings} result={result} link={link} />
               <Notices list={list} onShow={showInTable} />
               <ScaleStrips scales={scales} rule={result.rule} colorName={colorName} />
               <ContrastPair scales={scales} />
               <ScaleTables scales={scales} list={list} pending={valid.pending} selected={table} onSelect={setTable} />
             </section>
+            <ExportSection
+              result={result}
+              name={colorName}
+              errors={errors}
+              onShowErrors={() => dispatch({ type: 'showErrors' })}
+              onGoTo={goTo}
+            />
             <StatusRegion result={result} list={list} extra={extra} />
             <HowItWorks />
           </div>

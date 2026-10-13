@@ -31,6 +31,12 @@
     outline: none;
   }
 
+  /* El resumen de errores de Exportar recibe el foco por script al pulsar Download o Copy: se ve también tras un clic. */
+  div[tabindex='-1']:focus {
+    outline: var(--cg-border-width-200) solid var(--cg-color-border-focus);
+    outline-offset: 2px;
+  }
+
   /* La fila de la tabla a la que lleva "Show in table" (solo por script, así que :focus y no :focus-visible, para que
      se vea también tras un clic): anillo por dentro, porque la tabla recorta lo que sale. Las
      columnas fijas lo taparían con su fondo, así que las celdas lo dibujan también (con colores forzados, que quitan

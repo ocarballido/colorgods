@@ -68,7 +68,9 @@ export type Action =
   // fill: el color que se ve en la muestra del rol, para rellenar el campo al pasar a "Custom color".
   | { type: 'roleChoice'; role: Role; choice: string; fill: string }
   | { type: 'roleColor'; role: Role; text: string }
-  | { type: 'roleBlur'; role: Role };
+  | { type: 'roleBlur'; role: Role }
+  // Al pulsar Download o Copy con errores, se ven en todos los campos (ux.md §4).
+  | { type: 'showErrors' };
 
 export const CONVENTIONS: { value: Convention; label: string }[] = [
   { value: 'tailwind', label: 'Tailwind' },
@@ -206,6 +208,12 @@ export function reducer(s: Settings, a: Action): Settings {
     }
     case 'roleBlur':
       return withRole(s, a.role, { touched: true });
+    case 'showErrors':
+      return {
+        ...s,
+        touched: { ...s.touched, color: true, name: true, steps: true, names: true },
+        roles: Object.fromEntries(ROLES.map((r) => [r, { ...s.roles[r], touched: true }])) as Settings['roles'],
+      };
   }
 }
 
@@ -257,3 +265,20 @@ export function namesError(s: Settings): string | null {
 }
 
 export const multipleError = (s: Settings) => (parseMultiple(s.multipleText) ? null : 'Use a whole number from 1 up.');
+
+// Errores que bloquean la exportación (F1, F2, F5, F6.1 y F23; ux.md §4), se vean o no en su campo, con el id del
+// campo al que lleva cada uno en el resumen de errores.
+export function blockingErrors(s: Settings, suggested: string) {
+  const list: [string, string, string | null][] = [
+    ['color', 'Your color', colorError(s)],
+    ['palette-name', 'Palette name', nameError(s, suggested)],
+    ['steps', 'Steps', stepsError(s)],
+    ['custom-names', 'Step names', namesError(s)],
+    ...ROLES.filter((r) => s.roles[r].on && s.roles[r].choice === 'custom').map(
+      (r): [string, string, string | null] => [`role-${r}-color`, `${r} color`, colorError(s.roles[r])],
+    ),
+  ];
+  return list
+    .filter((e) => e[2])
+    .map(([id, label, error]) => ({ id, text: `${label}: ${error!.charAt(0).toLowerCase()}${error!.slice(1)}` }));
+}

@@ -846,12 +846,19 @@ export function build(
 // 3, 3 y 1 decimales fijos (src/components/ScaleTables.tsx).
 export const oklchText = ([L, C, H]) => `${round(L, 3)} ${round(C, 3)} ${round(H, 1)}`;
 
-// --- Archivo para Figma (F14) -------------------------------------------------------------------
+// --- Exportación (F14 a F16) --------------------------------------------------------------------
+
+// Todas las escalas completas (decisiones 11 y 15), en el orden de las tiras: color, roles activos y neutros. El nombre
+// se comprueba aquí también, para que nadie pueda escribir otra cosa en el CSS llamando al motor sin la interfaz.
+function paletteList(scales, name) {
+  if (!isPaletteName(name)) throw new Error(`Invalid palette name: ${name}`);
+  return [[name, scales.color], ...Object.entries(scales.roles), ['neutral', scales.neutral]];
+}
 
 /**
  * DTCG para importar en Figma: color/<nombre>/<paso>, color/<rol>/<paso> y color/neutral/<paso>, en sRGB con hex.
- * Todas las escalas completas (decisiones 11 y 15). Ocultos al publicar; sin scopes, porque la importación pone
- * ALL_SCOPES de todos modos (investigación del curso, §7, prueba 3). Nombre del archivo: Value.tokens.json.
+ * Ocultos al publicar; sin scopes, porque la importación pone ALL_SCOPES de todos modos (investigación del curso, §7,
+ * prueba 3). Nombre del archivo: Value.tokens.json.
  */
 export function toFigmaTokens(scales, { name }) {
   const group = (rows) =>
@@ -865,11 +872,26 @@ export function toFigmaTokens(scales, { name }) {
         },
       ]),
     );
-  const color = { [name]: group(scales.color) };
-  for (const [role, rows] of Object.entries(scales.roles)) color[role] = group(rows);
-  color.neutral = group(scales.neutral);
+  const color = Object.fromEntries(paletteList(scales, name).map(([p, rows]) => [p, group(rows)]));
   return `${JSON.stringify({ color }, null, 2)}\n`;
 }
+
+// Variables --color-<paleta>-<paso> con el hex, una paleta por bloque. En @theme, cada paleta va precedida de
+// --color-<paleta>-*: initial; para no mezclarse con una paleta de Tailwind del mismo nombre (decisión 11, F16). Todas
+// las líneas initial van antes que las variables: Tailwind borra todo lo que empieza por --color-<paleta>, así que
+// --color-neutral-*: initial; después de la paleta neutral-warm la borraría (comprobado con Tailwind CSS 4.3).
+function cssBlock(selector, scales, name, initial) {
+  const list = paletteList(scales, name);
+  const blocks = list.map(([p, rows]) => rows.map((r) => `  --color-${p}-${r.name}: ${r.hex};`).join('\n'));
+  if (initial) blocks.unshift(list.map(([p]) => `  --color-${p}-*: initial;`).join('\n'));
+  return `${selector} {\n${blocks.join('\n\n')}\n}\n`;
+}
+
+// CSS (F15): las variables en :root.
+export const toCss = (scales, { name }) => cssBlock(':root', scales, name, false);
+
+// @theme de Tailwind CSS 4 (F16).
+export const toTheme = (scales, { name }) => cssBlock('@theme', scales, name, true);
 
 // --- Curva y nombre propuestos (C25 y C26 del curso) --------------------------------------------
 
