@@ -9,7 +9,8 @@ export function ResultSummary({ settings: s, result }: { settings: Settings; res
     `${v.steps} steps`,
     v.pending ? 'Custom names (pending)' : `${namesLabel(v.convention).replace(/^c/, 'C')} names`,
     `Curve ${result.input.curve}`,
-    `Tint ${s.tint}`,
+    // Sin croma, el motor calcula los neutros con tinte 0 (F12.1): el resumen dice lo calculado.
+    result.warnings.some((w) => w.code === 'achromatic') ? 'Tint 0 (no hue)' : `Tint ${s.tint}`,
     ...(s.cap ? ['Chroma cap'] : []),
   ];
   return (

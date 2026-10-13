@@ -2,7 +2,8 @@
 // moverse, activación al momento, y Tab entra en el panel. El panel oculto sigue montado para no perder lo escrito.
 import { useRef, type KeyboardEvent, type ReactNode } from 'react';
 
-type Tab = { id: string; label: string; panel: ReactNode };
+// focusable: el panel recibe el foco con Tab cuando no tiene controles (patrón de pestañas de APG).
+type Tab = { id: string; label: string; panel: ReactNode; focusable?: boolean };
 
 export function SettingsTabs({
   tabs,
@@ -56,7 +57,14 @@ export function SettingsTabs({
         })}
       </div>
       {tabs.map((t) => (
-        <div key={t.id} role="tabpanel" id={`panel-${t.id}`} aria-labelledby={`tab-${t.id}`} hidden={t.id !== selected}>
+        <div
+          key={t.id}
+          role="tabpanel"
+          id={`panel-${t.id}`}
+          aria-labelledby={`tab-${t.id}`}
+          hidden={t.id !== selected}
+          tabIndex={t.focusable ? 0 : undefined}
+        >
           {t.panel}
         </div>
       ))}

@@ -6,6 +6,14 @@
 @import './styles/theme.css';
 
 @layer base {
+  /* Alto de la cabecera fija (76 px en Figma). Los destinos de los enlaces no quedan tapados por ella (2.4.11). */
+  :root {
+    --cg-header-height: 4.75rem;
+  }
+  html {
+    scroll-padding-top: calc(var(--cg-header-height) + var(--cg-space-400));
+  }
+
   body {
     background: var(--cg-color-background-neutral-default);
     color: var(--cg-color-text-neutral-default);

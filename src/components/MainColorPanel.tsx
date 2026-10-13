@@ -48,9 +48,11 @@ export function MainColorPanel({ settings: s, dispatch, onBlur, result, suggeste
 
   const fill = (multiple: boolean) => {
     dispatch({ type: 'fill', multiple });
-    // Rellenar sustituye lo escrito y se anuncia (ux.md §5). El texto cambia para que se anuncie cada vez.
-    if (!multiple || multipleError(s) === null)
-      setFilled((t) => (t === 'Names filled.' ? 'Names filled' : 'Names filled.'));
+    // Rellenar sustituye lo escrito y se anuncia (ux.md §5); con m no válido, se dice por qué no se rellena.
+    // El texto alterna un punto final para que se anuncie también cuando se repite.
+    const error = multiple ? multipleError(s) : null;
+    const text = error ? `Names not filled: ${error.charAt(0).toLowerCase()}${error.slice(1)}` : 'Names filled.';
+    setFilled((t) => (t === text ? text.replace(/\.$/, '') : text));
   };
 
   return (
@@ -80,9 +82,9 @@ export function MainColorPanel({ settings: s, dispatch, onBlur, result, suggeste
           />
         </div>
         <div className="h-[56px] rounded-control border border-neutral-default" style={{ background: s.color }} />
-        <output id="color-using" htmlFor="color" className={hintClass}>
+        <p id="color-using" className={hintClass}>
           {colorErr ? `The result still uses ${s.color}.` : `Using ${s.color}`}
-        </output>
+        </p>
       </div>
 
       <TextField
@@ -125,6 +127,7 @@ export function MainColorPanel({ settings: s, dispatch, onBlur, result, suggeste
                 name="convention"
                 value={c.value}
                 checked={s.convention === c.value}
+                aria-describedby={c.value === 'radix' && s.convention === 'radix' ? 'radix-note' : undefined}
                 onChange={() => dispatch({ type: 'convention', convention: c.value })}
                 className="size-[24px] accent-[var(--cg-color-border-accent-strong)]"
               />
@@ -132,7 +135,7 @@ export function MainColorPanel({ settings: s, dispatch, onBlur, result, suggeste
             </label>
           ))}
         </div>
-        {s.convention === 'radix' && <Callout>{RADIX_NOTE}</Callout>}
+        {s.convention === 'radix' && <Callout id="radix-note">{RADIX_NOTE}</Callout>}
       </fieldset>
 
       {s.convention === 'custom' && (
@@ -232,9 +235,9 @@ export function MainColorPanel({ settings: s, dispatch, onBlur, result, suggeste
             onChange={(e) => dispatch({ type: 'tint', tint: Number(e.target.value) })}
             className="range min-w-0 flex-1"
           />
-          <output htmlFor="tint" className="min-w-1200 text-right">
+          <span aria-hidden="true" className="min-w-1200 text-right">
             {s.tint} / 1
-          </output>
+          </span>
         </div>
         {achromatic && (
           <p id="tint-none" className={hintClass}>

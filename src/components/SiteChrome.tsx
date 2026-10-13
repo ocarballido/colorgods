@@ -4,8 +4,8 @@ import logo from '../assets/logo.svg';
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-10 border-b border-neutral-default bg-neutral-translucent p-400 backdrop-blur-[var(--cg-blur-300)]">
-      <div className="flex items-center justify-between">
+    <header className="sticky top-0 z-10 flex h-[var(--cg-header-height)] items-center border-b border-neutral-default bg-neutral-translucent px-400 backdrop-blur-[var(--cg-blur-300)]">
+      <div className="flex w-full items-center justify-between">
         <h1 className="flex items-center gap-100">
           <img src={logo} alt="" width="48" height="31" />
           <span
@@ -63,7 +63,12 @@ export function SiteFooter() {
           <br />
           Oscar Carballido
         </p>
-        <a href="https://www.oscarballido.com" aria-label="Oscar Carballido, personal website" className="self-start">
+        <a
+          href="https://www.oscarballido.com"
+          rel="noreferrer"
+          aria-label="Oscar Carballido, personal website"
+          className="self-start"
+        >
           <img src={author} alt="" width="39" height="24" />
         </a>
       </div>

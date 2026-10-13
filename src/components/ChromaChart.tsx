@@ -6,7 +6,9 @@ import { TW_CURVES, type NamedStep } from '../../tools/scales.mjs';
 const MAX_CHROMA = Math.max(...Object.values(TW_CURVES).flatMap((curve) => curve.map(([, c]) => c)));
 const W = 293;
 const H = 104;
-const PAD = 10;
+// Margen para que el punto grande de la marca (radio 8) no se corte en los bordes, con cualquier N y croma.
+const R = 8;
+const PAD = R + 1;
 // Con más pasos los nombres no caben: solo el primero, el de la marca y el último.
 const ALL_LABELS = 12;
 
@@ -14,8 +16,9 @@ type Props = { steps: NamedStep[]; cap: boolean; brandChroma: number };
 
 export function ChromaChart({ steps, cap, brandChroma }: Props) {
   const n = steps.length;
-  const x = (i: number) => (W / n) * (i + 0.5);
-  const y = (c: number) => PAD + (1 - c / MAX_CHROMA) * (H - 2 * PAD);
+  const x = (i: number) => Math.min(W - PAD, Math.max(PAD, (W / n) * (i + 0.5)));
+  // Un color con más croma que las 17 curvas (como #0000FF) se queda en el borde de arriba.
+  const y = (c: number) => Math.max(PAD, PAD + (1 - c / MAX_CHROMA) * (H - 2 * PAD));
   const anchor = steps.findIndex((s) => s.anchor);
   const points = steps.map((s, i) => `${x(i).toFixed(1)},${y(s.oklch[1]).toFixed(1)}`).join(' ');
   const showLabel = (i: number) => n <= ALL_LABELS || i === 0 || i === n - 1 || i === anchor;
@@ -40,7 +43,7 @@ export function ChromaChart({ steps, cap, brandChroma }: Props) {
                 key={s.name}
                 cx={x(i)}
                 cy={y(s.oklch[1])}
-                r="8"
+                r={R}
                 fill={s.hex}
                 stroke="var(--cg-color-text-neutral-default)"
               />
@@ -64,7 +67,7 @@ export function ChromaChart({ steps, cap, brandChroma }: Props) {
           ))}
         </div>
       </div>
-      <ul className="sr-only">
+      <ul className="sr-only" aria-label="Chroma at each step">
         {steps.map((s, i) => (
           <li key={s.name}>
             {s.name}, chroma {s.oklch[1].toFixed(3)}

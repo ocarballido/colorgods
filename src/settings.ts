@@ -106,8 +106,16 @@ const touch = (s: Settings, field: Field, value: boolean): Settings => ({
 });
 
 // Al volver a ser válido, el campo deja de mostrar el error hasta la próxima vez que se salga de él.
+// Si el par no cambia, se conserva el mismo objeto: así no se recalcula ni se anuncia nada (revisión de C4).
+const sameSteps = (a: ValidSteps, b: ValidSteps) =>
+  a.steps === b.steps &&
+  a.convention === b.convention &&
+  a.pending === b.pending &&
+  (Array.isArray(a.names) && Array.isArray(b.names) ? a.names.join(' ') === b.names.join(' ') : a.names === b.names);
+
 function withSteps(s: Settings): Settings {
-  const next = { ...s, valid: resolveSteps(s) };
+  const resolved = resolveSteps(s);
+  const next = { ...s, valid: sameSteps(resolved, s.valid) ? s.valid : resolved };
   if (stepsError(next) === null) next.touched = { ...next.touched, steps: false };
   if (namesError(next) === null) next.touched = { ...next.touched, names: false };
   return next;
