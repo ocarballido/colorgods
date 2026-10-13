@@ -4,3 +4,78 @@
 @import './styles/tokens.css';
 /* Capa 2: @theme inline de Tailwind que apunta a la capa 1. Generado por `npm run tokens`. */
 @import './styles/theme.css';
+
+@layer base {
+  body {
+    background: var(--cg-color-background-neutral-default);
+    color: var(--cg-color-text-neutral-default);
+    font-family: var(--font-sans);
+  }
+
+  /* Foco de ColorScaleUI: anillo border-width/200 en border/focus por fuera (C31 del curso). */
+  :focus-visible {
+    outline: var(--cg-border-width-200) solid var(--cg-color-border-focus);
+    outline-offset: 2px;
+  }
+
+  /* Las secciones que reciben el foco con los enlaces de saltar no muestran anillo: no son controles. */
+  section[tabindex='-1']:focus {
+    outline: none;
+  }
+
+  /* Sin animaciones que transmitan información (ux.md §4). */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0s !important;
+      animation-duration: 0s !important;
+    }
+  }
+}
+
+/* Deslizador del tinte (componente Slider de ColorScaleUI): pista de 4 px y pulgar de 24 px. */
+@layer components {
+  .range {
+    appearance: none;
+    height: 24px;
+    background: transparent;
+  }
+  .range::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: var(--cg-radius-100);
+    background: var(--cg-color-border-neutral-strong);
+  }
+  .range::-moz-range-track {
+    height: 4px;
+    border-radius: var(--cg-radius-100);
+    background: var(--cg-color-border-neutral-strong);
+  }
+  .range::-webkit-slider-thumb {
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    margin-top: -10px;
+    border: var(--cg-border-width-200) solid var(--cg-color-border-accent-strong);
+    border-radius: var(--cg-radius-1200);
+    background: var(--cg-color-background-accent-strong-default);
+  }
+  .range::-moz-range-thumb {
+    box-sizing: border-box;
+    width: 24px;
+    height: 24px;
+    border: var(--cg-border-width-200) solid var(--cg-color-border-accent-strong);
+    border-radius: var(--cg-radius-1200);
+    background: var(--cg-color-background-accent-strong-default);
+  }
+
+  /* Colores forzados: el deslizador vuelve al del sistema y la pestaña elegida se marca con un borde (ux.md §9). */
+  @media (forced-colors: active) {
+    .range {
+      appearance: auto;
+    }
+    [role='tab'][aria-selected='true'] {
+      border-color: Highlight;
+    }
+  }
+}
