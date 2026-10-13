@@ -42,25 +42,40 @@ test('F15: CSS válido, una variable --color-<paleta>-<paso> por paso en :root, 
   assert.equal(css.split('}').length, 2);
 });
 
-test('F16: @theme con las mismas variables y cada paleta precedida de su línea initial', () => {
+test('F16: @theme con las mismas variables y cada paleta precedida de su línea initial, todas antes de las variables', () => {
   const theme = toTheme(result, { name: 'blue' });
   const lines = theme.trim().split('\n');
   assert.equal(lines[0], '@theme {');
   assert.equal(lines.at(-1), '}');
-  const blocks = lines.slice(1, -1).join('\n').split('\n\n');
+  const [initial, ...blocks] = lines.slice(1, -1).join('\n').split('\n\n');
   const groups = tables(result, 'blue');
+  assert.deepEqual(
+    initial.split('\n'),
+    groups.map(([p]) => `  --color-${p}-*: initial;`),
+  );
   assert.equal(blocks.length, groups.length);
-  groups.forEach(([p, rows], i) => {
-    const [first, ...vars] = blocks[i].split('\n');
-    assert.equal(first, `  --color-${p}-*: initial;`);
+  groups.forEach(([p, rows], i) =>
     assert.deepEqual(
-      vars,
+      blocks[i].split('\n'),
       rows.map((s) => `  --color-${p}-${s.name}: ${s.hex};`),
-    );
-  });
+    ),
+  );
   // Las declaraciones de color son las mismas que las del CSS (F15).
   const decl = (text) => text.split('\n').filter((l) => /: #/.test(l));
   assert.deepEqual(decl(theme), decl(toCss(result, { name: 'blue' })));
+});
+
+test('F16: una paleta cuyo nombre empieza por el de otra (neutral-warm) no queda detrás de una línea initial', () => {
+  // Tailwind borra todo lo que empieza por --color-neutral, también --color-neutral-warm-50 (revisión de la parte 5).
+  const theme = toTheme(build('#1877F2', { roles: { info: null } }), { name: 'neutral-warm' });
+  const lastInitial = theme.lastIndexOf(': initial;');
+  const firstVar = theme.search(/: #/);
+  assert.ok(lastInitial < firstVar);
+});
+
+test('el motor no exporta con un nombre de paleta no válido', () => {
+  for (const name of ['a;}body{color:red', 'Blue', 'neutral', 'danger', ''])
+    for (const f of [toCss, toTheme, toFigmaTokens]) assert.throws(() => f(result, { name }), /Invalid palette name/);
 });
 
 test('CSS y @theme con nombres personalizados y 5 pasos: los nombres de la convención, sin más pasos', () => {

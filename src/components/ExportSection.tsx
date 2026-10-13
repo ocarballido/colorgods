@@ -26,7 +26,7 @@ type Props = {
 
 export function ExportSection({ result, name, errors, onShowErrors, onGoTo }: Props) {
   const [format, setFormat] = useState(0);
-  const [copied, copy] = useCopy('Copied', 'Couldn’t copy. Select the code and copy it.');
+  const [copied, copy, failed] = useCopy('Copied', 'Couldn’t copy. Select the code and copy it.');
   const summary = useRef<HTMLDivElement>(null);
   const { file, type, make } = FORMATS[format];
   const blocked = errors.length > 0;
@@ -42,7 +42,8 @@ export function ExportSection({ result, name, errors, onShowErrors, onGoTo }: Pr
     a.href = URL.createObjectURL(new Blob([text], { type }));
     a.download = file;
     a.click();
-    setTimeout(() => URL.revokeObjectURL(a.href));
+    // La URL del archivo se libera unos segundos después, cuando la descarga ya ha empezado.
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
   });
   const copyCode = act(() => copy(text));
 
@@ -91,6 +92,8 @@ export function ExportSection({ result, name, errors, onShowErrors, onGoTo }: Pr
                     href={`#${e.id}`}
                     onClick={(ev) => {
                       ev.preventDefault();
+                      // El campo enseña su error al llegar a él, aunque no se haya salido de él.
+                      onShowErrors();
                       onGoTo(e.id);
                     }}
                     className="text-body-default leading-normal text-accent-default underline hover:text-accent-hover"
@@ -106,7 +109,10 @@ export function ExportSection({ result, name, errors, onShowErrors, onGoTo }: Pr
             <div className="flex items-center justify-between gap-200 border-b border-neutral-default py-100 pr-100 pl-400">
               <p className="text-caption-default leading-snug text-neutral-subtle">{file}</p>
               <div className="flex items-center gap-200">
-                <p role="status" className="text-caption-default leading-snug text-success-default">
+                <p
+                  role="status"
+                  className={`text-caption-default leading-snug ${failed ? 'text-danger-default' : 'text-success-default'}`}
+                >
                   {copied}
                 </p>
                 <button
@@ -126,7 +132,7 @@ export function ExportSection({ result, name, errors, onShowErrors, onGoTo }: Pr
               // jsx-a11y no contempla una región desplazable enfocable, como la de las tablas.
               // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
               tabIndex={0}
-              className="max-h-[18rem] overflow-auto p-400 font-mono text-code-default leading-normal"
+              className="max-h-[18rem] overflow-auto p-400 font-mono text-code-default leading-normal focus-visible:outline-offset-[-2px]"
             >
               {text}
             </pre>

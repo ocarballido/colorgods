@@ -64,13 +64,16 @@ function usePointerSafeBlur<T>(onBlur: (field: T) => void) {
 }
 
 // Ajustes en la URL (F18, ux.md §4): history.replaceState tras una pausa en los cambios, sin entradas en el historial.
-// Al abrir la página no se toca la URL hasta el primer cambio.
+// Al abrir la página no se toca la URL hasta el primer cambio; desde entonces se escribe siempre, también al volver a
+// los ajustes del principio (revisión de la parte 5).
 const URL_DELAY = 500;
+const writeSearch = (search: string) => history.replaceState(history.state, '', `?${search}${location.hash}`);
 function useSearchInUrl(search: string) {
-  const first = useRef(search);
+  const first = useRef<string | null>(search);
   useEffect(() => {
     if (search === first.current) return;
-    const timer = setTimeout(() => history.replaceState(history.state, '', `?${search}${location.hash}`), URL_DELAY);
+    first.current = null;
+    const timer = setTimeout(() => writeSearch(search), URL_DELAY);
     return () => clearTimeout(timer);
   }, [search]);
 }
@@ -113,7 +116,7 @@ export default function App() {
   const search = useMemo(() => searchFromSettings(settings), [settings]);
   useSearchInUrl(search);
   const link = () => {
-    history.replaceState(history.state, '', `?${search}${location.hash}`);
+    writeSearch(search);
     return `${location.origin}${location.pathname}?${search}`;
   };
   const errors = blockingErrors(settings, suggested.name);

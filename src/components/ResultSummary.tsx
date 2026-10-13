@@ -8,7 +8,7 @@ import { Button, buttonClass } from './ui';
 type Props = { settings: Settings; result: Scales; link: () => string };
 
 export function ResultSummary({ settings: s, result, link }: Props) {
-  const [copied, copy] = useCopy('Link copied', 'Couldn’t copy the link');
+  const [copied, copy, failed] = useCopy('Link copied', 'Couldn’t copy. Copy the address from the browser bar.');
   const v = s.valid;
   const items = [
     `Scales for ${result.input.hex}`,
@@ -37,14 +37,15 @@ export function ResultSummary({ settings: s, result, link }: Props) {
         ))}
       </ul>
       <div className="flex flex-col gap-200 sm:flex-row">
-        <Button className="sm:flex-1" onClick={() => copy(link())}>
-          {copied || 'Copy link'}
+        {/* El nombre del botón no cambia: lo dice la región de estado, una sola vez (4.1.3, 2.5.3). */}
+        <Button className="sm:flex-1" label="Copy link" onClick={() => copy(link())}>
+          {failed ? 'Copy link' : copied || 'Copy link'}
         </Button>
         <a href="#export" className={`${buttonClass(true)} sm:flex-1`}>
           Go to export
         </a>
       </div>
-      <p role="status" className="sr-only">
+      <p role="status" className={failed ? 'text-caption-default leading-snug text-danger-default' : 'sr-only'}>
         {copied}
       </p>
     </section>

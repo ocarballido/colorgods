@@ -49,11 +49,12 @@ export function settingsFromSearch(search: string): Settings {
   for (const r of ROLES) {
     if (!q.has(r)) continue;
     const value = get(r);
-    const hex = ROLE_PALETTES[r].includes(value) ? null : parseColor(value);
+    const palette = ROLE_PALETTES[r].includes(value);
+    const hex = palette ? null : parseColor(value);
     roles[r] = {
       ...roles[r],
       on: true,
-      choice: hex ? 'custom' : ROLE_PALETTES[r].includes(value) ? value : '',
+      choice: hex ? 'custom' : palette ? value : '',
       ...(hex && { colorText: hex, color: hex }),
     };
   }
