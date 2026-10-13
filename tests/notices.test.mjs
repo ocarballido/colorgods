@@ -64,3 +64,53 @@ test('#1877F2 con 11 pasos: la nota de recorte nombra 50, 700 y 800, como en Fig
   );
   assert.equal(count(list), '1 note');
 });
+
+test('extremo: claro u oscuro no depende de N ni de la convención (de 3 a 30 pasos con Radix)', () => {
+  for (const [hex, side] of [
+    ['#F5F5DC', 'light'],
+    ['#FFF8E7', 'light'],
+    ['#1A2B5C', 'dark'],
+  ]) {
+    for (let n = 3; n <= 30; n++) {
+      const r = build(hex, { steps: n, names: 'radix' });
+      const list = notices(r, [{ id: 'color', name: 'x', steps: r.color }]);
+      assert.match(list[0].text, new RegExp(`very ${side}:`), `${hex}, N = ${n}`);
+    }
+  }
+});
+
+test('pasos muy juntos: hasta tres pares se nombran; con más, se cuentan (decisión 77)', () => {
+  const steps = (n) => Array.from({ length: n }, (_, i) => ({ name: String(i + 1), hex: '#000000' }));
+  const close = (pairs) =>
+    notices({ warnings: [{ code: 'close', scale: 'color', pairs }] }, [
+      { id: 'color', name: 'x', steps: steps(10) },
+    ])[0];
+  assert.match(close([['1', '2']]).text, /^x: steps 1 and 2 are very close/);
+  assert.match(
+    close([
+      ['1', '2'],
+      ['9', '10'],
+    ]).text,
+    /^x: steps 1 and 2, and 9 and 10 are very close/,
+  );
+  const four = close([
+    ['1', '2'],
+    ['2', '3'],
+    ['3', '4'],
+    ['9', '10'],
+  ]);
+  assert.match(four.text, /^x: 4 pairs of neighboring steps are very close/);
+  assert.equal(four.row, 0);
+});
+
+test('recorte en todos los pasos de un rol: se cuentan todos y se aconseja otra paleta (Figma)', () => {
+  const steps = Array.from({ length: 11 }, (_, i) => ({ name: String(i), hex: '#000000', clip: 10 }));
+  const [n] = notices(
+    { warnings: [{ code: 'clipped', scale: 'warning', steps: steps.map(({ name, clip }) => ({ name, clip })) }] },
+    [{ id: 'warning', name: 'warning', steps }],
+  );
+  assert.equal(
+    n.text,
+    'warning: in all 11 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). If the clip is large, try another palette.',
+  );
+});

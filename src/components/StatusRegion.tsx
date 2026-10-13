@@ -6,11 +6,10 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Scales } from '../../tools/scales.mjs';
 import { plural, type Notice } from './noticeData';
+import { again } from './pairData';
 
 // Pausa antes de anunciar: la de ux.md §9, que se ajusta en C4.
 export const ANNOUNCE_DELAY = 500;
-
-const NBSP = String.fromCharCode(160);
 
 export function summarize(result: Scales, list: Notice[]) {
   const warnings = list.filter((n) => n.warning).length;
@@ -20,15 +19,18 @@ export function summarize(result: Scales, list: Notice[]) {
 
 export function StatusRegion({ result, list, extra }: { result: Scales; list: Notice[]; extra: string }) {
   const [message, setMessage] = useState('');
-  const initial = useRef({ result, extra });
+  // Último resultado anunciado (al abrir, el de la página): si no cambian ni él ni los errores, no se dice nada, por
+  // ejemplo al escribir el nombre de la paleta, que cambia el texto de los avisos pero no el resultado.
+  const last = useRef({ result, extra });
   // Avisos ya dichos o que ya estaban al abrir la página.
   const known = useRef(new Set(list.map((n) => n.key)));
   useEffect(() => {
     // Al abrir la página no se anuncia nada: el resultado ya está ahí (ux.md §2).
-    if (result === initial.current.result && extra === initial.current.extra) return;
+    if (result === last.current.result && extra === last.current.extra) return;
     const timer = setTimeout(() => {
       const fresh = list.filter((n) => !known.current.has(n.key));
       known.current = new Set(list.map((n) => n.key));
+      last.current = { result, extra };
       const text = [
         summarize(result, list),
         ...fresh.map((n) => `New ${n.warning ? 'warning' : 'note'}: ${n.text}`),
@@ -36,8 +38,7 @@ export function StatusRegion({ result, list, extra }: { result: Scales; list: No
       ]
         .filter(Boolean)
         .join(' ');
-      // Un espacio duro alterno hace que se anuncie también un texto igual al anterior.
-      setMessage((prev) => (prev === text ? `${text}${NBSP}` : text));
+      setMessage((prev) => again(prev, text));
     }, ANNOUNCE_DELAY);
     return () => clearTimeout(timer);
   }, [result, list, extra]);

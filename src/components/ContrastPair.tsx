@@ -1,70 +1,22 @@
-// Par de contraste (F11, ux.md §6.4): texto y fondo entre los pasos de las escalas visibles, White y Black; por
-// defecto, la marca sobre blanco. Ratio truncado y veredicto sin redondear (decisión 12). El paso se guarda por su
-// posición k: si N o la convención cambian su nombre, el par sigue en el mismo paso (con menos pasos, en el último).
-// La región viva solo habla al cambiar un selector o con Swap, una vez, y no cuando cambian los ajustes.
+// Par de contraste (F11, ux.md §6.4); el cálculo está en pairData.ts. La región viva solo habla al cambiar un selector
+// o con Swap, una vez, y no cuando cambian los ajustes; lo dicho se borra cuando cambian las escalas, para que el
+// cursor virtual no lea un ratio que ya no se ve.
 import { useState } from 'react';
-import { hexToRgb } from '../../tools/scales.mjs';
-import { contrastWith, ratioText, type Scale } from './scaleData';
+import { FIXED, LEVELS, again, color, measure, ratioText, type Pick } from './pairData';
+import type { Scale } from './scaleData';
 import { Button, Select, TestBadge } from './ui';
 
-const LEVELS = [
-  ['Normal text', 'AA 4.5', 4.5],
-  ['Normal text', 'AAA 7', 7],
-  ['Large text', 'AA 3', 3],
-  ['Large text', 'AAA 4.5', 4.5],
-  ['UI components', '3', 3],
-] as const;
-
-const NBSP = String.fromCharCode(160);
 const cell = 'border-b border-neutral-default px-300 py-200 text-left font-400 whitespace-nowrap';
-
-// Valor de un selector: "white", "black" o "<escala>:<k>". null es el de por defecto.
-type Pick = { text: string | null; bg: string | null };
-type Color = { value: string; hex: string; name: string; label: string };
-
-const FIXED: Color[] = [
-  { value: 'white', hex: '#FFFFFF', name: 'white', label: 'White' },
-  { value: 'black', hex: '#000000', name: 'black', label: 'Black' },
-];
-
-function color(scale: Scale, k: number): Color {
-  const step = scale.steps[k];
-  const name = `${scale.name} ${step.name}`;
-  return { value: `${scale.id}:${k}`, hex: step.hex, name, label: step.anchor ? `${name} (your color)` : name };
-}
-
-// Un paso que ya no existe (un rol desactivado, en otra parte de C4) vuelve al valor por defecto.
-function resolve(value: string, scales: Scale[]): Color | undefined {
-  const fixed = FIXED.find((c) => c.value === value);
-  if (fixed) return fixed;
-  const [id, k] = value.split(':');
-  const scale = scales.find((s) => s.id === id);
-  return scale && color(scale, Math.min(Number(k), scale.steps.length - 1));
-}
-
-function measure(pick: Pick, scales: Scale[]) {
-  const brand = `color:${scales[0].steps.findIndex((s) => s.anchor)}`;
-  const text = resolve(pick.text ?? brand, scales) ?? resolve(brand, scales)!;
-  const bg = resolve(pick.bg ?? 'white', scales) ?? FIXED[0];
-  const ratio = contrastWith(text.hex, hexToRgb(bg.hex));
-  const passes = LEVELS.map(([, , min]) => ratio >= min);
-  const n = passes.filter(Boolean).length;
-  const caption = `${text.name[0].toUpperCase()}${text.name.slice(1)} on ${bg.name}. Passes ${n} of 5 levels.`;
-  return { text, bg, ratio, passes, caption };
-}
 
 export function ContrastPair({ scales }: { scales: Scale[] }) {
   const [pick, setPick] = useState<Pick>({ text: null, bg: null });
-  const [said, setSaid] = useState('');
+  const [said, setSaid] = useState({ text: '', scales });
   const m = measure(pick, scales);
 
   const change = (next: Pick) => {
     setPick(next);
-    const n = measure(next, scales);
-    const which = LEVELS.filter((_, i) => n.passes[i]).map(([use, level]) => `${use.toLowerCase()} ${level}`);
-    const text = `${ratioText(n.ratio)}:1. ${n.caption.slice(0, -1)}${which.length ? `: ${which.join(', ')}` : ''}.`;
-    // Un espacio duro alterno hace que se anuncie también un texto igual al anterior.
-    setSaid((prev) => (prev === text ? `${text}${NBSP}` : text));
+    const { spoken } = measure(next, scales);
+    setSaid((prev) => ({ text: again(prev.text, spoken), scales }));
   };
 
   const options = FIXED.map(({ value, label }) => ({ value, label }));
@@ -150,7 +102,7 @@ export function ContrastPair({ scales }: { scales: Scale[] }) {
         </div>
       </div>
       <p aria-live="polite" className="sr-only">
-        {said}
+        {said.scales === scales ? said.text : ''}
       </p>
     </section>
   );

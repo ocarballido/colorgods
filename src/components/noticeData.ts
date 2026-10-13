@@ -25,23 +25,23 @@ function describe(w: ScaleWarning, scale: Scale): Omit<Notice, 'key' | 'scale'> 
     case 'extreme':
       return {
         warning: true,
-        // Claro u oscuro según el lado de la escala en el que cae la marca; la fila es la suya.
-        text: `Your color is very ${anchor * 2 <= names.length - 1 ? 'light' : 'dark'}: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve.`,
+        // Claro u oscuro por la luminosidad de la marca, no por su paso: así no depende de N. La fila es la suya.
+        text: `Your color is very ${scale.steps[anchor].oklch[0] > 0.5 ? 'light' : 'dark'}: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve.`,
         row: anchor,
       };
     case 'clipped': {
       const n = w.steps.length;
-      // Hasta tres pasos se nombran; con más, se cuentan (Figma, decisión 62). La columna Clip los da todos.
+      // Hasta tres pasos se nombran; con más, se cuentan, y si son todos se aconseja otra paleta (Figma,
+      // decisiones 62 y 77). La columna Clip los da todos.
       const which =
         n === names.length
           ? `all ${n} steps`
           : n > 3
             ? `${n} steps`
             : `step${n > 1 ? 's' : ''} ${list(w.steps.map((s) => s.name))}`;
-      const advice =
-        n === names.length && scale.id !== 'neutral'
-          ? ` If the clip is large, try another ${scale.id === 'color' ? 'curve' : 'palette'}.`
-          : '';
+      // Solo una escala de rol puede recortar en todos sus pasos: el de la marca conserva su hex y los neutros casi
+      // no tienen croma. El consejo es entonces otra paleta, como en Figma.
+      const advice = n === names.length && scale.id !== 'neutral' ? ' If the clip is large, try another palette.' : '';
       return {
         warning: false,
         text: `in ${which} the color doesn’t fit in sRGB, so its chroma is reduced (Clip column).${advice}`,
@@ -49,8 +49,13 @@ function describe(w: ScaleWarning, scale: Scale): Omit<Notice, 'key' | 'scale'> 
       };
     }
     case 'close': {
-      const [a, b] = w.pairs[0];
-      const which = w.pairs.length > 1 ? `${w.pairs.length} pairs of neighboring steps are` : `steps ${a} and ${b} are`;
+      // Hasta tres pares se nombran ("steps 50 and 100, and 900 and 950"); con más, se cuentan (decisión 77).
+      const [a] = w.pairs[0];
+      const named = w.pairs.map(([x, y]) => `${x} and ${y}`);
+      const which =
+        named.length > 3
+          ? `${named.length} pairs of neighboring steps are`
+          : `steps ${named.length > 1 ? `${named.slice(0, -1).join(', ')}, and ${named.at(-1)}` : named[0]} are`;
       return {
         warning: false,
         text: `${which} very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart.`,
