@@ -13,6 +13,7 @@ import {
   stepsError,
   namesError,
   multipleError,
+  roleOptions,
 } from '../src/settings.ts';
 
 const run = (actions, from = initialSettings) => actions.reduce(reducer, from);
@@ -163,4 +164,43 @@ test('el par N y convención no cambia de objeto si no cambia (no se recalcula n
   const same = run([{ type: 'custom', text: `${custom.customText} ` }], custom);
   assert.equal(same.valid, custom.valid);
   assert.equal(run([{ type: 'steps', text: ' 11' }]).valid, initialSettings.valid);
+});
+
+test('roles: activar, elegir paleta y color propio con su último valor válido (F20, F21, F23)', () => {
+  let s = run([{ type: 'role', role: 'danger', on: true }]);
+  assert.deepEqual(roleOptions(s.roles), { danger: null });
+  s = run(
+    [
+      { type: 'roleChoice', role: 'warning', choice: 'orange', fill: '#000000' },
+      { type: 'role', role: 'warning', on: true },
+    ],
+    s,
+  );
+  assert.deepEqual(roleOptions(s.roles), { danger: null, warning: 'orange' });
+  // Al pasar a "Custom color", el campo se rellena con el color de la muestra; después sigue al último válido.
+  s = run([{ type: 'roleChoice', role: 'danger', choice: 'custom', fill: '#F71D2F' }], s);
+  assert.deepEqual(roleOptions(s.roles).danger, { color: '#F71D2F' });
+  s = run(
+    [
+      { type: 'roleColor', role: 'danger', text: '#FF4D8' },
+      { type: 'roleBlur', role: 'danger' },
+    ],
+    s,
+  );
+  assert.equal(colorError(s.roles.danger), 'Use hex, RGB or HSL, like #1877F2.');
+  assert.deepEqual(roleOptions(s.roles).danger, { color: '#F71D2F' });
+  s = run([{ type: 'roleColor', role: 'danger', text: 'rgb(255, 77, 128)' }], s);
+  assert.deepEqual(roleOptions(s.roles).danger, { color: '#FF4D80' });
+  assert.equal(s.roles.danger.touched, false);
+  // Volver a una paleta conserva lo escrito para la próxima vez; desactivar quita el rol del cálculo.
+  s = run(
+    [
+      { type: 'roleChoice', role: 'danger', choice: '', fill: '#000000' },
+      { type: 'role', role: 'warning', on: false },
+    ],
+    s,
+  );
+  assert.deepEqual(roleOptions(s.roles), { danger: null });
+  assert.equal(s.roles.danger.colorText, 'rgb(255, 77, 128)');
+  assert.deepEqual(Object.keys(build(s.color, { roles: roleOptions(s.roles) }).roles), ['danger']);
 });

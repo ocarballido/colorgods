@@ -25,10 +25,10 @@ export const FIXED: Color[] = [
 export function color(scale: Scale, k: number): Color {
   const step = scale.steps[k];
   const name = `${scale.name} ${step.name}`;
-  return { value: `${scale.id}:${k}`, hex: step.hex, name, label: step.anchor ? `${name} (your color)` : name };
+  return { value: `${scale.id}:${k}`, hex: step.hex, name, label: step.anchor ? `${name} (${scale.own})` : name };
 }
 
-// Un paso de una escala que ya no se ve (un rol desactivado, en otra parte de C4) vuelve al valor por defecto.
+// Un paso de una escala que ya no se ve (un rol desactivado) vuelve al valor por defecto.
 function resolve(value: string, scales: Scale[]): Color | undefined {
   const fixed = FIXED.find((c) => c.value === value);
   if (fixed) return fixed;
@@ -38,6 +38,12 @@ function resolve(value: string, scales: Scale[]): Color | undefined {
 }
 
 export const ratioText = (x: number) => truncate2(x).toFixed(2);
+
+// Escala de un paso elegido que ya no se ve (un rol desactivado), o undefined.
+export const lostScale = (pick: Pick, scales: Scale[]) =>
+  [pick.text, pick.bg]
+    .map((v) => v?.split(':')[0])
+    .find((id) => id && !FIXED.some((c) => c.value === id) && !scales.some((s) => s.id === id));
 
 export function measure(pick: Pick, scales: Scale[]) {
   const brand = `color:${scales[0].steps.findIndex((s) => s.anchor)}`;

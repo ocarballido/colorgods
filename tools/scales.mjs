@@ -397,6 +397,8 @@ export const ROLE_PALETTES = {
   success: ['green', 'emerald'],
   info: ['blue', 'sky'],
 };
+// Margen de tono de cada rol en grados de oklch (decisión 20, docs/semanticas.md §2), para la nota de F23.
+export const ROLE_HUES = { danger: [21, 30], warning: [43, 90], success: [138, 168], info: [218, 267] };
 
 // Nombre de una paleta (F5): minúsculas, kebab-case por segmento, y ni "neutral" ni el nombre de un rol.
 export function isPaletteName(name) {
@@ -590,6 +592,22 @@ export function isExtreme(hex) {
   return d(0.1) <= d(0.2) || d(0.9) < d(0.8);
 }
 
+// Croma de un color en cada L: el de la curva por la proporción de croma (decisión 4), con el tope si se pide (32).
+// Lo usan la escala del color y la de un color propio de un rol (F23), que se calcula igual.
+function colorModel(hex, curve, cap) {
+  const c = CURVES[curve];
+  if (!c) throw new Error(`Unknown curve: ${curve}`);
+  let [aL, aC, aH] = rgbToOklch(...hexToRgb(hex));
+  const achromatic = aC <= ACHROMATIC;
+  if (achromatic) aC = 0;
+  const ratio = aC / c.cAtL(aL);
+  const chroma = (l) => {
+    const x = c.cAtL(l) * ratio;
+    return cap ? Math.min(x, aC) : x;
+  };
+  return { oklch: [aL, aC, aH], achromatic, ratio, chroma };
+}
+
 /**
  * Escala del color (F7). curve: una de TW_CURVES (por defecto, la propuesta por suggest()); cap: tope de croma (F24).
  * Devuelve { curve, chromaRatio, anchor (índice del paso de la marca), achromatic, extreme, steps }.
@@ -597,17 +615,13 @@ export function isExtreme(hex) {
 export function colorScale(hex, N, { curve, cap = false } = {}) {
   hex = hex.toUpperCase();
   curve ??= suggest(hex).curve;
-  const c = CURVES[curve];
-  if (!c) throw new Error(`Unknown curve: ${curve}`);
-  let [aL, aC, aH] = rgbToOklch(...hexToRgb(hex));
-  const achromatic = aC <= ACHROMATIC;
-  if (achromatic) aC = 0;
-  const ratio = aC / c.cAtL(aL);
+  const {
+    oklch: [aL, aC, aH],
+    achromatic,
+    ratio,
+    chroma,
+  } = colorModel(hex, curve, cap);
   const anchor = nearestStep(hex, N);
-  const chroma = (l) => {
-    const x = c.cAtL(l) * ratio;
-    return cap ? Math.min(x, aC) : x;
-  };
   const lad = ladder(N);
   const steps = lad.map((y, i) =>
     i === anchor ? { hex, oklch: [aL, aC, aH], clip: 0, anchor: true } : solve(y, chroma, aH),
@@ -707,9 +721,9 @@ const MIN_GAP = 0.014; // salto de L más pequeño de las paletas de Tailwind CS
 /**
  * Las escalas del color, de los roles activos y de neutros, con los nombres de los pasos, la regla de contraste y los avisos.
  * Opciones: steps (N, por defecto 11), names ('tailwind', 'sds', 'radix' o una lista de N nombres), curve (null: la
- * propuesta), cap (tope de croma), tint (0 a 1), roles ({ rol: null para la paleta propuesta, o el nombre de una paleta
- * de su margen }; los roles que no están, desactivados).
- * Lanza un error si N, los nombres, la curva o la paleta de un rol no valen: la interfaz los valida antes (F2, F6.1).
+ * propuesta), cap (tope de croma), tint (0 a 1), roles ({ rol: null para la paleta propuesta, el nombre de una paleta
+ * de su margen o { color } con un color propio en cualquier formato de F1 (F23) }; los roles que no están, desactivados).
+ * Lanza un error si N, los nombres, la curva, la paleta o el color de un rol no valen: la interfaz los valida antes.
  * Avisos como códigos; el texto lo pone la interfaz (docs/funcionalidades.md §3):
  *   { code: 'achromatic' }                        la marca no tiene croma: escala gris y neutros sin tinte (F12.1)
  *   { code: 'extreme' }                           la marca está en un extremo (F12.2)
@@ -717,6 +731,9 @@ const MIN_GAP = 0.014; // salto de L más pequeño de las paletas de Tailwind CS
  *   { code: 'close', scale, pairs }               pasos vecinos muy juntos en L (F12.4)
  *   { code: 'role-changed', role, from, to }      la marca colisiona con la paleta por defecto del rol y se cambia (F22)
  *   { code: 'role-collision', role, palette }     la marca colisiona con el rol y no hay alternativa (F22)
+ *   { code: 'role-custom-collision', role }       el color propio del rol colisiona con la marca (F23)
+ *   { code: 'roles-close', role, other }          el color propio del rol y otro rol activo son muy parecidos (F23)
+ *   { code: 'role-hue', role, min, max }          el tono del color propio está fuera del margen del rol (F23)
  * scale es 'color', 'neutral' o el nombre de un rol.
  */
 export function build(
@@ -728,17 +745,24 @@ export function build(
     throw new Error(`Invalid steps for ${convention}: ${N}`);
   if (Array.isArray(names) && checkCustomNames(names, N))
     throw new Error(`Invalid custom names: ${JSON.stringify(checkCustomNames(names, N))}`);
+  const custom = {};
   for (const [r, p] of Object.entries(roles)) {
     if (!ROLES.includes(r)) throw new Error(`Unknown role: ${r}`);
-    if (p != null && !ROLE_PALETTES[r].includes(p)) throw new Error(`Palette ${p} is not in the ${r} range`);
+    if (p?.color !== undefined) {
+      custom[r] = parseColor(p.color);
+      if (!custom[r]) throw new Error(`Invalid ${r} color: ${p.color}`);
+    } else if (p != null && !ROLE_PALETTES[r].includes(p)) throw new Error(`Palette ${p} is not in the ${r} range`);
   }
   const label = Array.isArray(names) ? [...names] : stepNames(N, names);
   const color = colorScale(hex, N, { curve: curve ?? undefined, cap });
   const neutral = neutralScale(hex, N, color.achromatic ? 0 : tint);
-  const chosen = Object.fromEntries(Object.entries(roles).filter(([, p]) => p != null));
+  const chosen = Object.fromEntries(Object.entries(roles).filter(([r, p]) => p != null && !custom[r]));
   const proposal = proposeRoles(hex, chosen);
   const active = ROLES.filter((r) => r in roles);
-  const roleScales = Object.fromEntries(active.map((r) => [r, paletteScale(proposal[r].palette, N)]));
+  // Un color propio (F23) se calcula como la marca: curva propuesta por su tono y sin tope.
+  const roleScales = Object.fromEntries(
+    active.map((r) => [r, custom[r] ? colorScale(custom[r], N) : paletteScale(proposal[r].palette, N)]),
+  );
   const named = (s) => s.steps.map((x, i) => ({ name: label[i], ...x }));
 
   const warnings = [];
@@ -755,10 +779,33 @@ export function build(
       if (s.steps[i - 1].oklch[0] - s.steps[i].oklch[0] < MIN_GAP) pairs.push([label[i - 1], label[i]]);
     if (pairs.length) warnings.push({ code: 'close', scale, pairs });
   }
+  // Color propio (F23, decisión 24): la app no lo cambia; avisa si colisiona con la marca (regla de F22, sin info) o
+  // si su paso central dista menos de 0,05 del de otro rol activo, y pone una nota si su tono está fuera del margen.
+  const model = (r) => colorModel(custom[r], suggest(custom[r]).curve, false);
+  const centerOf = (r) =>
+    custom[r] ? solve(ladderAt(0.5), model(r).chroma, model(r).oklch[2]).hex : center(proposal[r].palette);
+  const checkBrand = !color.achromatic && !color.extreme;
   for (const r of active) {
     const p = proposal[r];
-    if (p.changed) warnings.push({ code: 'role-changed', role: r, from: p.changed, to: p.palette });
-    if (p.collision) warnings.push({ code: 'role-collision', role: r, palette: p.palette });
+    if (!custom[r]) {
+      if (p.changed) warnings.push({ code: 'role-changed', role: r, from: p.changed, to: p.palette });
+      if (p.collision) warnings.push({ code: 'role-collision', role: r, palette: p.palette });
+      continue;
+    }
+    const m = model(r);
+    if (checkBrand && r !== 'info' && deltaE(solve(Yhex(hex), m.chroma, m.oklch[2]).hex, hex) < COLLISION)
+      warnings.push({ code: 'role-custom-collision', role: r });
+    // Cada par se dice una vez: con dos colores propios, en el primero.
+    for (const q of active)
+      if (
+        q !== r &&
+        !(custom[q] && active.indexOf(q) < active.indexOf(r)) &&
+        deltaE(centerOf(r), centerOf(q)) < COLLISION
+      )
+        warnings.push({ code: 'roles-close', role: r, other: q });
+    const [min, max] = ROLE_HUES[r];
+    const hue = Math.round(m.oklch[2]);
+    if (m.achromatic || hue < min || hue > max) warnings.push({ code: 'role-hue', role: r, min, max });
   }
 
   const ruleScales = visible.map(([, s]) => s);
@@ -777,7 +824,8 @@ export function build(
     names: label,
     color: named(color),
     roles: Object.fromEntries(active.map((r) => [r, named(roleScales[r])])),
-    rolePalettes: Object.fromEntries(active.map((r) => [r, proposal[r].palette])),
+    rolePalettes: Object.fromEntries(active.filter((r) => !custom[r]).map((r) => [r, proposal[r].palette])),
+    roleColors: Object.fromEntries(active.filter((r) => custom[r]).map((r) => [r, custom[r]])),
     neutral: named(neutral),
     rule: {
       aa: { white: name(aa.white), black: name(aa.black) },

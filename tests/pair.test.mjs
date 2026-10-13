@@ -8,8 +8,8 @@ import { measure } from '../src/components/pairData.ts';
 const scales = (hex, options) => {
   const r = build(hex, options);
   return [
-    { id: 'color', name: 'blue', steps: r.color },
-    { id: 'neutral', name: 'neutral', steps: r.neutral },
+    { id: 'color', name: 'blue', steps: r.color, own: 'your color' },
+    { id: 'neutral', name: 'neutral', steps: r.neutral, own: '' },
   ];
 };
 const none = { text: null, bg: null };

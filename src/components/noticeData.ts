@@ -5,7 +5,17 @@ import type { ScaleWarning, Scales } from '../../tools/scales.mjs';
 import type { Scale } from './scaleData';
 
 // row: índice de la fila de la tabla; at: su escala y su paso, para el nombre accesible de "Show in table".
-export type Notice = { key: string; warning: boolean; scale: string; text: string; row?: number; at?: string };
+// body: el texto sin el nombre de la escala, y roles: los roles a cuyo selector también va (F22, F23; ux.md §5).
+export type Notice = {
+  key: string;
+  warning: boolean;
+  scale: string;
+  text: string;
+  body: string;
+  row?: number;
+  at?: string;
+  roles?: string[];
+};
 
 export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
@@ -13,20 +23,25 @@ export const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' :
 const list = (names: string[]) =>
   names.length < 2 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`;
 
-function describe(w: ScaleWarning, scale: Scale): Omit<Notice, 'key' | 'scale'> | null {
+const icon = (r: string) => `Don’t rely on color alone: show ${r} messages with an icon and text.`;
+
+// brand: índice del paso de la marca. Los avisos de un rol llevan a la fila donde se miden: la del paso de la marca
+// (colisión, F22), la del color propio (F23) o la del paso central (roles parecidos).
+function describe(w: ScaleWarning, scale: Scale, brand: number): Omit<Notice, 'key' | 'scale' | 'text'> | null {
   const names = scale.steps.map((s) => s.name);
   const anchor = scale.steps.findIndex((s) => s.anchor);
+  const r = scale.id;
   switch (w.code) {
     case 'achromatic':
       return {
         warning: true,
-        text: 'Your color has no chroma, so it has no hue: the scale comes out gray and the neutrals have no tint.',
+        body: 'Your color has no chroma, so it has no hue: the scale comes out gray and the neutrals have no tint.',
       };
     case 'extreme':
       return {
         warning: true,
         // Claro u oscuro por la luminosidad de la marca, no por su paso: así no depende de N. La fila es la suya.
-        text: `Your color is very ${scale.steps[anchor].oklch[0] > 0.5 ? 'light' : 'dark'}: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve.`,
+        body: `Your color is very ${scale.steps[anchor].oklch[0] > 0.5 ? 'light' : 'dark'}: almost every step falls on one side of it, and the middle steps may come out much more saturated than you expect. Turn on the chroma cap or try another curve.`,
         row: anchor,
       };
     case 'clipped': {
@@ -44,7 +59,7 @@ function describe(w: ScaleWarning, scale: Scale): Omit<Notice, 'key' | 'scale'> 
       const advice = n === names.length && scale.id !== 'neutral' ? ' If the clip is large, try another palette.' : '';
       return {
         warning: false,
-        text: `in ${which} the color doesn’t fit in sRGB, so its chroma is reduced (Clip column).${advice}`,
+        body: `in ${which} the color doesn’t fit in sRGB, so its chroma is reduced (Clip column).${advice}`,
         row: names.indexOf(w.steps[0].name),
       };
     }
@@ -58,26 +73,59 @@ function describe(w: ScaleWarning, scale: Scale): Omit<Notice, 'key' | 'scale'> 
           : `steps ${named.length > 1 ? `${named.slice(0, -1).join(', ')}, and ${named.at(-1)}` : named[0]} are`;
       return {
         warning: false,
-        text: `${which} very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart.`,
+        body: `${which} very close in lightness, closer than any two steps in the Tailwind CSS palettes. With fewer steps they will be easier to tell apart.`,
         row: names.indexOf(a),
       };
     }
-    default:
-      // Los avisos de los roles (F22, F23) llegan con los roles, en otra parte de C4.
-      return null;
+    case 'role-changed':
+      return {
+        warning: false,
+        body: `Your color is close to ${w.from}, the usual palette for ${r}, so ${r} uses ${w.to}, which design systems also use for ${r}. You can change it.`,
+        row: brand,
+        roles: [r],
+      };
+    case 'role-collision':
+      return {
+        warning: true,
+        body: `Your color is close to ${r}, and design systems use this hue for ${r}. ${icon(r)}`,
+        row: brand,
+        roles: [r],
+      };
+    case 'role-custom-collision':
+      return {
+        warning: true,
+        body: `This ${r} color is close to your color, so people may confuse them. ${icon(r)}`,
+        row: anchor,
+        roles: [r],
+      };
+    case 'roles-close':
+      return {
+        warning: true,
+        body: `${r} and ${w.other} are very close in color. Choose colors that are easier to tell apart.`,
+        row: (names.length - 1) >> 1,
+        roles: [r, w.other],
+      };
+    case 'role-hue':
+      return {
+        warning: false,
+        body: `Design systems don’t use this hue for ${r}: they use ${w.min}° to ${w.max}° (OKLCH hue).`,
+        row: anchor,
+        roles: [r],
+      };
   }
 }
 
 export function notices(result: Scales, scales: Scale[]): Notice[] {
   const out: Notice[] = [];
+  const brand = scales[0].steps.findIndex((s) => s.anchor);
   for (const w of result.warnings) {
     // Los avisos con scale van a su escala; los de un rol, a la del rol; el resto (sin croma, extremo), a la del color.
     const id = 'scale' in w ? w.scale : 'role' in w ? w.role : 'color';
     const scale = scales.find((s) => s.id === id);
-    const d = scale && describe(w, scale);
+    const d = scale && describe(w, scale, brand);
     if (!d) continue;
     const at = d.row === undefined ? undefined : `${scale.name} ${scale.steps[d.row].name}`;
-    out.push({ ...d, key: `${w.code}:${id}`, scale: id, text: `${scale.name}: ${d.text}`, at });
+    out.push({ ...d, key: `${w.code}:${id}`, scale: id, text: `${scale.name}: ${d.body}`, at });
   }
   return [...out.filter((n) => n.warning), ...out.filter((n) => !n.warning)];
 }

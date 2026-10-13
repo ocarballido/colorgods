@@ -56,7 +56,7 @@ function ScaleTable({ scale, pending }: { scale: Scale; pending: boolean }) {
             <tr key={s.name} id={rowId(scale.id, k)} tabIndex={-1}>
               <th scope="row" className={`${cell} ${stick1} bg-neutral-default text-left font-400`}>
                 {s.name}
-                {s.anchor && ' · Your color'}
+                {s.anchor && ` · Y${scale.own.slice(1)}`}
               </th>
               <td className={`${cell} ${stick2} bg-neutral-default`}>
                 <span

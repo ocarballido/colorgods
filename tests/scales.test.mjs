@@ -230,6 +230,61 @@ test('F21: una paleta elegida por el usuario se mantiene', () => {
   assert.throws(() => build('#33CC99', { roles: { danger: 'blue' } }), /danger/);
 });
 
+// --- F23 ------------------------------------------------------------------------------------------
+
+const roleWarnings = (out) => out.warnings.filter((w) => w.code.startsWith('role'));
+
+test('F23: un color propio se calcula como la marca (curva propuesta, sin tope), en cualquier formato de F1', () => {
+  for (const color of ['#FF4D80', 'ff4d80', 'rgb(255, 77, 128)', '255 77 128']) {
+    const out = build('#1877F2', { roles: { danger: { color } }, cap: true });
+    assert.deepEqual(out.roles.danger, build('#FF4D80', { curve: suggest('#FF4D80').curve }).color, color);
+    assert.equal(out.roleColors.danger, '#FF4D80');
+    assert.equal(out.rolePalettes.danger, undefined);
+  }
+  for (const N of [3, 11, 30]) {
+    const out = build('#1877F2', { steps: N, names: 'radix', roles: { warning: { color: '#33CC99' } } });
+    assert.equal(out.roles.warning.find((s) => s.anchor).hex, '#33CC99', `N ${N}`);
+  }
+  assert.throws(() => build('#1877F2', { roles: { danger: { color: '#FF4D8' } } }), /danger/);
+});
+
+test('F23: colisión con la marca, roles parecidos y fuera de margen (criterios de funcionalidades.md)', () => {
+  // #FF0000 en danger con la marca #FF0000: aviso de colisión.
+  assert.deepEqual(roleWarnings(build('#FF0000', { roles: { danger: { color: '#FF0000' } } })), [
+    { code: 'role-custom-collision', role: 'danger' },
+  ]);
+  // #FF4D80 en danger: nota de fuera de margen.
+  assert.deepEqual(roleWarnings(build('#1877F2', { roles: { danger: { color: '#FF4D80' } } })), [
+    { code: 'role-hue', role: 'danger', min: 21, max: 30 },
+  ]);
+  // Red (#EF4444, red 500 de Tailwind CSS) en warning con danger activo: aviso de roles parecidos y fuera de margen.
+  assert.deepEqual(roleWarnings(build('#1877F2', { roles: { danger: null, warning: { color: '#EF4444' } } })), [
+    { code: 'roles-close', role: 'warning', other: 'danger' },
+    { code: 'role-hue', role: 'warning', min: 43, max: 90 },
+  ]);
+  // Sin danger activo no hay con quién parecerse.
+  assert.deepEqual(roleWarnings(build('#1877F2', { roles: { warning: { color: '#EF4444' } } })), [
+    { code: 'role-hue', role: 'warning', min: 43, max: 90 },
+  ]);
+  // Info no se comprueba contra la marca (decisión 23); dentro de su margen, nada.
+  assert.deepEqual(roleWarnings(build('#1877F2', { roles: { info: { color: '#1877F2' } } })), []);
+  // Con la marca sin croma o en un extremo no se comprueba la colisión (F22).
+  for (const brand of ['#808080', '#1A2B5C'])
+    assert.ok(
+      !build(brand, { roles: { danger: { color: brand } } }).warnings.some((w) => w.code === 'role-custom-collision'),
+      brand,
+    );
+});
+
+test('F23: un color propio no cambia las demás escalas ni la propuesta de otros roles', () => {
+  const a = build('#1877F2', { roles: { danger: null, warning: null } });
+  const b = build('#1877F2', { roles: { danger: { color: '#FF4D80' }, warning: null } });
+  assert.deepEqual(b.color, a.color);
+  assert.deepEqual(b.neutral, a.neutral);
+  assert.deepEqual(b.roles.warning, a.roles.warning);
+  assert.equal(b.rolePalettes.warning, 'amber');
+});
+
 // --- F24 ------------------------------------------------------------------------------------------
 
 test('F24: tope de croma', () => {
