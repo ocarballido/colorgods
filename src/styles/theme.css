@@ -47,8 +47,8 @@
   --text-color-success-default: var(--cg-color-text-success-default);
   --text-color-warning-default: var(--cg-color-text-warning-default);
   --ease-standard: var(--cg-easing-standard);
-  --font-mono: var(--font-jetbrains-mono, var(--cg-font-family-mono)), ui-monospace, monospace;
-  --font-sans: var(--font-inter, var(--cg-font-family-sans)), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--cg-font-family-mono), ui-monospace, monospace;
+  --font-sans: var(--cg-font-family-sans), ui-sans-serif, system-ui, sans-serif;
   --text-body-default: var(--cg-font-size-body-default);
   --text-body-small: var(--cg-font-size-body-small);
   --text-caption-default: var(--cg-font-size-caption-default);
