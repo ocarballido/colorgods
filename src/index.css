@@ -31,6 +31,26 @@
     outline: none;
   }
 
+  /* La fila de la tabla a la que lleva "Show in table": anillo por dentro, porque la tabla recorta lo que sale. Las
+     columnas fijas lo taparían con su fondo, así que las celdas lo dibujan también (con colores forzados, que quitan
+     las sombras, queda el contorno de la fila). */
+  tr[tabindex='-1']:focus-visible {
+    --w: var(--cg-border-width-200);
+    --c: var(--cg-color-border-focus);
+    outline-offset: calc(-1 * var(--w));
+  }
+  tr[tabindex='-1']:focus-visible > * {
+    box-shadow:
+      inset 0 var(--w) var(--c),
+      inset 0 calc(-1 * var(--w)) var(--c);
+  }
+  tr[tabindex='-1']:focus-visible > :first-child {
+    box-shadow:
+      inset 0 var(--w) var(--c),
+      inset 0 calc(-1 * var(--w)) var(--c),
+      inset var(--w) 0 var(--c);
+  }
+
   /* Sin animaciones que transmitan información (ux.md §4). */
   @media (prefers-reduced-motion: reduce) {
     *,
