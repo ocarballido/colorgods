@@ -56,7 +56,7 @@ function ScaleTable({ scale, pending }: { scale: Scale; pending: boolean }) {
             <tr key={s.name} id={rowId(scale.id, k)} tabIndex={-1}>
               <th scope="row" className={`${cell} ${stick1} bg-neutral-default text-left font-400`}>
                 {s.name}
-                {s.anchor && ' · Your color'}
+                {s.anchor && ` · ${scale.own[0].toUpperCase()}${scale.own.slice(1)}`}
               </th>
               <td className={`${cell} ${stick2} bg-neutral-default`}>
                 <span
@@ -91,7 +91,7 @@ type Props = {
 
 export function ScaleTables({ scales, list, pending, selected, onSelect }: Props) {
   const tabId = (scale: Scale) => `table-${scale.id}`;
-  // Si la escala elegida deja de verse (un rol desactivado, en otra parte de C4), se vuelve a la primera.
+  // Si la escala elegida deja de verse (un rol desactivado), se vuelve a la primera.
   const current = tabId(scales.find((s) => s.id === selected) ?? scales[0]);
   return (
     <section aria-labelledby="tables-heading" className="flex flex-col gap-200">

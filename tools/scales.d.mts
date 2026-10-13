@@ -28,7 +28,10 @@ export type ScaleWarning =
   | { code: 'clipped'; scale: string; steps: { name: string; clip: number }[] }
   | { code: 'close'; scale: string; pairs: [string, string][] }
   | { code: 'role-changed'; role: Role; from: string; to: string }
-  | { code: 'role-collision'; role: Role; palette: string };
+  | { code: 'role-collision'; role: Role; palette: string }
+  | { code: 'role-custom-collision'; role: Role }
+  | { code: 'roles-close'; role: Role; other: Role }
+  | { code: 'role-hue'; role: Role; min: number; max: number };
 
 export type BuildOptions = {
   steps?: number;
@@ -36,8 +39,9 @@ export type BuildOptions = {
   curve?: string | null;
   cap?: boolean;
   tint?: number;
-  // Roles activos: null para la paleta propuesta, o una paleta de su margen elegida por el usuario.
-  roles?: Partial<Record<Role, string | null>>;
+  // Roles activos: null para la paleta propuesta, una paleta de su margen elegida por el usuario o un color propio (F23)
+  // en cualquier formato de F1.
+  roles?: Partial<Record<Role, string | null | { color: string }>>;
 };
 
 export type Scales = {
@@ -46,6 +50,7 @@ export type Scales = {
   color: NamedStep[];
   roles: Partial<Record<Role, NamedStep[]>>;
   rolePalettes: Partial<Record<Role, string>>;
+  roleColors: Partial<Record<Role, string>>;
   neutral: NamedStep[];
   // Nombres de paso, o null si ningún paso cumple. brand: el paso de la marca y su contraste sin truncar.
   rule: {
@@ -66,6 +71,7 @@ export const TW_HUES: Record<string, number>;
 export const ACHROMATIC: number;
 export const ROLES: Role[];
 export const ROLE_PALETTES: Record<Role, string[]>;
+export const ROLE_HUES: Record<Role, [number, number]>;
 export const MIN_STEPS: number;
 export const MAX_STEPS: Record<Convention, number>;
 

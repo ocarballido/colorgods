@@ -126,8 +126,10 @@ type Option = { value: string; label: string };
 
 type SelectProps = {
   id: string;
-  label: string;
+  label: ReactNode;
   hint?: string;
+  // Otras descripciones fuera del selector (los avisos de un rol debajo de su selector, ux.md §5).
+  extraDescribedBy?: string;
   value: string;
   options: Option[];
   // Opciones agrupadas con optgroup, después de las sueltas (el par de contraste, ux.md §6.4).
@@ -142,7 +144,7 @@ const optionList = (options: Option[]) =>
     </option>
   ));
 
-export function Select({ id, label, hint, value, options, groups = [], onChange }: SelectProps) {
+export function Select({ id, label, hint, extraDescribedBy, value, options, groups = [], onChange }: SelectProps) {
   const hintId = hint && `${id}-hint`;
   return (
     <div className="flex flex-col gap-100">
@@ -158,7 +160,7 @@ export function Select({ id, label, hint, value, options, groups = [], onChange 
         <select
           id={id}
           value={value}
-          aria-describedby={hintId || undefined}
+          aria-describedby={describedBy(hintId, extraDescribedBy)}
           onChange={(e) => onChange(e.target.value)}
           className={`${fieldClass} appearance-none pr-800`}
         >

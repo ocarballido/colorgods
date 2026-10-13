@@ -136,7 +136,7 @@ En este orden (el del teclado):
 
 ### 6.1. Resumen
 
-Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names · curve blue · tint 0.5", y "· chroma cap" si está activado), "Copy link" y un enlace a la exportación. "Copy link" confirma con "Link copied", anunciado (F17, F18).
+Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names · curve blue · tint 0.5", "· chroma cap" si está activado y "· Roles: danger, warning" con roles activos, decisión 83), "Copy link" y un enlace a la exportación. "Copy link" confirma con "Link copied", anunciado (F17, F18).
 
 ### 6.2. Avisos y notas (U5)
 
@@ -168,7 +168,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 - Pestañas con el patrón ARIA de pestañas (flechas para moverse, activación al momento): una por escala, con el nombre de la paleta y, si tiene avisos o notas, su número ("danger, 1 warning").
 - Encima de la tabla, el texto de F10, visible siempre.
-- Columnas de F9: nombre del paso, color, `oklch()`, hex, contraste con blanco, contraste con negro, recorte. La fila de la marca dice "Your color" en la columna del nombre.
+- Columnas de F9: nombre del paso, color, `oklch()`, hex, contraste con blanco, contraste con negro, recorte. La fila de la marca dice "Your color" en la columna del nombre, y la del color propio de un rol, "Your danger color" (decisión 83).
 - La tabla tiene su propio desplazamiento horizontal; el contenedor es enfocable con teclado y tiene nombre ("blue table"), para poder desplazarlo sin ratón. Las dos primeras columnas se quedan fijas al desplazar.
 - Al cambiar de escala por "Show in table", la pestaña cambia y el foco va a la fila.
 
@@ -203,7 +203,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 - **Orden:** enlace para saltar al contenido, ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Encabezados: h1 (colorgods y lo que hace), h2 Settings, Result, Export, How it works; h3 dentro de Result.
 - **Campos:** etiqueta visible, ayuda y error asociados con `aria-describedby`; `aria-invalid` con error.
-- **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
+- **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes"; con roles activos, "11 steps, 2 semantic palettes, …") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
 - **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, y los enlaces de saltar.
 - **Color:** la marca, los roles, los avisos, los niveles de contraste y las marcas de la regla llevan texto (F19, 1.4.1). Las muestras de color no tienen borde, como en Figma; con colores forzados llevan un contorno del sistema. Oscar asume el riesgo el 2026-10-13: el paso más claro casi no se distingue del blanco (decisión 75, que sustituye al borde de C21 del curso).
 - **Objetivos:** todos los controles de al menos 24 × 24 px (2.5.8).

@@ -114,3 +114,71 @@ test('recorte en todos los pasos de un rol: se cuentan todos y se aconseja otra 
     'warning: in all 11 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). If the clip is large, try another palette.',
   );
 });
+
+// --- Roles (paso C4 parte 4): F22 y F23 con los textos de funcionalidades.md §3 y las pantallas de B3 ------------
+
+const withRoles = (hex, roles, steps = 11) => {
+  const r = build(hex, { steps, roles });
+  // Las escalas visibles en el orden de ux.md §6.3, como visibleScales() de scaleData.ts.
+  const scales = [
+    { id: 'color', name: suggest(hex).name, steps: r.color },
+    ...Object.entries(r.roles).map(([id, steps]) => ({ id, name: id, steps })),
+    { id: 'neutral', name: 'neutral', steps: r.neutral },
+  ];
+  return { r, list: notices(r, scales) };
+};
+
+test('F22: #FF0000 y rosa pastel dan el aviso de danger, también para su selector y con su fila', () => {
+  for (const hex of ['#FF0000', '#F8C8DC']) {
+    const { r, list } = withRoles(hex, { danger: null });
+    const n = list.find((x) => x.key === 'role-collision:danger');
+    assert.equal(n.warning, true, hex);
+    assert.equal(
+      n.text,
+      'danger: Your color is close to danger, and design systems use this hue for danger. Don’t rely on color alone: show danger messages with an icon and text.',
+    );
+    assert.deepEqual(n.roles, ['danger']);
+    assert.equal(n.at, `danger ${r.input.anchorStep}`);
+  }
+  // #F59E0B: warning pasa a orange y se dice en una nota (estado "Rol con paleta cambiada").
+  const { list } = withRoles('#F59E0B', { warning: null });
+  assert.equal(
+    list.find((x) => x.key === 'role-changed:warning').body,
+    'Your color is close to amber, the usual palette for warning, so warning uses orange, which design systems also use for warning. You can change it.',
+  );
+});
+
+test('F23: colisión con la marca, roles parecidos y fuera de margen, con la fila del color propio', () => {
+  const same = withRoles('#FF0000', { danger: { color: '#FF0000' } }).list;
+  const sameN = same.find((x) => x.key === 'role-custom-collision:danger');
+  assert.match(sameN.body, /^This danger color is close to your color/);
+  // La colisión se mide a la luminancia de la marca: lleva a la fila del paso de la marca.
+  assert.equal(sameN.at, 'danger 600');
+  const { r, list } = withRoles('#1877F2', { danger: { color: '#FF4D80' } });
+  const hue = list.find((x) => x.key === 'role-hue:danger');
+  assert.equal(hue.body, 'Design systems don’t use this hue for danger: they use 21° to 30° (OKLCH hue).');
+  assert.equal(
+    hue.row,
+    r.roles.danger.findIndex((s) => s.anchor),
+  );
+  const close = withRoles('#1877F2', { danger: null, warning: { color: '#EF4444' } }).list;
+  const n = close.find((x) => x.key === 'roles-close:warning:danger');
+  assert.equal(
+    n.text,
+    'warning: Warning and danger are very close in color. Choose colors that are easier to tell apart.',
+  );
+  assert.deepEqual(n.roles, ['warning', 'danger']);
+  assert.equal(n.at, 'warning 500');
+});
+
+test('#1877F2 con danger y warning: notas de recorte como en el escritorio de Figma', () => {
+  const { list } = withRoles('#1877F2', { danger: null, warning: null });
+  assert.deepEqual(
+    list.map((n) => n.text),
+    [
+      'blue: in steps 50, 700 and 800 the color doesn’t fit in sRGB, so its chroma is reduced (Clip column).',
+      'danger: in 7 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column).',
+      'warning: in all 11 steps the color doesn’t fit in sRGB, so its chroma is reduced (Clip column). If the clip is large, try another palette.',
+    ],
+  );
+});

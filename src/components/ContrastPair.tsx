@@ -1,22 +1,29 @@
 // Par de contraste (F11, ux.md §6.4); el cálculo está en pairData.ts. La región viva solo habla al cambiar un selector
 // o con Swap, una vez, y no cuando cambian los ajustes; lo dicho se borra cuando cambian las escalas, para que el
-// cursor virtual no lea un ratio que ya no se ve.
+// cursor virtual no lea un ratio que ya no se ve. Si se desactiva un rol que estaba en el par, el par vuelve al de
+// por defecto y se dice, también a la vista (F11, ux.md §6.4); el foco se queda en la casilla del rol.
 import { useState } from 'react';
-import { FIXED, LEVELS, again, color, measure, ratioText, type Pick } from './pairData';
+import { FIXED, LEVELS, again, color, lostScale, measure, ratioText, type Pick } from './pairData';
 import type { Scale } from './scaleData';
-import { Button, Select, TestBadge } from './ui';
+import { Button, Select, TestBadge, hintClass } from './ui';
 
 const cell = 'border-b border-neutral-default px-300 py-200 text-left font-400 whitespace-nowrap';
 
 export function ContrastPair({ scales }: { scales: Scale[] }) {
   const [pick, setPick] = useState<Pick>({ text: null, bg: null });
-  const [said, setSaid] = useState({ text: '', scales });
+  const [said, setSaid] = useState({ text: '', scales, reset: false });
+  const lost = lostScale(pick, scales);
+  if (lost) {
+    // Ajuste del estado durante el render (patrón de React para estado que depende de las props).
+    setPick({ text: null, bg: null });
+    setSaid({ text: `The pair was reset because ${lost} was turned off.`, scales, reset: true });
+  }
   const m = measure(pick, scales);
 
   const change = (next: Pick) => {
     setPick(next);
     const { spoken } = measure(next, scales);
-    setSaid((prev) => ({ text: again(prev.text, spoken), scales }));
+    setSaid((prev) => ({ text: again(prev.text, spoken), scales, reset: false }));
   };
 
   const options = FIXED.map(({ value, label }) => ({ value, label }));
@@ -57,6 +64,12 @@ export function ContrastPair({ scales }: { scales: Scale[] }) {
             />
           </div>
         </div>
+        {/* Visible y oculto al lector: ya lo dice la región viva de abajo. */}
+        {said.reset && said.scales === scales && (
+          <p aria-hidden="true" className={hintClass}>
+            {said.text}
+          </p>
+        )}
         <div className="flex flex-col gap-400 lg:flex-row lg:items-start">
           <div className="flex flex-col gap-400 overflow-hidden rounded-control border border-neutral-default p-400 lg:flex-1 lg:self-stretch">
             <p className="text-heading-2 font-600 leading-tight">{ratioText(m.ratio)}:1</p>

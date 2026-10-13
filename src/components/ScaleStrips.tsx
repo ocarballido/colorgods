@@ -14,7 +14,8 @@ const columns = (n: number): CSSProperties => ({ gridTemplateColumns: `64px repe
 
 type Rule = Scales['rule'];
 
-// Un paso cuenta si cumple en todas las escalas visibles, sin el paso de la marca (F26, decisión 48). Es el mismo
+// Un paso cuenta si cumple en todas las escalas visibles, sin el paso de la marca ni el del color propio de un rol
+// (F26, decisiones 48 y 83). Es el mismo
 // criterio que contrastRule() del motor, que da el texto: si uno cambia, el otro también.
 const passes = (scales: Scale[], k: number, bg: number[]) =>
   scales.every((s) => s.steps[k].anchor || contrastWith(s.steps[k].hex, bg) >= AA);
@@ -26,7 +27,7 @@ function altText(scale: Scale) {
   const { steps } = scale;
   const anchor = steps.find((s) => s.anchor);
   return `${scale.name}, ${steps.length} steps from ${steps[0].name} to ${steps[steps.length - 1].name}${
-    anchor ? `; your color is ${anchor.name}` : ''
+    anchor ? `; ${scale.own} is ${anchor.name}` : ''
   }`;
 }
 
@@ -55,6 +56,8 @@ export function ScaleStrips({ scales, rule, colorName }: { scales: Scale[]; rule
     { label: 'Black AA', bg: BLACK },
   ].map((r) => ({ ...r, marks: names.map((_, k) => passes(scales, k, r.bg)) }));
   const { brand } = rule;
+  // Pasos con el color propio de un rol (F23): también llevan ✓ y tampoco cuentan en la regla (decisión 83).
+  const owns = scales.slice(1).flatMap((s) => s.steps.filter((x) => x.anchor).map((x) => ({ scale: s, step: x })));
 
   return (
     <section aria-labelledby="scales-heading" className="flex flex-col gap-200">
@@ -162,6 +165,10 @@ export function ScaleStrips({ scales, rule, colorName }: { scales: Scale[]; rule
         <span className="sm:hidden">Each step name is in black or white, whichever passes AA on that color. </span>✓
         marks your color: {colorName} {brand.step}. It keeps your exact color, so its contrast is its own:{' '}
         {ratioText(brand.white)} with white, {ratioText(brand.black)} with black. It isn’t counted in the rule above.
+        {owns.map(
+          ({ scale, step }) =>
+            ` ✓ also marks ${scale.own}, ${scale.name} ${step.name}: ${ratioText(contrastWith(step.hex, WHITE))} with white, ${ratioText(contrastWith(step.hex, BLACK))} with black. It isn’t counted either.`,
+        )}
       </p>
     </section>
   );

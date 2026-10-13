@@ -1,20 +1,21 @@
-// Página de colorgods (C4: estructura y entrada, tiras y tablas, avisos y par de contraste). Dos columnas desde 1024 px y una por debajo (decisión 58).
+// Página de colorgods (C4: estructura y entrada, tiras y tablas, avisos y par de contraste, paletas semánticas). Dos columnas desde 1024 px y una por debajo (decisión 58).
 // El resultado se calcula al momento con build() del motor y los últimos valores válidos (U1, U2).
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import { build, suggest } from '../tools/scales.mjs';
+import { build, suggest, type Role } from '../tools/scales.mjs';
 import { ContrastPair } from './components/ContrastPair';
 import { MainColorPanel } from './components/MainColorPanel';
 import { Notices } from './components/Notices';
 import { notices, type Notice } from './components/noticeData';
 import { ResultSummary } from './components/ResultSummary';
 import { ScaleStrips } from './components/ScaleStrips';
+import { SemanticPanel } from './components/SemanticPanel';
 import { ScaleTables, rowId } from './components/ScaleTables';
 import { visibleScales } from './components/scaleData';
 import { Tabs } from './components/Tabs';
 import { HowItWorks, SiteFooter, SiteHeader } from './components/SiteChrome';
 import { StatusRegion } from './components/StatusRegion';
-import { initialSettings, namesLabel, reducer, stepsError, type Field } from './settings';
+import { initialSettings, namesLabel, reducer, roleOptions, stepsError, type Field } from './settings';
 
 // Enlaces de saltar: visibles en una columna; en dos columnas, solo con el foco (decisión 58).
 const skipClass =
@@ -22,7 +23,7 @@ const skipClass =
 
 // Un error que aparece al salir del campo no puede mover el botón entre pointerdown y pointerup, o el clic se pierde
 // (ux.md §4, solución del curso): con el puntero pulsado, el error espera a que se suelte o se cancele el gesto.
-function usePointerSafeBlur(onBlur: (field: Field) => void) {
+function usePointerSafeBlur<T>(onBlur: (field: T) => void) {
   const down = useRef(false);
   const waiting = useRef<AbortController | null>(null);
   useEffect(() => {
@@ -39,7 +40,7 @@ function usePointerSafeBlur(onBlur: (field: Field) => void) {
     };
   }, []);
   return useCallback(
-    (field: Field) => {
+    (field: T) => {
       if (!down.current) return onBlur(field);
       // Si ya había un error esperando, se muestra ya: solo espera el último.
       waiting.current?.abort();
@@ -84,11 +85,13 @@ export default function App() {
   const [tab, setTab] = useState('main');
   const [settingsRef, fits] = useFitsInWindow();
   const onBlur = usePointerSafeBlur(useCallback((field: Field) => dispatch({ type: 'blur', field }), []));
+  const onRoleBlur = usePointerSafeBlur(useCallback((role: Role) => dispatch({ type: 'roleBlur', role }), []));
   const { color, valid, curve, cap, tint } = settings;
   const suggested = useMemo(() => suggest(color), [color]);
+  const roles = useMemo(() => roleOptions(settings.roles), [settings.roles]);
   const result = useMemo(
-    () => build(color, { steps: valid.steps, names: valid.names, curve, cap, tint }),
-    [color, valid, curve, cap, tint],
+    () => build(color, { steps: valid.steps, names: valid.names, curve, cap, tint, roles }),
+    [color, valid, curve, cap, tint, roles],
   );
   const colorName = settings.name ?? suggested.name;
   const scales = useMemo(() => visibleScales(result, colorName), [result, colorName]);
@@ -149,12 +152,14 @@ export default function App() {
                 {
                   id: 'semantic',
                   label: 'Semantic palettes',
-                  // Provisional: los roles (F20 a F23) llegan en otra parte de C4.
-                  focusable: true,
                   panel: (
-                    <p className="text-body-default leading-normal text-neutral-subtle">
-                      Danger, warning, success and info palettes are coming soon.
-                    </p>
+                    <SemanticPanel
+                      settings={settings}
+                      dispatch={dispatch}
+                      onBlur={onRoleBlur}
+                      result={result}
+                      list={list}
+                    />
                   ),
                 },
               ]}

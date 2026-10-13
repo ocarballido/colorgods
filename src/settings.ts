@@ -1,4 +1,4 @@
-// Ajustes de la pestaña "Main color" y sus últimos valores válidos (U2, ux.md §4; decisión 26).
+// Ajustes de las pestañas "Main color" y "Semantic palettes" y sus últimos valores válidos (U2, ux.md §4; decisión 26).
 // Cada campo guarda lo escrito y, aparte, el último valor válido con el que se calcula el resultado.
 import {
   MAX_STEPS,
@@ -9,8 +9,11 @@ import {
   parseColor,
   parseSteps,
   stepNames,
+  ROLES,
+  type BuildOptions,
   type Convention,
   type CustomNamesError,
+  type Role,
 } from '../tools/scales.mjs';
 
 // Color por defecto: el de las pantallas de B3 (decisión 62). No es #33CC99, la marca de DesignToken101 (A5).
@@ -18,6 +21,10 @@ export const DEFAULT_COLOR = '#1877F2';
 
 type Named = Exclude<Convention, 'custom'>;
 export type Field = 'color' | 'name' | 'steps' | 'names' | 'multiple';
+
+// Un rol (F20 a F23): activo o no; choice es '' ("Suggested"), una paleta de su margen o 'custom' (color propio, con
+// lo escrito y su último color válido, como el color de marca).
+export type RoleSettings = { on: boolean; choice: string; colorText: string; color: string; touched: boolean };
 
 // Par N y convención con el que se calcula (F2): N y convención se validan juntos.
 // Con nombres personalizados no válidos, el resultado sigue a N con las posiciones 1 a N (pending).
@@ -39,6 +46,7 @@ export type Settings = {
   curve: string | null;
   cap: boolean;
   tint: number;
+  roles: Record<Role, RoleSettings>;
   // Un error se ve al salir del campo y mientras siga sin ser válido (ux.md §4).
   touched: Record<Field, boolean>;
 };
@@ -55,7 +63,12 @@ export type Action =
   | { type: 'curve'; curve: string | null }
   | { type: 'cap'; cap: boolean }
   | { type: 'tint'; tint: number }
-  | { type: 'blur'; field: Field };
+  | { type: 'blur'; field: Field }
+  | { type: 'role'; role: Role; on: boolean }
+  // fill: el color que se ve en la muestra del rol, para rellenar el campo al pasar a "Custom color".
+  | { type: 'roleChoice'; role: Role; choice: string; fill: string }
+  | { type: 'roleColor'; role: Role; text: string }
+  | { type: 'roleBlur'; role: Role };
 
 export const CONVENTIONS: { value: Convention; label: string }[] = [
   { value: 'tailwind', label: 'Tailwind' },
@@ -85,6 +98,9 @@ export const initialSettings: Settings = {
   curve: null,
   cap: false,
   tint: 0.5,
+  roles: Object.fromEntries(
+    ROLES.map((r) => [r, { on: false, choice: '', colorText: '', color: '', touched: false }]),
+  ) as Record<Role, RoleSettings>,
   touched: { color: false, name: false, steps: false, names: false, multiple: false },
 };
 
@@ -177,12 +193,40 @@ export function reducer(s: Settings, a: Action): Settings {
       return { ...s, tint: a.tint };
     case 'blur':
       return touch(s, a.field, true);
+    case 'role':
+      return withRole(s, a.role, { on: a.on });
+    case 'roleChoice': {
+      const r = s.roles[a.role];
+      const text = a.choice === 'custom' && !r.colorText ? a.fill : r.colorText;
+      return withRole(s, a.role, { choice: a.choice, colorText: text, color: parseColor(text) ?? r.color });
+    }
+    case 'roleColor': {
+      const hex = parseColor(a.text);
+      return withRole(s, a.role, { colorText: a.text, ...(hex && { color: hex, touched: false }) });
+    }
+    case 'roleBlur':
+      return withRole(s, a.role, { touched: true });
   }
 }
 
+const withRole = (s: Settings, role: Role, change: Partial<RoleSettings>): Settings => ({
+  ...s,
+  roles: { ...s.roles, [role]: { ...s.roles[role], ...change } },
+});
+
+// Roles activos para build(): null para la propuesta, la paleta elegida o el último color propio válido.
+export const roleOptions = (roles: Settings['roles']): NonNullable<BuildOptions['roles']> =>
+  Object.fromEntries(
+    ROLES.filter((r) => roles[r].on).map((r) => {
+      const { choice, color } = roles[r];
+      return [r, choice === 'custom' ? { color } : choice || null];
+    }),
+  );
+
 // Errores de cada campo, se vean o no. null: sin error.
 
-export const colorError = (s: Settings) => (parseColor(s.colorText) ? null : 'Use hex, RGB or HSL, like #1877F2.');
+export const colorError = (s: Pick<Settings, 'colorText'>) =>
+  parseColor(s.colorText) ? null : 'Use hex, RGB or HSL, like #1877F2.';
 
 export const nameError = (s: Settings, suggested: string) =>
   isPaletteName(s.nameText ?? suggested)

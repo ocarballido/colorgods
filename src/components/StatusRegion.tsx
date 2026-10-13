@@ -14,7 +14,8 @@ export const ANNOUNCE_DELAY = 500;
 export function summarize(result: Scales, list: Notice[]) {
   const warnings = list.filter((n) => n.warning).length;
   const notes = list.length - warnings;
-  return `Scales updated: ${result.names.length} steps, ${plural(warnings, 'warning')}, ${plural(notes, 'note')}.`;
+  const roles = Object.keys(result.roles).length;
+  return `Scales updated: ${result.names.length} steps, ${roles ? `${plural(roles, 'semantic palette')}, ` : ''}${plural(warnings, 'warning')}, ${plural(notes, 'note')}.`;
 }
 
 export function StatusRegion({ result, list, extra }: { result: Scales; list: Notice[]; extra: string }) {
