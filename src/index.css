@@ -85,5 +85,9 @@
     [role='tab'][aria-selected='true'] {
       border-color: Highlight;
     }
+    /* Las muestras conservan su color (forced-color-adjust: none) y llevan un contorno para no perderse en el fondo. */
+    .swatches {
+      outline: 1px solid CanvasText;
+    }
   }
 }

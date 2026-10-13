@@ -59,16 +59,36 @@ export function ChromaChart({ steps, cap, brandChroma }: Props) {
             ),
           )}
         </svg>
-        <div className="grid" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
-          {steps.map((s, i) => (
-            <span
-              key={s.name}
-              className="text-center text-caption-default leading-snug whitespace-nowrap text-neutral-default"
-            >
-              {showLabel(i) ? s.name : ''}
-            </span>
-          ))}
-        </div>
+        {n <= ALL_LABELS ? (
+          <div className="grid" style={{ gridTemplateColumns: `repeat(${n}, minmax(0, 1fr))` }}>
+            {steps.map((s) => (
+              <span
+                key={s.name}
+                className="truncate text-center text-caption-default leading-snug text-neutral-default"
+              >
+                {s.name}
+              </span>
+            ))}
+          </div>
+        ) : (
+          // Con más pasos, el primero a la izquierda, el de la marca bajo su punto y el último a la derecha, recortados
+          // para que no se salgan del gráfico ni se pisen.
+          <div className="relative h-[17px] overflow-hidden text-caption-default leading-snug text-neutral-default">
+            {steps.map((s, i) =>
+              showLabel(i) ? (
+                <span
+                  key={s.name}
+                  className={`absolute top-0 max-w-[30%] truncate ${
+                    i === 0 ? 'left-0' : i === n - 1 ? 'right-0 text-right' : '-translate-x-1/2'
+                  }`}
+                  style={i === 0 || i === n - 1 ? undefined : { left: `${(x(i) / W) * 100}%` }}
+                >
+                  {s.name}
+                </span>
+              ) : null,
+            )}
+          </div>
+        )}
       </div>
       <ul className="sr-only" aria-label="Chroma at each step">
         {steps.map((s, i) => (

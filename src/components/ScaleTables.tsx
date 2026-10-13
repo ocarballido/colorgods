@@ -1,32 +1,30 @@
 // Tablas (F9, F10, U4, ux.md §6.5): una por escala, elegida con pestañas. Cada tabla tiene su propio desplazamiento
 // horizontal en un contenedor enfocable con nombre, y las dos primeras columnas se quedan fijas al desplazar.
 import { useState } from 'react';
-import { oklchText, type Oklch, type Scales } from '../../tools/scales.mjs';
+import type { Oklch, Scales } from '../../tools/scales.mjs';
 import { BLACK, WHITE, contrastWith, ratioText, tabLabel, type Scale } from './scaleData';
 import { Tabs } from './Tabs';
 
 const F10 =
   'Every scale has the same contrast at each step, except your color’s step, which keeps your exact color. See the rule above the scales, or check any pair below.';
 
-// oklch() con 3, 3 y 1 decimales, como en Figma (oklchText() del motor quita los ceros finales: 0.02 por 0.020).
-const oklch = (v: Oklch) =>
-  oklchText(v)
-    .split(' ')
-    .map((x, i) => Number(x).toFixed(i === 2 ? 1 : 3))
-    .join(' ');
+// oklch() con 3, 3 y 1 decimales fijos, como en Figma (0.020, no 0.02).
+const oklch = ([L, C, H]: Oklch) => `${L.toFixed(3)} ${C.toFixed(3)} ${H.toFixed(1)}`;
 
 const head = 'border-b border-neutral-default bg-neutral-subtle px-300 py-200 text-left text-label-default font-500';
 const cell = 'border-b border-neutral-default px-300 py-200 whitespace-nowrap';
-// Columnas fijas: paso (150 px) y color (61 px), como en Figma. Llevan fondo para tapar lo que pasa por debajo.
+// Columnas fijas: paso (150 px) y color (61 px), como en Figma. Llevan fondo para tapar lo que pasa por debajo. Por
+// debajo de 640 px solo se fija el paso, para que quede sitio para las demás columnas.
 const stick1 = 'sticky left-0 w-[150px] min-w-[150px]';
-const stick2 = 'sticky left-[150px] w-[61px] min-w-[61px]';
+const stick2 = 'sm:sticky sm:left-[150px] w-[61px] min-w-[61px]';
 
 function ScaleTable({ scale, pending }: { scale: Scale; pending: boolean }) {
   return (
     // Región desplazable enfocable para moverla con las flechas sin ratón (ux.md §6.5, 2.1.1); jsx-a11y no la contempla.
     // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <div role="region" aria-label={`${scale.name} table`} tabIndex={0} className="overflow-x-auto">
+    <div role="region" aria-label={`${scale.name} table`} tabIndex={0} className="relative overflow-x-auto">
       <table className="w-full min-w-[760px] border-collapse text-body-small leading-normal">
+        <caption className="sr-only">{scale.name} scale</caption>
         <thead>
           <tr>
             <th scope="col" className={`${head} ${stick1}`}>
@@ -62,7 +60,7 @@ function ScaleTable({ scale, pending }: { scale: Scale; pending: boolean }) {
               <td className={`${cell} ${stick2} bg-neutral-default`}>
                 <span
                   aria-hidden="true"
-                  className="mx-auto block size-[24px] rounded-full forced-color-adjust-none"
+                  className="swatches mx-auto block size-[24px] rounded-full forced-color-adjust-none"
                   style={{ background: s.hex }}
                 />
               </td>
@@ -70,7 +68,7 @@ function ScaleTable({ scale, pending }: { scale: Scale; pending: boolean }) {
               <td className={cell}>{s.hex}</td>
               <td className={cell}>{ratioText(contrastWith(s.hex, WHITE))}</td>
               <td className={cell}>{ratioText(contrastWith(s.hex, BLACK))}</td>
-              <td className={cell}>{s.clip ? `${Math.round(s.clip)}%` : ''}</td>
+              <td className={cell}>{s.clip ? `${s.clip}%` : <span className="sr-only">none</span>}</td>
             </tr>
           ))}
         </tbody>

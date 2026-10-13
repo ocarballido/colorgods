@@ -150,6 +150,17 @@ Tomadas al escribir la parte 1 de C4 (rama `c4-entrada`); cada una dice su motiv
 | 71 | Campos de texto y selector sin borde, con fondo `neutral-100`, como en Figma. Oscar asume el riesgo el 2026-10-13: el contraste del campo con la página es 1,09 a 1 (calculado por el revisor de accesibilidad) y no cumple 1.4.11. Con colores forzados se ve un borde. Cualquier cambio de diseño lo decide Oscar. | Cerrada (Oscar) | 2026-10-13 |
 | 72 | Peso tras la parte 1: 89.181 B con gzip (JavaScript 84.001 B, CSS 5.180 B; `stack.md` §4), dentro de los 100 kB de la decisión 45. Antes del texto nuevo de "How it works" eran 89.172 B. Quedan unos 10,8 kB para tiras, regla, avisos, par, tablas, roles, exportación y URL. `scales.mjs` pesa 11.290 B con gzip desde C3 (cifra corregida en la decisión 45). Si una parte siguiente supera el presupuesto, se decide antes de seguir (decisión 45). | Cerrada (medida) | 2026-10-13 |
 
+## Interfaz, parte 2: tiras y tablas (paso C4)
+
+Tomadas al escribir la parte 2 de C4 (rama `c4-tiras`); cada una dice su motivo.
+
+| ID | Decisión | Estado | Fecha |
+|---|---|---|---|
+| 73 | Textos de la regla y de la marca como en Figma (decisión 63): "Large text and UI components (3:1) on white: … and darker; on black: … and lighter." (más largo que el borrador de `funcionalidades.md` §3, decisión 62) y la línea "✓ marks your color: blue 600. It keeps your exact color, so its contrast is its own: 4.23 with white, 4.95 with black. It isn't counted in the rule above." debajo de las tiras. No se añade además "Your color: 600, 4.23 with white" junto a la tira: decía lo mismo; `ux.md` §6.3 y §10.8 corregidos. En móvil la línea empieza por "Each step name is in black or white, whichever passes AA on that color." y conserva la última frase, que Figma quitaba en móvil, para decir lo mismo en los dos anchos. Si ningún paso cumple, el texto dice "no step" (`funcionalidades.md` no lo decía). | Cerrada (Claude, con la decisión 63) | 2026-10-13 |
+| 74 | Filas "White AA" y "Black AA": un paso lleva ✓ si cumple en todas las escalas visibles, sin el paso de la marca, el mismo criterio que `contrastRule()` del motor, que da el texto (comprobado: 5 colores por 5 valores de N, filas y texto coinciden). El contenedor de las tiras solo es enfocable cuando desborda; la región de la tabla, siempre (`ux.md` §6.5). Por debajo de 640 px solo se fija la columna del paso, para dejar sitio a las demás. Los nombres largos (nombres personalizados) se recortan en la cabecera de las tiras, en las muestras de móvil y en el gráfico de la curva; están enteros en la tabla. En la tabla, oklch() con 3, 3 y 1 decimales fijos, como en Figma, y la columna de recorte vacía lleva "none" para el lector de pantalla. | Cerrada | 2026-10-13 |
+| 75 | Muestras de las tiras y de la tabla sin borde, como en Figma, aunque `ux.md` §9 dice que lleven borde para verse sobre cualquier fondo (C21 del curso). Los revisores de código y de accesibilidad lo señalan: el paso más claro casi no se distingue del blanco. Con colores forzados llevan un contorno del sistema. Oscar decide si se añade un borde (por ejemplo, interior de `border-neutral-default`, sin cambiar el tamaño) o se corrige `ux.md` §9. | Abierta | 2026-10-13 |
+| 76 | Peso tras la parte 2: 91.807 B con gzip (JavaScript 86.299 B, CSS 5.508 B; `stack.md` §4), 2.626 B más que la parte 1. Quedan unos 8,2 kB para avisos, par, roles, exportación y URL (decisión 45). | Cerrada (medida) | 2026-10-13 |
+
 ## Forma de trabajo
 
 | ID | Decisión | Estado | Fecha |

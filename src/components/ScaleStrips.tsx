@@ -3,7 +3,7 @@
 // 24 px y desplazamiento horizontal compartido si no caben. Por debajo: filas de 8 muestras con el nombre de cada paso
 // dentro, en negro o en blanco (el de más contraste, que siempre cumple AA), y sin filas de checks.
 import type { CSSProperties } from 'react';
-import type { NamedStep } from '../../tools/scales.mjs';
+import type { NamedStep, Scales } from '../../tools/scales.mjs';
 import { useOverflows } from '../useOverflows';
 import { Check } from './icons';
 import { BLACK, WHITE, contrastWith, ratioText, type Scale } from './scaleData';
@@ -12,16 +12,14 @@ const AA = 4.5;
 // Columna de nombres de 64 px y muestras de al menos 24 px (decisión 60).
 const columns = (n: number): CSSProperties => ({ gridTemplateColumns: `64px repeat(${n}, minmax(24px, 1fr))` });
 
-type Rule = {
-  aa: { white: string | null; black: string | null };
-  large: { white: string | null; black: string | null };
-  brand: { step: string; white: number; black: number };
-};
+type Rule = Scales['rule'];
 
-// Un paso cuenta si cumple en todas las escalas visibles, sin el paso de la marca (F26, decisión 48).
+// Un paso cuenta si cumple en todas las escalas visibles, sin el paso de la marca (F26, decisión 48). Es el mismo
+// criterio que contrastRule() del motor, que da el texto: si uno cambia, el otro también.
 const passes = (scales: Scale[], k: number, bg: number[]) =>
   scales.every((s) => s.steps[k].anchor || contrastWith(s.steps[k].hex, bg) >= AA);
 
+// Si ningún paso cumple, "no step" (decisión 73).
 const from = (step: string | null, dir: string) => (step ? `${step} and ${dir}` : 'no step');
 
 function altText(scale: Scale) {
@@ -75,7 +73,7 @@ export function ScaleStrips({ scales, rule, colorName }: { scales: Scale[]; rule
       {/* Desde 640 px: filas de la regla y tiras con el mismo desplazamiento. */}
       <div
         ref={scrollRef}
-        className="hidden overflow-x-auto sm:block"
+        className="relative hidden overflow-x-auto sm:block"
         tabIndex={overflows ? 0 : undefined}
         role={overflows ? 'group' : undefined}
         aria-label={overflows ? 'Scales and contrast rule' : undefined}
@@ -85,7 +83,9 @@ export function ScaleStrips({ scales, rule, colorName }: { scales: Scale[]; rule
             <div aria-hidden="true" className="grid text-center text-caption-default leading-snug" style={columns(n)}>
               <span />
               {names.map((name) => (
-                <span key={name}>{name}</span>
+                <span key={name} className="truncate">
+                  {name}
+                </span>
               ))}
             </div>
             {rows.map((r) => (
@@ -93,7 +93,7 @@ export function ScaleStrips({ scales, rule, colorName }: { scales: Scale[]; rule
                 <p className="sr-only">
                   {r.label}: {names.filter((_, k) => r.marks[k]).join(', ') || 'no step'}
                 </p>
-                <div aria-hidden="true" className="grid h-[28px] items-center" style={columns(n)}>
+                <div aria-hidden="true" className="grid min-h-[28px] items-center" style={columns(n)}>
                   <span className="text-caption-default leading-snug">{r.label}</span>
                   {r.marks.map((ok, k) => (
                     <span key={names[k]} className="flex justify-center text-neutral-subtle">
@@ -106,13 +106,13 @@ export function ScaleStrips({ scales, rule, colorName }: { scales: Scale[]; rule
           </div>
           {scales.map((scale) => (
             <div key={scale.id} className="grid items-center" style={columns(n)}>
-              <span aria-hidden="true" className="truncate text-label-default font-500 leading-snug">
+              <span aria-hidden="true" className="pr-100 text-label-default font-500 leading-snug break-words">
                 {scale.name}
               </span>
               <div
                 role="img"
                 aria-label={altText(scale)}
-                className="flex h-[64px] overflow-hidden rounded-control forced-color-adjust-none"
+                className="swatches flex h-[64px] overflow-hidden rounded-control forced-color-adjust-none"
                 style={{ gridColumn: `span ${n}` }}
               >
                 {scale.steps.map((s) => (
@@ -136,20 +136,20 @@ export function ScaleStrips({ scales, rule, colorName }: { scales: Scale[]; rule
             <div
               role="img"
               aria-label={altText(scale)}
-              className="grid grid-cols-8 overflow-hidden rounded-control forced-color-adjust-none"
+              className="swatches grid grid-cols-8 overflow-hidden rounded-control forced-color-adjust-none"
             >
               {scale.steps.map((s) => {
                 const dark = contrastWith(s.hex, BLACK) >= contrastWith(s.hex, WHITE);
                 return (
                   <div
                     key={s.name}
-                    className={`flex h-[48px] flex-col items-center justify-center gap-[2px] text-caption-default leading-snug font-600 tracking-[1.2px] ${
+                    className={`flex h-[48px] min-w-0 flex-col items-center justify-center gap-[2px] overflow-hidden px-050 text-caption-default leading-snug font-600 tracking-[1.2px] ${
                       dark ? 'text-[var(--cg-color-black)]' : 'text-[var(--cg-color-white)]'
                     }`}
                     style={swatchStyle(s)}
                   >
                     {s.anchor && <BrandMark size={18} />}
-                    {s.name}
+                    <span className="max-w-full truncate">{s.name}</span>
                   </div>
                 );
               })}

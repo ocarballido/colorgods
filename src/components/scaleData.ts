@@ -22,7 +22,11 @@ const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
 // Avisos y notas de una escala, para el nombre de su pestaña ("blue, 1 note"; ux.md §6.5).
 export function tabLabel(result: Scales, scale: Scale) {
-  const mine = result.warnings.filter((w) => ('scale' in w ? w.scale === scale.id : scale.id === 'color'));
+  // Los avisos con scale van a su escala; los de un rol (role-changed, role-collision), a la del rol; el resto
+  // (sin croma, extremo), a la del color.
+  const mine = result.warnings.filter((w) =>
+    'scale' in w ? w.scale === scale.id : 'role' in w ? w.role === scale.id : scale.id === 'color',
+  );
   const warnings = mine.filter((w) => WARNINGS.has(w.code)).length;
   const notes = mine.length - warnings;
   const parts = [warnings && plural(warnings, 'warning'), notes && plural(notes, 'note')].filter(Boolean);
