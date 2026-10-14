@@ -29,6 +29,7 @@ Este documento dice qué hay en la pantalla, en qué orden y cómo se comporta. 
 3. Ajusta lo que quiera en cualquier orden: pasos y convención, curva, tope de croma, tinte, nombre, roles.
 4. Revisa avisos, tiras con la regla de contraste, el par de contraste y las tablas.
 5. Exporta (DTCG, CSS o `@theme`) descargando o copiando, y, si quiere, copia el enlace con los ajustes.
+6. Si quiere saber cómo funciona algo, "How it works" de la cabecera abre la página `/how-it-works` en la misma pestaña (decisión 108): un índice al principio y un apartado por parte de la app y por el método. "Back to colorgods", arriba, o el botón Atrás del navegador vuelven a la app con los mismos ajustes.
 
 No hay pasos obligatorios ni asistente: todo está en una pantalla.
 
@@ -78,13 +79,13 @@ Esquema, no diseño: los valores entre llaves son ilustrativos.
 |                                |  └────────────────────────────────────────┘   |
 |                                |  [Download Value.tokens.json] [Copy]          |
 +--------------------------------+-----------------------------------------------+
-| How it works (h2): método, fuentes, curvas de Tailwind CSS (MIT), DesignToken101|
+| Pie                                                                            |
 +--------------------------------------------------------------------------------+
 ```
 
 - **Columna de ajustes:** ancho fijo, en un contenedor con fondo `background/neutral/subtle` que ocupa todo el alto entre la cabecera y el pie; su contenido se queda fijo bajo la cabecera al desplazar la página (`position: sticky`) y, si no cabe en la ventana, se desplaza por dentro (decisiones 95 y 107). Con zoom de 400 % (1.4.10) la pantalla ya es la de móvil, con los ajustes en el panel.
 - **Columna de resultado:** el resto del ancho. El resumen de arriba (color, N, convención, curva) sigue a lo calculado, no a lo escrito: con un error, dice con qué valores sigue (U2).
-- **"How it works"**: sección breve al final de la página con el método (§0 de `funcionalidades.md`: la escalera de contraste, la mediana de las paletas de Tailwind CSS, la marca en el paso de contraste más cercano, la curva como forma del croma y el tope), las fuentes, el crédito de las curvas (A5) y el enlace a DesignToken101 (C6). El texto es de B3.
+- **"How it works"**: página aparte, `/how-it-works` (decisión 108, que revisa la 40): HTML estático con la cabecera y el pie de la app, "Back to colorgods", el título (h1), una introducción, el índice y un apartado (h2) por parte de la app (Settings, con Main color y Semantic palettes en h3; Summary; Warnings and notes; Scales; Contrast pair; Tables; Export) y por el método, con el crédito de las curvas (A5) y los enlaces a DesignToken101 y al repositorio. Texto aprobado por Oscar el 2026-10-14. Ancho de lectura de 720 px como máximo, con los márgenes laterales del resultado.
 
 ### 3.1. Anchos (B3, decisiones 58 y 95)
 
@@ -98,7 +99,7 @@ Por debajo de 1024 px, los ajustes van en el panel lateral de las pantallas "Men
 
 ### Móvil
 
-Una columna, en este orden: resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works"; los ajustes, en el panel modal de §3.1 (decisión 95). No hay "Skip to result" ni "Back to settings": el resultado ya va primero, y esos enlaces solo existen en dos columnas, visibles con el foco. Con el panel abierto, la región de estado y la del par siguen hablando (tienen una copia dentro del panel). Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Desde 640 px, las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px (decisión 60): las tiras no se desplazan, se parten en filas de 8 muestras con el nombre de la escala encima; no hay filas de checks de la regla, y el nombre de cada paso va dentro de su muestra, en negro o en blanco, el que cumpla AA con ella; el texto de F26 sigue encima de las tiras. Además, los dos selectores del par y el botón "Swap" se apilan, los botones de cada grupo de acciones (resumen y exportar) van uno debajo de otro, a todo el ancho.
+Una columna, en este orden: resultado (resumen, avisos, regla y tiras, par, tablas), exportar; los ajustes, en el panel modal de §3.1 (decisión 95). No hay "Skip to result" ni "Back to settings": el resultado ya va primero, y esos enlaces solo existen en dos columnas, visibles con el foco. Con el panel abierto, la región de estado y la del par siguen hablando (tienen una copia dentro del panel). Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Desde 640 px, las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px (decisión 60): las tiras no se desplazan, se parten en filas de 8 muestras con el nombre de la escala encima; no hay filas de checks de la regla, y el nombre de cada paso va dentro de su muestra, en negro o en blanco, el que cumpla AA con ella; el texto de F26 sigue encima de las tiras. Además, los dos selectores del par y el botón "Swap" se apilan, los botones de cada grupo de acciones (resumen y exportar) van uno debajo de otro, a todo el ancho.
 
 ## 4. Comportamiento general
 
@@ -201,7 +202,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 ## 9. Teclado y lector de pantalla (WCAG 2.2 AA)
 
-- **Orden:** en dos columnas, "How it works" de la cabecera y el enlace para saltar al resultado (decisión 67), ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Por debajo de 1024 px, "How it works", el botón "Settings" (abre el panel de ajustes, donde el foco queda atrapado) y el resultado, sin enlaces de saltar (decisión 95). Encabezados: h1 (el logotipo, con el texto alternativo "colorgods", decisión 97), h2 Settings, Result, Export, How it works; h3 dentro de Result.
+- **Orden:** en dos columnas, "How it works" de la cabecera y el enlace para saltar al resultado (decisión 67), ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Por debajo de 1024 px, "How it works", el botón "Settings" (abre el panel de ajustes, donde el foco queda atrapado) y el resultado, sin enlaces de saltar (decisión 95). "How it works" es un enlace a otra página (decisión 108). Encabezados: h1 (el logotipo, con el texto alternativo "colorgods", decisión 97), h2 Settings, Result, Export; h3 dentro de Result. **Página "How it works":** orden de Tab: logotipo (enlace a la app), "How it works" (con `aria-current="page"`), "Back to colorgods", los enlaces del índice (una lista con el nombre "Contents:"), los enlaces del texto y el pie; el destino de cada enlace del índice queda bajo la cabecera fija (`scroll-padding-top`, 2.4.11). Encabezados: h1 "How colorgods works", un h2 por apartado y h3 Main color y Semantic palettes. El logotipo no es un encabezado: el h1 es el título. "Source on GitHub" abre una pestaña nueva y lo dice ("(opens in a new tab)", oculto); los enlaces del texto, en la misma pestaña.
 - **Campos:** etiqueta visible, ayuda y error asociados con `aria-describedby`; `aria-invalid` con error.
 - **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes"; con roles activos, "11 steps, 2 semantic palettes, …") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
 - **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, los enlaces de saltar y el panel de ajustes (al abrirlo entra en él; al cerrarlo vuelve al botón "Settings" o, si se cerró al pasar a dos columnas, a la columna de ajustes).

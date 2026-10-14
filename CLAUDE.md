@@ -14,6 +14,7 @@ App web de una sola página que genera escalas tonales de color: N pasos (3 a 30
 | Carpeta | Contenido |
 |---|---|
 | `src/` | La app: Vite, React 19 y TypeScript, Tailwind CSS 4. `src/styles/tokens.css` y `theme.css` los genera `npm run tokens` |
+| `how-it-works/` | La página "How it works" (`/how-it-works`), segunda entrada de Vite, en HTML estático sin React; su módulo y su CSS están en `src/` (decisión 108) |
 | `tools/` | Motor de escalas (`scales.mjs`, sin dependencias, con tipos en `scales.d.mts`) y `figma-to-dtcg.mjs` |
 | `tests/` | Pruebas del motor con `node --test` |
 | `tokens/` | Variables de Figma (`tokens/figma/`, exportadas tal cual) y su paso a DTCG para Terrazzo |

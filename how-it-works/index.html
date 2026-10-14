@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="preload"
+      href="/src/assets/fonts/inter-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <title>How colorgods works: settings, exports and method</title>
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="How colorgods builds tonal color scales with the same contrast at each step: each setting, the warnings, the contrast pair, the exports for Figma, CSS and Tailwind, and the method."
+    />
+    <!-- Open Graph y SEO (decisión 109), como en index.html. -->
+    <link rel="canonical" href="https://colorgods.com/how-it-works" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="colorgods" />
+    <meta property="og:title" content="How colorgods works" />
+    <meta
+      property="og:description"
+      content="Each setting, the warnings, the contrast pair, the exports for Figma, CSS and Tailwind, and the method behind the same contrast at each step."
+    />
+    <meta property="og:url" content="https://colorgods.com/how-it-works" />
+    <meta property="og:image" content="https://colorgods.com/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="colorgods: a blue color scale with its neutral, danger and warning scales, the steps that meet WCAG AA on white and on black, and the summary of the settings."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <!-- Cabecera y pie como los de la app (SiteHeader y SiteFooter de src/components/SiteChrome.tsx); decisión 108. -->
+    <header
+      class="sticky top-0 z-10 flex h-[var(--cg-header-height)] items-center border-b border-neutral-default bg-neutral-translucent px-400 backdrop-blur-[var(--cg-blur-300)]"
+    >
+      <div class="flex w-full items-center justify-between">
+        <a href="/" class="rounded-control">
+          <picture>
+            <source srcset="/src/assets/logo-dark.svg" media="(prefers-color-scheme: dark)" />
+            <img src="/src/assets/logo.svg" alt="colorgods" width="106" height="44" class="block" />
+          </picture>
+        </a>
+        <a href="/how-it-works" aria-current="page" class="text-body-small leading-normal text-accent-default underline"
+          >How it works</a
+        >
+      </div>
+    </header>
+    <main class="px-400 pt-600 pb-1200 sm:px-600 lg:px-[clamp(2rem,calc(10.526vw_-_4.737rem),5rem)]">
+      <article
+        class="mx-auto flex max-w-[45rem] flex-col gap-400 text-body-default leading-normal text-neutral-default"
+      >
+        <!-- Por defecto lleva a "/"; how-it-works.ts pone los ajustes con los que se llegó desde la app. -->
+        <a
+          id="back"
+          href="/"
+          class="self-start text-body-small leading-normal text-accent-default underline hover:text-accent-hover"
+          >Back to colorgods</a
+        >
+        <h1 class="text-heading-2 font-600 leading-tight">How colorgods works</h1>
+        <p>
+          colorgods builds tonal color scales from one color: your scale, a neutral scale and, if you want them,
+          semantic palettes, all with the same contrast at each step. This page explains each part of the app and the
+          method behind it.
+        </p>
+        <nav aria-label="Contents">
+          <span aria-hidden="true">Contents:</span>
+          <!-- En línea como el texto aprobado; role="list" porque Safari quita la semántica a las listas sin viñetas. -->
+          <ul role="list" class="inline">
+            <li class="inline">
+              <a href="#settings" class="text-accent-default underline hover:text-accent-hover">Settings</a
+              ><span aria-hidden="true"> ·</span>
+            </li>
+            <li class="inline">
+              <a href="#summary" class="text-accent-default underline hover:text-accent-hover">Summary</a
+              ><span aria-hidden="true"> ·</span>
+            </li>
+            <li class="inline">
+              <a href="#warnings-and-notes" class="text-accent-default underline hover:text-accent-hover"
+                >Warnings and notes</a
+              ><span aria-hidden="true"> ·</span>
+            </li>
+            <li class="inline">
+              <a href="#scales" class="text-accent-default underline hover:text-accent-hover">Scales</a
+              ><span aria-hidden="true"> ·</span>
+            </li>
+            <li class="inline">
+              <a href="#contrast-pair" class="text-accent-default underline hover:text-accent-hover">Contrast pair</a
+              ><span aria-hidden="true"> ·</span>
+            </li>
+            <li class="inline">
+              <a href="#tables" class="text-accent-default underline hover:text-accent-hover">Tables</a
+              ><span aria-hidden="true"> ·</span>
+            </li>
+            <li class="inline">
+              <a href="#export" class="text-accent-default underline hover:text-accent-hover">Export</a
+              ><span aria-hidden="true"> ·</span>
+            </li>
+            <li class="inline">
+              <a href="#the-method" class="text-accent-default underline hover:text-accent-hover">The method</a>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Texto aprobado por Oscar el 2026-10-14. Estilos del texto con variantes de descendiente, solo aquí. -->
+        <div
+          class="flex flex-col gap-400 [&_a]:text-accent-default [&_a]:underline [&_a:hover]:text-accent-hover [&_code]:font-mono [&_code]:text-code-default [&_h2]:mt-800 [&_h2]:text-heading-3 [&_h2]:font-600 [&_h2]:leading-snug [&_h3]:mt-400 [&_h3]:text-heading-4 [&_h3]:font-600 [&_h3]:leading-snug [&_li]:mt-200 [&_strong]:font-600 [&_ul]:list-disc [&_ul]:pl-600"
+        >
+          <h2 id="settings">Settings</h2>
+
+          <h3 id="main-color">Main color</h3>
+          <p>
+            <strong>Your color.</strong> Hex, RGB or HSL. Your color is kept exactly: it becomes one of the steps of
+            your scale, unchanged.
+          </p>
+          <p>
+            <strong>Palette name.</strong> The name of your scale in the exports, as in <code>color/blue/500</code> or
+            <code>--color-blue-500</code>. We suggest one from the hue. Use lowercase letters, numbers and hyphens,
+            starting with a letter; <code>neutral</code> and the semantic role names are taken.
+          </p>
+          <p>
+            <strong>Steps.</strong> How many colors each scale has: from 3 up to the maximum of the names you choose.
+          </p>
+          <p>
+            <strong>Names.</strong> Pick the names your design system already uses, so the exported tokens fit in
+            without renaming.
+          </p>
+          <ul>
+            <li>
+              <strong>Tailwind</strong> (50 to 950) and <strong>SDS</strong> (100 to 1000, from Figma's
+              <a href="https://github.com/figma/sds" rel="noreferrer">Simple Design System</a>): each step is named
+              after its position between the lightest and the darkest step, rounded to 50, so the names stay in order
+              with any number of steps. Up to 16 steps with Tailwind and 19 with SDS, so no two steps share a name.
+            </li>
+            <li>
+              <strong>Radix</strong>: 1 to N, up to 30. You get the names, not the scale: your color sits on the step
+              with the closest contrast, not necessarily step 9. For the Radix scale itself, use
+              <a href="https://www.radix-ui.com/colors" rel="noreferrer">Radix Colors</a>.
+            </li>
+            <li>
+              <strong>Custom</strong>: your own names, one per step, or filled with "1 to N" or "multiples of". If the
+              number of names doesn't match the steps, the app says so and export waits until it does; it never changes
+              your names for you.
+            </li>
+          </ul>
+          <p>
+            <strong>Chroma curve.</strong> How saturated each step is, taken from one of the 17 color palettes of
+            <a href="https://tailwindcss.com/docs/colors" rel="noreferrer">Tailwind CSS</a>. We suggest the one closest
+            to your hue. The curve doesn't change contrast: the lightness of each step comes from the contrast levels
+            (see <a href="#the-method">The method</a>). The chart shows the chroma of each step.
+          </p>
+          <p>
+            <strong>Keep chroma at or below my color's.</strong> No step of your scale is more saturated than your
+            color. Lightness and contrast don't change. It only affects your color's scale.
+          </p>
+          <p>
+            <strong>Neutral tint.</strong> How much of your hue goes into the neutral scale, from 0 (pure gray) to 1.
+            Only the color of the neutrals changes, not their contrast.
+          </p>
+
+          <h3 id="semantic-palettes">Semantic palettes</h3>
+          <p>
+            Turn on danger, warning, success and info as you need them. Each role uses a Tailwind CSS palette with the
+            hue design systems use for that role: we compared the error, warning, success and info colors of up to nine
+            public design systems, such as Material 3 and Spectrum. By default, red, amber, green and blue. Each palette
+            is placed on the same contrast levels as your scale, so it has the same steps, names and contrast; its hue
+            and chroma are its own. The chroma curve and the chroma cap don't affect it, and your color only changes it
+            in one case: if your color is too close to danger, warning or success, that role switches to another palette
+            design systems also use for it (orange or yellow for warning, emerald for success). Danger has no
+            alternative, so you get a warning instead. You can also choose another palette for the role, or type your
+            own color: its scale is built like yours, with its suggested curve and without the cap.
+          </p>
+
+          <h2 id="summary">Summary</h2>
+          <p>
+            The first row of the result sums up what was calculated: your color, steps, names, curve, tint and chroma
+            cap.
+            <strong>Copy link</strong> copies a link with all your settings, to share the result or come back to it.
+          </p>
+
+          <h2 id="warnings-and-notes">Warnings and notes</h2>
+          <p>
+            Warnings point to something worth changing; notes explain something you may notice. Each one starts with the
+            name of its scale.
+          </p>
+          <ul>
+            <li>
+              <strong>Very light or very dark color:</strong> almost every step falls on one side of it, and the middle
+              steps may come out very saturated.
+            </li>
+            <li><strong>No chroma:</strong> your color is gray, so its scale is gray and the neutrals have no tint.</li>
+            <li>
+              <strong>Clip:</strong> a step doesn't fit in sRGB, so its chroma is reduced. The Clip column of the table
+              says by how much.
+            </li>
+            <li>
+              <strong>Steps very close:</strong> two neighboring steps are closer in lightness than any two in the
+              Tailwind CSS palettes. Fewer steps help.
+            </li>
+            <li>
+              <strong>Semantic palettes:</strong> a role is too close to your color or to another role, or its palette
+              was changed for that reason.
+            </li>
+          </ul>
+          <p><strong>Show in table</strong> opens the table of that scale on the step it names.</p>
+
+          <h2 id="scales">Scales</h2>
+          <p>
+            Every scale, one strip each. The same step has the same contrast in every scale, so you can swap one color
+            for another of the same step without checking contrast again. ✓ marks your color, which keeps its own
+            contrast.
+          </p>
+          <p>
+            The <strong>White AA</strong> and <strong>Black AA</strong> rows mark the steps where normal text meets
+            <a href="https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html" rel="noreferrer">WCAG AA</a>
+            (4.5:1) on white or on black, in every scale shown. The text above the strips also gives the steps for 3:1,
+            enough for large text and interface components. Your color's step is left out of the rule and its contrast
+            is given apart.
+          </p>
+
+          <h2 id="contrast-pair">Contrast pair</h2>
+          <p>
+            Choose a text color and a background among all the steps, white and black. You see a sample, the ratio and
+            which of the five WCAG levels it passes: normal text (AA 4.5, AAA 7), large text (AA 3, AAA 4.5) and
+            interface components (3). The ratio is truncated, not rounded, so a pair that fails 4.5 never shows 4.50.
+          </p>
+
+          <h2 id="tables">Tables</h2>
+          <p>
+            One table per scale, in tabs. Each row is a step: name, sample, <code>oklch()</code>, hex, contrast with
+            white, contrast with black and clip, the share of chroma lost to fit in sRGB.
+          </p>
+
+          <h2 id="export">Export</h2>
+          <p>
+            Exports carry every scale: yours, the neutrals and each semantic palette turned on. Download the file or
+            copy its content.
+          </p>
+          <ul>
+            <li>
+              <strong>DTCG for Figma</strong> (<code>Value.tokens.json</code>, the
+              <a href="https://www.designtokens.org/" rel="noreferrer">Design Tokens</a> format): in Figma, open the
+              Variables panel and drag the file in. It creates a collection with one color variable per step, grouped as
+              <code>color/&lt;palette&gt;/&lt;step&gt;</code>. The variables come hidden from publishing, so they don't
+              reach your library until you decide.
+            </li>
+            <li>
+              <strong>CSS</strong> (<code>colors.css</code>): custom properties on <code>:root</code>, like
+              <code>--color-blue-500</code>.
+            </li>
+            <li>
+              <strong>Tailwind @theme</strong> (<code>theme.css</code>), for Tailwind CSS 4: the same variables inside
+              <code>@theme</code>. Each palette starts with <code>--color-&lt;palette&gt;-*: initial;</code>, so it
+              replaces a Tailwind palette of the same name entirely instead of mixing with its steps (<a
+                href="https://tailwindcss.com/docs/colors"
+                rel="noreferrer"
+                >Disabling default colors</a
+              >).
+            </li>
+          </ul>
+          <p>If a setting has an error, Export lists it with a link to the field.</p>
+
+          <h2 id="the-method">The method</h2>
+          <p>
+            Each step is a contrast level. At each step, every scale has the same relative luminance, the value WCAG
+            uses to calculate contrast, so the same contrast with white and with black. The levels are the median of the
+            17 Tailwind CSS color palettes.
+          </p>
+          <p>
+            Your color keeps its exact value and replaces the step with the closest contrast; that step keeps your
+            color's own contrast. The other steps of your scale take your hue, and the chroma of the curve scaled to
+            your color's. The semantic palettes take the hue and chroma of their Tailwind CSS palette. The neutrals take
+            the chroma of Tailwind's gray times the tint, with your hue. When a color doesn't fit in sRGB, its chroma is
+            reduced (clip) and its contrast is kept.
+          </p>
+          <p>
+            The chroma curves come from Tailwind CSS (MIT license). colorgods grows from the "Generate scales" tool of
+            <a href="https://github.com/ocarballido/design-tokens-101" rel="noreferrer">DesignToken101</a>. The code is
+            <a href="https://github.com/ocarballido/colorgods" rel="noreferrer">on GitHub</a>.
+          </p>
+        </div>
+      </article>
+    </main>
+    <footer class="mt-1200 border-t border-neutral-default bg-neutral-default px-400 py-600">
+      <div class="flex flex-col gap-200 text-caption-default leading-snug text-neutral-subtle">
+        <p>
+          Made by
+          <br />
+          Oscar Carballido
+        </p>
+        <a
+          href="https://www.oscarballido.com"
+          rel="noreferrer"
+          aria-label="Oscar Carballido, personal website"
+          class="self-start"
+        >
+          <img src="/src/assets/author.svg" alt="" width="39" height="24" />
+        </a>
+        <a
+          href="https://github.com/ocarballido/colorgods"
+          target="_blank"
+          rel="noreferrer"
+          class="flex items-center gap-100 self-start text-accent-default underline hover:text-accent-hover"
+        >
+          Source on GitHub
+          <span class="sr-only"> (opens in a new tab)</span>
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 3h6v6m-11 5L21 3m-3 10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+          </svg>
+        </a>
+        <p>Anonymous visit statistics with Vercel Web Analytics. No&nbsp;cookies.</p>
+      </div>
+    </footer>
+    <script type="module" src="/src/how-it-works.ts"></script>
+  </body>
+</html>
