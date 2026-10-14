@@ -16,7 +16,7 @@ import { SemanticPanel } from './components/SemanticPanel';
 import { ScaleTables, rowId } from './components/ScaleTables';
 import { visibleScales } from './components/scaleData';
 import { Tabs } from './components/Tabs';
-import { HowItWorks, SiteFooter, SiteHeader } from './components/SiteChrome';
+import { HowItWorks, Logo, SiteFooter, SiteHeader } from './components/SiteChrome';
 import { StatusRegion } from './components/StatusRegion';
 import { Menu, X } from './components/icons';
 import { blockingErrors, namesLabel, reducer, roleOptions, stepsError, type Field } from './settings';
@@ -191,7 +191,7 @@ export default function App() {
       id="settings"
       aria-labelledby="settings-heading"
       tabIndex={-1}
-      className={`flex flex-col gap-200 p-400 sm:px-600 lg:px-400 ${fits ? 'lg:sticky lg:top-[var(--cg-header-height)]' : ''}`}
+      className={`flex flex-col gap-200 ${wide ? `p-400 ${fits ? 'sticky top-[var(--cg-header-height)]' : ''}` : ''}`}
     >
       <h2 id="settings-heading" className="sr-only">
         Settings
@@ -201,7 +201,8 @@ export default function App() {
           Skip to result
         </a>
       )}
-      <div className="rounded-container border border-neutral-default bg-neutral-default p-400">
+      {/* En la columna, la tarjeta de Figma; en el panel, sin relleno, borde ni radio, a todo el ancho (decisión 95). */}
+      <div className={wide ? 'rounded-container border border-neutral-default bg-neutral-default p-400' : ''}>
         <Tabs
           label="Settings"
           fill
@@ -275,12 +276,16 @@ export default function App() {
           }}
           onPointerDown={(e) => (pressedBackdrop.current = e.target === e.currentTarget)}
           onClick={(e) => pressedBackdrop.current && e.target === e.currentTarget && dialogRef.current?.close()}
-          className="settings-dialog fixed top-[var(--cg-header-height)] bottom-0 left-0 m-0 h-auto max-h-none w-full max-w-[22.5rem] overflow-y-auto border-0 bg-neutral-subtle p-0 text-neutral-default"
+          className="settings-dialog fixed inset-y-0 left-0 m-0 h-auto max-h-none w-full max-w-[22.5rem] overflow-y-auto border-0 bg-neutral-default p-0 text-neutral-default"
         >
-          {/* El contenido ocupa todo el panel: así un clic en su parte vacía no llega al <dialog> y no lo cierra. */}
+          {/* Panel "Aside" de las pantallas "MenuOpen": todo el alto, fondo background/neutral/default, relleno de 24 px y
+              el logotipo con la X arriba. El contenido ocupa todo el panel: así un clic en su parte vacía no llega al
+              <dialog> y no lo cierra. */}
           {!wide && (
-            <div className="min-h-full">
-              <div className="flex justify-end px-400 pt-400 sm:px-600">
+            <div className="flex min-h-full flex-col gap-600 p-600">
+              <div className="flex items-center justify-between gap-600">
+                {/* Decorativo: con el panel abierto, el resto es inerte y el panel ya tiene nombre (Settings). */}
+                <Logo alt="" />
                 <button
                   type="button"
                   aria-label="Close settings"

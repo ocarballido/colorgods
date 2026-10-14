@@ -7,15 +7,21 @@ import { ExternalLink } from './icons';
 
 // Logotipo de la cabecera de Figma con el texto en trazos (decisión 97); en modo oscuro, el texto en
 // text/accent/default oscuro. Pesan más de 4 KB, así que Vite los sirve como archivos y no como data:.
+export function Logo({ alt }: { alt: string }) {
+  return (
+    <picture>
+      <source srcSet={logoDark} media="(prefers-color-scheme: dark)" />
+      <img src={logo} alt={alt} width="106" height="44" className="block" />
+    </picture>
+  );
+}
+
 export function SiteHeader({ menu }: { menu: ReactNode }) {
   return (
     <header className="sticky top-0 z-10 flex h-[var(--cg-header-height)] items-center border-b border-neutral-default bg-neutral-translucent px-400 backdrop-blur-[var(--cg-blur-300)]">
       <div className="flex w-full items-center justify-between">
         <h1>
-          <picture>
-            <source srcSet={logoDark} media="(prefers-color-scheme: dark)" />
-            <img src={logo} alt="colorgods" width="106" height="44" className="block" />
-          </picture>
+          <Logo alt="colorgods" />
         </h1>
         <div className="flex items-center gap-400">
           <a href="#how-it-works" className="text-body-small leading-normal text-accent-default underline">

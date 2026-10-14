@@ -94,7 +94,7 @@ Esquema, no diseño: los valores entre llaves son ilustrativos.
 | Menos de 1024 px | Una columna con el resultado; los ajustes, en un panel modal que se abre desde la cabecera (decisión 95) | 24 px (tableta, 744 en Figma) | 632 px a 744 |
 | Menos de 640 px | Una columna, con los cambios de móvil de abajo | 16 px | 328 px a 360, en filas de 8 muestras |
 
-Por debajo de 1024 px, los ajustes van en el panel lateral de las pantallas "MenuOpen" (decisión 95, que sustituye a la 58 en esto): un `<dialog>` modal bajo la cabecera, de hasta 360 px de ancho, sobre un fondo negro al 40 %, que se abre con el botón de menú ("Settings") y se cierra con su botón `li:x`, con Escape o con un clic en el fondo; el foco vuelve al botón de menú. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
+Por debajo de 1024 px, los ajustes van en el panel lateral de las pantallas "MenuOpen" (decisión 95, que sustituye a la 58 en esto): un `<dialog>` modal a todo el alto de la ventana (tapa la cabecera), de hasta 360 px de ancho, con el logotipo y la X arriba y los ajustes sin la tarjeta, sobre un fondo negro al 40 %, que se abre con el botón de menú ("Settings") y se cierra con su botón `li:x`, con Escape o con un clic en el fondo; el foco vuelve al botón de menú. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
 
 ### Móvil
 
