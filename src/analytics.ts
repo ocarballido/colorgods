@@ -20,16 +20,20 @@ declare global {
 const config = import.meta.env.VITE_VERCEL_OBSERVABILITY_CLIENT_CONFIG;
 const basePath = import.meta.env.VITE_VERCEL_OBSERVABILITY_BASEPATH;
 
+// Igual que makeAbsolute del paquete, que la aplica a scriptSrc antes de asignarla.
+const makeAbsolute = (url: string) =>
+  url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/') ? url : `/${url}`;
+
 // La misma ruta que calcularía el paquete; se le pasa explícita para que la política compare con la cadena
-// exacta que va a asignar.
+// exacta que va a asignar. Aquí no se filtra el origen: lo hace la política.
 function scriptSrc(): string {
   try {
     const src: unknown = config && JSON.parse(config).analytics?.scriptSrc;
-    if (typeof src === 'string' && src.startsWith('/')) return src;
+    if (typeof src === 'string') return makeAbsolute(src);
   } catch {
-    // Configuración no válida: la ruta de siempre.
+    // Configuración no válida: la ruta de basePath o la de siempre.
   }
-  return basePath ? `${basePath}/insights/script.js` : '/_vercel/insights/script.js';
+  return makeAbsolute(basePath ? `${basePath}/insights/script.js` : '/_vercel/insights/script.js');
 }
 const SCRIPT_SRC = scriptSrc();
 
@@ -42,7 +46,7 @@ window.trustedTypes?.createPolicy('default', {
 
 inject(
   {
-    mode: import.meta.env.PROD ? 'production' : 'development',
+    mode: 'production',
     debug: false,
     basePath,
     scriptSrc: SCRIPT_SRC,
