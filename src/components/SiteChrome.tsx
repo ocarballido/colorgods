@@ -83,10 +83,12 @@ export function SiteFooter() {
         {/* Link de ColorScaleUI, externo y del tamaño caption: li:external-link a space/100 del texto (decisión 99). */}
         <a
           href="https://github.com/ocarballido/colorgods"
+          target="_blank"
           rel="noreferrer"
           className="flex items-center gap-100 self-start text-accent-default underline hover:text-accent-hover"
         >
           Source on GitHub
+          <span className="sr-only"> (opens in a new tab)</span>
           <ExternalLink />
         </a>
       </div>
