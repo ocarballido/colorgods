@@ -1,7 +1,7 @@
 // Controles básicos con el aspecto de los componentes de ColorScaleUI (TextField, Button, Select, Callout).
 // Etiqueta visible; ayuda, error y estado asociados con aria-describedby; aria-invalid con error (ux.md §9).
 import type { ReactNode } from 'react';
-import { ChevronDown, CircleAlert, Info, TriangleAlert } from './icons';
+import { CheckMark, ChevronDown, CircleAlert, Info, TriangleAlert } from './icons';
 
 const describedBy = (...ids: (string | false | null | undefined)[]) => ids.filter(Boolean).join(' ') || undefined;
 
@@ -220,6 +220,38 @@ export function Callout({
         <p className="text-body-default leading-normal">{children}</p>
       </div>
     </div>
+  );
+}
+
+// Checkbox de ColorScaleUI: caja de 24 px con li:check de 16 en text/on-accent, sus estados de Figma (hover sobre toda
+// la etiqueta). El anillo de foco es el de toda la app, por fuera (decisión 98). Con colores forzados, la del sistema.
+export function Checkbox({
+  checked,
+  onChange,
+  hintId,
+  className = '',
+  children,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  hintId?: string;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className={`group flex min-h-[24px] items-center gap-200 text-body-default leading-normal ${className}`}>
+      <span className="relative flex shrink-0">
+        <input
+          type="checkbox"
+          checked={checked}
+          aria-describedby={hintId}
+          onChange={(e) => onChange(e.target.checked)}
+          className="check peer size-[24px] appearance-none rounded-100 border border-neutral-strong bg-neutral-default group-hover:bg-neutral-hover checked:border-transparent checked:bg-accent-strong-default checked:group-hover:bg-accent-strong-hover forced-colors:appearance-auto"
+        />
+        <CheckMark className="pointer-events-none absolute top-[4px] left-[4px] hidden text-on-accent peer-checked:block forced-colors:hidden!" />
+      </span>
+      {children}
+    </label>
   );
 }
 

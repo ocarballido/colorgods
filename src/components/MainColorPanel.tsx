@@ -17,7 +17,7 @@ import {
   type Settings,
 } from '../settings';
 import { ChromaChart } from './ChromaChart';
-import { Button, Callout, Select, TextField, hintClass, labelClass } from './ui';
+import { Button, Callout, Checkbox, Select, TextField, hintClass, labelClass } from './ui';
 
 const RADIX_NOTE =
   'With Radix you get its names, 1 to N, not its scale: your color sits on the step with the closest contrast, not necessarily step 9; lightness and chroma come from Tailwind CSS; and steps 11 and 12 don’t have the contrast Radix guarantees. For the Radix scale, use Radix’s own colors.';
@@ -199,16 +199,9 @@ export function MainColorPanel({ settings: s, dispatch, onBlur, result, suggeste
           {s.cap ? '; the dashed line is its chroma' : ''}. Curves from Tailwind CSS (MIT).
         </p>
         <div className="flex flex-col gap-200">
-          <label className="flex min-h-[24px] items-center gap-200 text-body-default leading-normal">
-            <input
-              type="checkbox"
-              checked={s.cap}
-              aria-describedby="cap-hint"
-              onChange={(e) => dispatch({ type: 'cap', cap: e.target.checked })}
-              className="size-[24px] shrink-0 accent-[var(--cg-color-border-accent-strong)]"
-            />
+          <Checkbox checked={s.cap} hintId="cap-hint" onChange={(cap) => dispatch({ type: 'cap', cap })}>
             Keep chroma at or below my color’s
-          </label>
+          </Checkbox>
           <p id="cap-hint" className={hintClass}>
             For muted colors: the scale stays as muted as your color, with the same contrast at each step.
           </p>

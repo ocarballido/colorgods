@@ -82,23 +82,23 @@ Esquema, no diseño: los valores entre llaves son ilustrativos.
 +--------------------------------------------------------------------------------+
 ```
 
-- **Columna de ajustes:** ancho fijo; se queda fija al desplazar la página (`position: sticky`) solo si cabe entera en la ventana; si no, se desplaza con la página. Con zoom de 400 % (1.4.10) la pantalla ya es la de móvil.
+- **Columna de ajustes:** ancho fijo, en un contenedor con fondo `background/neutral/subtle` que ocupa todo el alto entre la cabecera y el pie; su contenido se queda fijo al desplazar la página (`position: sticky`) solo si cabe entero en la ventana; si no, se desplaza con la página (decisiones 67 y 95). Con zoom de 400 % (1.4.10) la pantalla ya es la de móvil, con los ajustes en el panel.
 - **Columna de resultado:** el resto del ancho. El resumen de arriba (color, N, convención, curva) sigue a lo calculado, no a lo escrito: con un error, dice con qué valores sigue (U2).
 - **"How it works"**: sección breve al final de la página con el método (§0 de `funcionalidades.md`: la escalera de contraste, la mediana de las paletas de Tailwind CSS, la marca en el paso de contraste más cercano, la curva como forma del croma y el tope), las fuentes, el crédito de las curvas (A5) y el enlace a DesignToken101 (C6). El texto es de B3.
 
-### 3.1. Anchos (B3, decisión 58)
+### 3.1. Anchos (B3, decisiones 58 y 95)
 
 | Ancho de la ventana | Disposición | Margen lateral del resultado | Ancho de la tira (sin nombres) |
 |---|---|---|---|
 | 1024 px o más | Dos columnas: ajustes (360 px) y resultado | De 32 px a 1024 hasta 80 px a 1480 | 896 px a 1480; 696 px a 1280 |
-| Menos de 1024 px | Una columna: ajustes primero, como en "Móvil" | 24 px (tableta, 744 en Figma) | 632 px a 744 |
+| Menos de 1024 px | Una columna con el resultado; los ajustes, en un panel modal que se abre desde la cabecera (decisión 95) | 24 px (tableta, 744 en Figma) | 632 px a 744 |
 | Menos de 640 px | Una columna, con los cambios de móvil de abajo | 16 px | 328 px a 360, en filas de 8 muestras |
 
-El panel lateral que tapaba el resultado (pantallas "MenuOpen") no se usa. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
+Por debajo de 1024 px, los ajustes van en el panel lateral de las pantallas "MenuOpen" (decisión 95, que sustituye a la 58 en esto): un `<dialog>` modal a todo el alto de la ventana (tapa la cabecera), de hasta 360 px de ancho, con el logotipo y la X arriba y los ajustes sin la tarjeta, sobre un fondo negro al 40 %, que se abre con el botón de menú ("Settings") y se cierra con su botón `li:x`, con Escape o con un clic en el fondo; el foco vuelve al botón de menú. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
 
 ### Móvil
 
-Una columna, en este orden: ajustes, resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works". Arriba de los ajustes, un enlace "Skip to result" (y, en el resultado, "Back to settings"), porque con cálculo al momento el usuario va a ir y volver. Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Desde 640 px, las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px (decisión 60): las tiras no se desplazan, se parten en filas de 8 muestras con el nombre de la escala encima; no hay filas de checks de la regla, y el nombre de cada paso va dentro de su muestra, en negro o en blanco, el que cumpla AA con ella; el texto de F26 sigue encima de las tiras. Además, los dos selectores del par y el botón "Swap" se apilan, cada aviso lleva "Show in table" debajo y los botones de cada grupo de acciones (resumen y exportar) van uno debajo de otro, a todo el ancho.
+Una columna, en este orden: resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works"; los ajustes, en el panel modal de §3.1 (decisión 95). No hay "Skip to result" ni "Back to settings": el resultado ya va primero, y esos enlaces solo existen en dos columnas, visibles con el foco. Con el panel abierto, la región de estado y la del par siguen hablando (tienen una copia dentro del panel). Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Desde 640 px, las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px (decisión 60): las tiras no se desplazan, se parten en filas de 8 muestras con el nombre de la escala encima; no hay filas de checks de la regla, y el nombre de cada paso va dentro de su muestra, en negro o en blanco, el que cumpla AA con ella; el texto de F26 sigue encima de las tiras. Además, los dos selectores del par y el botón "Swap" se apilan, los botones de cada grupo de acciones (resumen y exportar) van uno debajo de otro, a todo el ancho.
 
 ## 4. Comportamiento general
 
@@ -107,7 +107,7 @@ Una columna, en este orden: ajustes, resultado (resumen, avisos, regla y tiras, 
 - **Cuándo se ve un error.** Al salir del campo y mientras siga sin ser válido (C22 del curso), y en todos al pulsar Download o Copy. Mientras se escribe por primera vez, no. Se mantiene la solución del curso para que el error no aparezca entre el `pointerdown` y el `pointerup` y se pierda el clic.
 - **Propuestas.** Curva, nombre de la paleta y paleta de cada rol se proponen a partir del color hasta que el usuario elige otra (C25, C26, F21). En los selectores, la primera opción es "Suggested (blue)" y significa "seguir la propuesta" (U6); las demás opciones fijan la elección. El nombre se comporta como en el curso: el propuesto se ve en el campo hasta que el usuario escribe.
 - **Exportación bloqueada.** Con algún error en F1, F2, F5, F6.1 o F23, la vista previa del archivo se sustituye por la lista de esos errores con enlaces a sus campos; Download y Copy siguen activos (D14 del curso) y, al pulsarlos, esa lista pasa a ser el resumen de errores y recibe el foco (D52).
-- **Sin animaciones** que transmitan información. Si B2 añade transiciones, se quitan con `prefers-reduced-motion`.
+- **Sin animaciones** que transmitan información. Las que hay (el panel de ajustes en una columna y el cambio de pestaña de los ajustes, decisión 103) solo acompañan y se quitan con `prefers-reduced-motion`.
 
 ## 5. Ajustes
 
@@ -141,7 +141,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 ### 6.2. Avisos y notas (U5)
 
 - Una lista, en este orden: avisos (sin croma, extremo, colisiones de roles y roles parecidos) y luego notas (recorte, pasos muy juntos, rol cambiado, fuera de margen). Cada elemento empieza con el nombre de la escala y lleva un icono con texto alternativo ("Warning" o "Note"), no solo color.
-- Los que señalan una fila llevan "Show in table": selecciona la pestaña de esa escala y lleva el foco a la primera fila nombrada; el aviso de extremo, a la fila de la marca, como en Figma; el de sin croma no lo lleva (decisión 78).
+- Los que señalan una fila llevan "Show in table": selecciona la pestaña de esa escala y lleva el foco a la primera fila nombrada; el aviso de extremo, a la fila de la marca, como en Figma; el de sin croma no lo lleva (decisión 78). Va en línea al final del texto del aviso (decisión 96).
 - Sin avisos ni notas, la sección no aparece.
 - Casos de F12 con los colores de prueba: `#808080` da solo el aviso sin croma (F12.1); `#1A2B5C` da el aviso de extremo con cualquier N (F12.2), y con él se sugiere el tope de croma; `#0000FF` con 11 pasos da la nota de recorte en 9 pasos (F12.3); `#F5F5DC` con 11 pasos da la nota de pasos muy juntos (F12.4).
 
@@ -201,10 +201,10 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 ## 9. Teclado y lector de pantalla (WCAG 2.2 AA)
 
-- **Orden:** "How it works" de la cabecera y el enlace para saltar al resultado (decisión 67), ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Encabezados: h1 (colorgods y lo que hace), h2 Settings, Result, Export, How it works; h3 dentro de Result.
+- **Orden:** en dos columnas, "How it works" de la cabecera y el enlace para saltar al resultado (decisión 67), ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Por debajo de 1024 px, "How it works", el botón "Settings" (abre el panel de ajustes, donde el foco queda atrapado) y el resultado, sin enlaces de saltar (decisión 95). Encabezados: h1 (el logotipo, con el texto alternativo "colorgods", decisión 97), h2 Settings, Result, Export, How it works; h3 dentro de Result.
 - **Campos:** etiqueta visible, ayuda y error asociados con `aria-describedby`; `aria-invalid` con error.
 - **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes"; con roles activos, "11 steps, 2 semantic palettes, …") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
-- **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, y los enlaces de saltar.
+- **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, los enlaces de saltar y el panel de ajustes (al abrirlo entra en él; al cerrarlo vuelve al botón "Settings" o, si se cerró al pasar a dos columnas, a la columna de ajustes).
 - **Color:** la marca, los roles, los avisos, los niveles de contraste y las marcas de la regla llevan texto (F19, 1.4.1). Las muestras de color no tienen borde, como en Figma; con colores forzados llevan un contorno del sistema. Oscar asume el riesgo el 2026-10-13: el paso más claro casi no se distingue del blanco (decisión 75, que sustituye al borde de C21 del curso).
 - **Objetivos:** todos los controles de al menos 24 × 24 px (2.5.8).
 - **Colores forzados:** bordes, foco, casillas, las marcas de la regla y el paso de la marca visibles.
