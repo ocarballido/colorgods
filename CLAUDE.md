@@ -1,6 +1,6 @@
 # colorgods
 
-App web de una sola página que genera escalas tonales de color: N pasos (3 a 30 según la convención de nombres), el mismo contraste en cada paso (método D, decisión 30), el color de marca exacto en su paso y exportación a Figma (DTCG), CSS y `@theme` de Tailwind CSS 4. Todo se calcula en el navegador; sin servidor. Se publicará en colorgods.com (Vercel, en C6).
+App web de una sola página que genera escalas tonales de color: N pasos (3 a 30 según la convención de nombres), el mismo contraste en cada paso (método D, decisión 30), el color de marca exacto en su paso y exportación a Figma (DTCG), CSS y `@theme` de Tailwind CSS 4. Todo se calcula en el navegador; sin servidor. Está en https://colorgods.com (Vercel; dominio en CDMON, decisión 111).
 
 ## Fuente de verdad: `docs/`
 

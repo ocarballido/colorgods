@@ -2,11 +2,11 @@
 
 App web para generar escalas tonales de color con el número de pasos que quieras, la convención de nombres que elijas y el mismo contraste en cada paso, lista para exportar a Figma (DTCG) y a código (CSS y `@theme` de Tailwind CSS 4).
 
-Se publicará en [colorgods.com](https://colorgods.com). La interfaz es en inglés; los documentos del proyecto, en español.
+Está en [colorgods.com](https://colorgods.com). La interfaz es en inglés; los documentos del proyecto, en español.
 
 ## Estado
 
-En construcción. El avance está en [`docs/plan.md`](docs/plan.md) y las decisiones, en [`docs/decisiones.md`](docs/decisiones.md).
+Versión 1 publicada en [colorgods.com](https://colorgods.com). El avance está en [`docs/plan.md`](docs/plan.md) y las decisiones, en [`docs/decisiones.md`](docs/decisiones.md).
 
 ## Estructura
 
