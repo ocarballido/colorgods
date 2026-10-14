@@ -19,5 +19,15 @@ updates:
         applies-to: security-updates
         patterns:
           - '*'
+    # Versiones mayores que no se proponen (decisión 110).
+    ignore:
+      # TypeScript 7.0 no trae la API programática del compilador que necesita typescript-eslint
+      # (prevista en 7.1). Revisar cuando salga 7.1 y typescript-eslint la soporte.
+      - dependency-name: 'typescript'
+        update-types: ['version-update:semver-major']
+      # La app usa Node 24 (`engines` de package.json, decisión 6): los tipos van con 24.x.
+      # Cambia solo si se cambia la versión de Node.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'Dependencias'
