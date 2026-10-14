@@ -100,6 +100,56 @@
     overflow: hidden;
   }
 
+  /* Animaciones (decisión 103), solo sin prefers-reduced-motion. El panel entra desde la izquierda con una curva que
+     decelera (300 ms) y sale con una que acelera (200 ms); el fondo se funde. display y overlay con allow-discrete
+     mantienen el <dialog> en la capa superior mientras sale. Sin @starting-style, se abre sin animación. */
+  @media (prefers-reduced-motion: no-preference) {
+    .settings-dialog,
+    .settings-dialog::backdrop {
+      transition:
+        translate 200ms cubic-bezier(0.3, 0, 0.8, 0.15),
+        opacity 200ms cubic-bezier(0.3, 0, 0.8, 0.15),
+        overlay 200ms allow-discrete,
+        display 200ms allow-discrete;
+    }
+    .settings-dialog {
+      translate: -100% 0;
+    }
+    .settings-dialog::backdrop {
+      opacity: 0;
+    }
+    .settings-dialog[open],
+    .settings-dialog[open]::backdrop {
+      transition-duration: 300ms;
+      transition-timing-function: cubic-bezier(0.05, 0.7, 0.1, 1);
+    }
+    .settings-dialog[open] {
+      translate: 0 0;
+    }
+    .settings-dialog[open]::backdrop {
+      opacity: 0.8;
+    }
+    @starting-style {
+      .settings-dialog[open] {
+        translate: -100% 0;
+      }
+      .settings-dialog[open]::backdrop {
+        opacity: 0;
+      }
+    }
+
+    /* Panel de una pestaña de ajustes: entra con un fundido y 16 px desde el lado de su pestaña. */
+    .tab-panel:not([hidden]) {
+      animation: tab-in 200ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    @keyframes tab-in {
+      from {
+        opacity: 0;
+        translate: calc(var(--tab-dir) * 16px) 0;
+      }
+    }
+  }
+
   /* Las secciones que reciben el foco con los enlaces de saltar no muestran anillo: no son controles. */
   section[tabindex='-1']:focus {
     outline: none;

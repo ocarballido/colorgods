@@ -44,7 +44,7 @@ export function SemanticPanel({ settings: s, dispatch, onBlur, result, list }: P
           // ocupa la fila entera, y los controles de debajo quedan fuera de ella (decisión 98).
           <div
             key={r}
-            className={`flex flex-col gap-400 ${rs.on ? '' : 'rounded-control border border-neutral-strong'}`}
+            className={`flex flex-col gap-400 ${rs.on ? '' : 'rounded-control border border-dashed border-neutral-strong'}`}
           >
             <Checkbox
               checked={rs.on}

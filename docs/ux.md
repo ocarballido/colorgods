@@ -107,7 +107,7 @@ Una columna, en este orden: resultado (resumen, avisos, regla y tiras, par, tabl
 - **Cuándo se ve un error.** Al salir del campo y mientras siga sin ser válido (C22 del curso), y en todos al pulsar Download o Copy. Mientras se escribe por primera vez, no. Se mantiene la solución del curso para que el error no aparezca entre el `pointerdown` y el `pointerup` y se pierda el clic.
 - **Propuestas.** Curva, nombre de la paleta y paleta de cada rol se proponen a partir del color hasta que el usuario elige otra (C25, C26, F21). En los selectores, la primera opción es "Suggested (blue)" y significa "seguir la propuesta" (U6); las demás opciones fijan la elección. El nombre se comporta como en el curso: el propuesto se ve en el campo hasta que el usuario escribe.
 - **Exportación bloqueada.** Con algún error en F1, F2, F5, F6.1 o F23, la vista previa del archivo se sustituye por la lista de esos errores con enlaces a sus campos; Download y Copy siguen activos (D14 del curso) y, al pulsarlos, esa lista pasa a ser el resumen de errores y recibe el foco (D52).
-- **Sin animaciones** que transmitan información. Si B2 añade transiciones, se quitan con `prefers-reduced-motion`.
+- **Sin animaciones** que transmitan información. Las que hay (el panel de ajustes en una columna y el cambio de pestaña de los ajustes, decisión 103) solo acompañan y se quitan con `prefers-reduced-motion`.
 
 ## 5. Ajustes
 
