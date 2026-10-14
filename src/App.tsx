@@ -164,13 +164,14 @@ export default function App() {
     .join(' ');
 
   // En la columna, los ajustes se quedan fijos bajo la cabecera al desplazar la página y, si no caben en la ventana, se
-  // desplazan por dentro (decisión 107, que sustituye a la regla "solo si cabe" de la 67).
+  // desplazan por dentro (decisión 107, que sustituye a la regla "solo si cabe" de la 67). Ahí la sección entra en el
+  // orden de Tab para desplazarla con las flechas: lo que hay bajo el último control no recibe el foco (2.1.1).
   const settingsPanel = (
     <section
       id="settings"
       aria-labelledby="settings-heading"
-      tabIndex={-1}
-      className={`flex flex-col gap-200 ${wide ? 'sticky top-[var(--cg-header-height)] max-h-[calc(100dvh-var(--cg-header-height))] overflow-y-auto p-400' : ''}`}
+      tabIndex={wide ? 0 : -1}
+      className={`flex flex-col gap-200 ${wide ? 'sticky top-[var(--cg-header-height)] max-h-[calc(100dvh-var(--cg-header-height))] scroll-py-400 overflow-y-auto p-400' : ''}`}
     >
       <h2 id="settings-heading" className="sr-only">
         Settings
