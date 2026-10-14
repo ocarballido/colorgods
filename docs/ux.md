@@ -82,7 +82,7 @@ Esquema, no diseño: los valores entre llaves son ilustrativos.
 +--------------------------------------------------------------------------------+
 ```
 
-- **Columna de ajustes:** ancho fijo, en un contenedor con fondo `background/neutral/subtle` que ocupa todo el alto entre la cabecera y el pie; su contenido se queda fijo al desplazar la página (`position: sticky`) solo si cabe entero en la ventana; si no, se desplaza con la página (decisiones 67 y 95). Con zoom de 400 % (1.4.10) la pantalla ya es la de móvil, con los ajustes en el panel.
+- **Columna de ajustes:** ancho fijo, en un contenedor con fondo `background/neutral/subtle` que ocupa todo el alto entre la cabecera y el pie; su contenido se queda fijo bajo la cabecera al desplazar la página (`position: sticky`) y, si no cabe en la ventana, se desplaza por dentro (decisiones 95 y 107). Con zoom de 400 % (1.4.10) la pantalla ya es la de móvil, con los ajustes en el panel.
 - **Columna de resultado:** el resto del ancho. El resumen de arriba (color, N, convención, curva) sigue a lo calculado, no a lo escrito: con un error, dice con qué valores sigue (U2).
 - **"How it works"**: sección breve al final de la página con el método (§0 de `funcionalidades.md`: la escalera de contraste, la mediana de las paletas de Tailwind CSS, la marca en el paso de contraste más cercano, la curva como forma del croma y el tope), las fuentes, el crédito de las curvas (A5) y el enlace a DesignToken101 (C6). El texto es de B3.
 

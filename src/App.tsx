@@ -91,33 +91,11 @@ function useSearchInUrl(search: string) {
   }, [search]);
 }
 
-// La columna de ajustes se queda fija al desplazar solo si cabe entera en la ventana (ux.md §3). Se vuelve a medir al
-// pasar de una a dos columnas, porque los ajustes se montan en otro sitio.
-function useFitsInWindow(wide: boolean) {
-  const ref = useRef<HTMLElement>(null);
-  const [fits, setFits] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const header = document.querySelector('header');
-    const check = () => setFits(el.offsetHeight <= window.innerHeight - (header?.offsetHeight ?? 0));
-    const observer = new ResizeObserver(check);
-    observer.observe(el);
-    window.addEventListener('resize', check);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', check);
-    };
-  }, [wide]);
-  return [ref, fits] as const;
-}
-
 export default function App() {
   // Al abrir, los ajustes de la URL, cada uno validado antes de llegar al motor (src/url.ts).
   const [settings, dispatch] = useReducer(reducer, location.search, settingsFromSearch);
   const [tab, setTab] = useState('main');
   const wide = useWide();
-  const [settingsRef, fits] = useFitsInWindow(wide);
   // Panel de ajustes por debajo de 1024 px: <dialog> modal (foco atrapado, Escape, resto inerte). Se cierra también
   // con el botón y con un clic en el fondo, y el foco vuelve al botón de menú. Al pasar a dos columnas, se cierra.
   const [menuOpen, setMenuOpen] = useState(false);
@@ -185,13 +163,14 @@ export default function App() {
     .filter(Boolean)
     .join(' ');
 
+  // En la columna, los ajustes se quedan fijos bajo la cabecera al desplazar la página y, si no caben en la ventana, se
+  // desplazan por dentro (decisión 107, que sustituye a la regla "solo si cabe" de la 67).
   const settingsPanel = (
     <section
-      ref={settingsRef}
       id="settings"
       aria-labelledby="settings-heading"
       tabIndex={-1}
-      className={`flex flex-col gap-200 ${wide ? `p-400 ${fits ? 'sticky top-[var(--cg-header-height)]' : ''}` : ''}`}
+      className={`flex flex-col gap-200 ${wide ? 'sticky top-[var(--cg-header-height)] max-h-[calc(100dvh-var(--cg-header-height))] overflow-y-auto p-400' : ''}`}
     >
       <h2 id="settings-heading" className="sr-only">
         Settings
