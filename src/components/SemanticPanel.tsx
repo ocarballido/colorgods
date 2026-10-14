@@ -5,7 +5,7 @@ import { useMemo, type Dispatch } from 'react';
 import { ROLES, ROLE_PALETTES, proposeRoles, type Role, type Scales } from '../../tools/scales.mjs';
 import { colorError, roleOptions, type Action, type Settings } from '../settings';
 import type { Notice } from './noticeData';
-import { Callout, Select, TextField, hintClass } from './ui';
+import { Callout, Checkbox, Select, TextField, hintClass } from './ui';
 
 type Props = {
   settings: Settings;
@@ -40,19 +40,19 @@ export function SemanticPanel({ settings: s, dispatch, onBlur, result, list }: P
         // Avisos del rol y la línea "Using …", que describen el selector y el campo (ux.md §9).
         const described = [...notes.map((_, i) => noteId(i)), !err && `${r}-using`].filter(Boolean).join(' ');
         return (
+          // Toda la caja es la etiqueta de la casilla: sin marcar, la etiqueta lleva el relleno de la caja; marcada,
+          // ocupa la fila entera, y los controles de debajo quedan fuera de ella (decisión 98).
           <div
             key={r}
-            className={`flex flex-col gap-400 ${rs.on ? '' : 'rounded-control border border-neutral-strong p-400'}`}
+            className={`flex flex-col gap-400 ${rs.on ? '' : 'rounded-control border border-neutral-strong'}`}
           >
-            <label className="flex min-h-[24px] items-center gap-200 text-body-default leading-normal">
-              <input
-                type="checkbox"
-                checked={rs.on}
-                onChange={(e) => dispatch({ type: 'role', role: r, on: e.target.checked })}
-                className="size-[24px] shrink-0 accent-[var(--cg-color-border-accent-strong)]"
-              />
+            <Checkbox
+              checked={rs.on}
+              onChange={(on) => dispatch({ type: 'role', role: r, on })}
+              className={rs.on ? '' : 'p-400'}
+            >
               {r}
-            </label>
+            </Checkbox>
             {rs.on && (
               <>
                 <Select

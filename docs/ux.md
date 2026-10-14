@@ -82,23 +82,23 @@ Esquema, no diseño: los valores entre llaves son ilustrativos.
 +--------------------------------------------------------------------------------+
 ```
 
-- **Columna de ajustes:** ancho fijo; se queda fija al desplazar la página (`position: sticky`) solo si cabe entera en la ventana; si no, se desplaza con la página. Con zoom de 400 % (1.4.10) la pantalla ya es la de móvil.
+- **Columna de ajustes:** ancho fijo, en un contenedor con fondo `background/neutral/subtle` que ocupa todo el alto entre la cabecera y el pie; su contenido se queda fijo al desplazar la página (`position: sticky`) solo si cabe entero en la ventana; si no, se desplaza con la página (decisiones 67 y 95). Con zoom de 400 % (1.4.10) la pantalla ya es la de móvil, con los ajustes en el panel.
 - **Columna de resultado:** el resto del ancho. El resumen de arriba (color, N, convención, curva) sigue a lo calculado, no a lo escrito: con un error, dice con qué valores sigue (U2).
 - **"How it works"**: sección breve al final de la página con el método (§0 de `funcionalidades.md`: la escalera de contraste, la mediana de las paletas de Tailwind CSS, la marca en el paso de contraste más cercano, la curva como forma del croma y el tope), las fuentes, el crédito de las curvas (A5) y el enlace a DesignToken101 (C6). El texto es de B3.
 
-### 3.1. Anchos (B3, decisión 58)
+### 3.1. Anchos (B3, decisiones 58 y 95)
 
 | Ancho de la ventana | Disposición | Margen lateral del resultado | Ancho de la tira (sin nombres) |
 |---|---|---|---|
 | 1024 px o más | Dos columnas: ajustes (360 px) y resultado | De 32 px a 1024 hasta 80 px a 1480 | 896 px a 1480; 696 px a 1280 |
-| Menos de 1024 px | Una columna: ajustes primero, como en "Móvil" | 24 px (tableta, 744 en Figma) | 632 px a 744 |
+| Menos de 1024 px | Una columna con el resultado; los ajustes, en un panel modal que se abre desde la cabecera (decisión 95) | 24 px (tableta, 744 en Figma) | 632 px a 744 |
 | Menos de 640 px | Una columna, con los cambios de móvil de abajo | 16 px | 328 px a 360, en filas de 8 muestras |
 
-El panel lateral que tapaba el resultado (pantallas "MenuOpen") no se usa. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
+Por debajo de 1024 px, los ajustes van en el panel lateral de las pantallas "MenuOpen" (decisión 95, que sustituye a la 58 en esto): un `<dialog>` modal bajo la cabecera, de hasta 360 px de ancho, sobre un fondo negro al 40 %, que se abre con el botón de menú ("Settings") y se cierra con su botón `li:x`, con Escape o con un clic en el fondo; el foco vuelve al botón de menú. Los ajustes están en dos pestañas, "Main color" (color, nombre, pasos, convención, curva, tope y tinte) y "Semantic palettes" (los cuatro roles), con el patrón de pestañas de §6.5 (decisión 61).
 
 ### Móvil
 
-Una columna, en este orden: ajustes, resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works". Arriba de los ajustes, un enlace "Skip to result" (y, en el resultado, "Back to settings"), porque con cálculo al momento el usuario va a ir y volver. Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Desde 640 px, las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px (decisión 60): las tiras no se desplazan, se parten en filas de 8 muestras con el nombre de la escala encima; no hay filas de checks de la regla, y el nombre de cada paso va dentro de su muestra, en negro o en blanco, el que cumpla AA con ella; el texto de F26 sigue encima de las tiras. Además, los dos selectores del par y el botón "Swap" se apilan, cada aviso lleva "Show in table" debajo y los botones de cada grupo de acciones (resumen y exportar) van uno debajo de otro, a todo el ancho.
+Una columna, en este orden: resultado (resumen, avisos, regla y tiras, par, tablas), exportar, "How it works"; los ajustes, en el panel modal de §3.1 (decisión 95). No hay "Skip to result" ni "Back to settings": el resultado ya va primero, y esos enlaces solo existen en dos columnas, visibles con el foco. Con el panel abierto, la región de estado y la del par siguen hablando (tienen una copia dentro del panel). Las tablas tienen su propio desplazamiento horizontal (C2 del curso); la página no. Desde 640 px, las tiras y las filas de la regla comparten el desplazamiento horizontal cuando no caben. Por debajo de 640 px (decisión 60): las tiras no se desplazan, se parten en filas de 8 muestras con el nombre de la escala encima; no hay filas de checks de la regla, y el nombre de cada paso va dentro de su muestra, en negro o en blanco, el que cumpla AA con ella; el texto de F26 sigue encima de las tiras. Además, los dos selectores del par y el botón "Swap" se apilan, los botones de cada grupo de acciones (resumen y exportar) van uno debajo de otro, a todo el ancho.
 
 ## 4. Comportamiento general
 
@@ -141,7 +141,7 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 ### 6.2. Avisos y notas (U5)
 
 - Una lista, en este orden: avisos (sin croma, extremo, colisiones de roles y roles parecidos) y luego notas (recorte, pasos muy juntos, rol cambiado, fuera de margen). Cada elemento empieza con el nombre de la escala y lleva un icono con texto alternativo ("Warning" o "Note"), no solo color.
-- Los que señalan una fila llevan "Show in table": selecciona la pestaña de esa escala y lleva el foco a la primera fila nombrada; el aviso de extremo, a la fila de la marca, como en Figma; el de sin croma no lo lleva (decisión 78).
+- Los que señalan una fila llevan "Show in table": selecciona la pestaña de esa escala y lleva el foco a la primera fila nombrada; el aviso de extremo, a la fila de la marca, como en Figma; el de sin croma no lo lleva (decisión 78). Va en línea al final del texto del aviso (decisión 96).
 - Sin avisos ni notas, la sección no aparece.
 - Casos de F12 con los colores de prueba: `#808080` da solo el aviso sin croma (F12.1); `#1A2B5C` da el aviso de extremo con cualquier N (F12.2), y con él se sugiere el tope de croma; `#0000FF` con 11 pasos da la nota de recorte en 9 pasos (F12.3); `#F5F5DC` con 11 pasos da la nota de pasos muy juntos (F12.4).
 

@@ -4,12 +4,14 @@
 // por defecto y se dice, también a la vista (F11, ux.md §6.4); el foco se queda en la casilla del rol.
 import { useState } from 'react';
 import { FIXED, LEVELS, again, color, lostScale, measure, ratioText, type Pick } from './pairData';
+import { LiveText } from './LiveText';
 import type { Scale } from './scaleData';
 import { Button, Select, TestBadge, hintClass } from './ui';
 
 const cell = 'border-b border-neutral-default px-300 py-200 text-left font-400 whitespace-nowrap';
 
-export function ContrastPair({ scales }: { scales: Scale[] }) {
+// slot: hueco del panel de ajustes para la región viva (LiveText), donde se desactiva un rol.
+export function ContrastPair({ scales, slot }: { scales: Scale[]; slot: HTMLElement | null }) {
   const [pick, setPick] = useState<Pick>({ text: null, bg: null });
   const [said, setSaid] = useState({ text: '', scales, reset: false });
   const lost = lostScale(pick, scales);
@@ -114,9 +116,7 @@ export function ContrastPair({ scales }: { scales: Scale[] }) {
           </table>
         </div>
       </div>
-      <p aria-live="polite" className="sr-only">
-        {said.scales === scales ? said.text : ''}
-      </p>
+      <LiveText slot={slot} text={said.scales === scales ? said.text : ''} />
     </section>
   );
 }

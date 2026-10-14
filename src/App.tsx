@@ -1,7 +1,8 @@
 // Página de colorgods (C4: estructura y entrada, tiras y tablas, avisos y par de contraste, paletas semánticas,
-// exportación y ajustes en la URL). Dos columnas desde 1024 px y una por debajo (decisión 58).
+// exportación y ajustes en la URL). Dos columnas desde 1024 px; por debajo, los ajustes van en un panel modal que
+// se abre desde la cabecera (decisión 95, que sustituye a la 58).
 // El resultado se calcula al momento con build() del motor y los últimos valores válidos (U1, U2).
-import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState, useSyncExternalStore } from 'react';
 import { flushSync } from 'react-dom';
 import { build, suggest, type Role } from '../tools/scales.mjs';
 import { ContrastPair } from './components/ContrastPair';
@@ -17,12 +18,24 @@ import { visibleScales } from './components/scaleData';
 import { Tabs } from './components/Tabs';
 import { HowItWorks, SiteFooter, SiteHeader } from './components/SiteChrome';
 import { StatusRegion } from './components/StatusRegion';
+import { Menu, X } from './components/icons';
 import { blockingErrors, namesLabel, reducer, roleOptions, stepsError, type Field } from './settings';
 import { searchFromSettings, settingsFromSearch } from './url';
 
-// Enlaces de saltar: visibles en una columna; en dos columnas, solo con el foco (decisión 58).
+// Enlaces de saltar: solo en dos columnas y solo con el foco; en una columna el resultado ya va primero (decisión 95).
 const skipClass =
-  'self-start rounded-control text-body-small leading-normal text-accent-default underline lg:sr-only lg:focus:not-sr-only lg:focus:absolute lg:focus:z-20 lg:focus:bg-neutral-default lg:focus:p-200';
+  'sr-only self-start rounded-control text-body-small leading-normal text-accent-default underline focus:not-sr-only focus:absolute focus:z-20 focus:bg-neutral-default focus:p-200';
+
+// IconButton de ColorScaleUI: 40 × 40 px, sin fondo en reposo.
+const iconButtonClass = 'rounded-control p-200 text-neutral-default hover:bg-neutral-hover active:bg-neutral-active';
+
+// Dos columnas desde 1024 px (el lg de Tailwind CSS).
+const wideQuery = matchMedia('(min-width: 64rem)');
+const subscribeWide = (onChange: () => void) => {
+  wideQuery.addEventListener('change', onChange);
+  return () => wideQuery.removeEventListener('change', onChange);
+};
+const useWide = () => useSyncExternalStore(subscribeWide, () => wideQuery.matches);
 
 // Un error que aparece al salir del campo no puede mover el botón entre pointerdown y pointerup, o el clic se pierde
 // (ux.md §4, solución del curso): con el puntero pulsado, el error espera a que se suelte o se cancele el gesto.
@@ -78,8 +91,9 @@ function useSearchInUrl(search: string) {
   }, [search]);
 }
 
-// La columna de ajustes se queda fija al desplazar solo si cabe entera en la ventana (ux.md §3).
-function useFitsInWindow() {
+// La columna de ajustes se queda fija al desplazar solo si cabe entera en la ventana (ux.md §3). Se vuelve a medir al
+// pasar de una a dos columnas, porque los ajustes se montan en otro sitio.
+function useFitsInWindow(wide: boolean) {
   const ref = useRef<HTMLElement>(null);
   const [fits, setFits] = useState(false);
   useEffect(() => {
@@ -94,7 +108,7 @@ function useFitsInWindow() {
       observer.disconnect();
       window.removeEventListener('resize', check);
     };
-  }, []);
+  }, [wide]);
   return [ref, fits] as const;
 }
 
@@ -102,7 +116,23 @@ export default function App() {
   // Al abrir, los ajustes de la URL, cada uno validado antes de llegar al motor (src/url.ts).
   const [settings, dispatch] = useReducer(reducer, location.search, settingsFromSearch);
   const [tab, setTab] = useState('main');
-  const [settingsRef, fits] = useFitsInWindow();
+  const wide = useWide();
+  const [settingsRef, fits] = useFitsInWindow(wide);
+  // Panel de ajustes por debajo de 1024 px: <dialog> modal (foco atrapado, Escape, resto inerte). Se cierra también
+  // con el botón y con un clic en el fondo, y el foco vuelve al botón de menú. Al pasar a dos columnas, se cierra.
+  const [menuOpen, setMenuOpen] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const menuRef = useRef<HTMLButtonElement>(null);
+  const pressedBackdrop = useRef(false);
+  // Hueco dentro del panel para las regiones vivas: con el panel abierto, las de fuera quedan inertes y no hablarían.
+  const [slot, setSlot] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (menuOpen && !wide) {
+      if (!dialog.open) dialog.showModal();
+    } else if (dialog.open) dialog.close();
+  }, [menuOpen, wide]);
   const onBlur = usePointerSafeBlur(useCallback((field: Field) => dispatch({ type: 'blur', field }), []));
   const onRoleBlur = usePointerSafeBlur(useCallback((role: Role) => dispatch({ type: 'roleBlur', role }), []));
   const { color, valid, curve, cap, tint } = settings;
@@ -123,6 +153,11 @@ export default function App() {
   // Enlace del resumen de errores: abre la pestaña de ajustes del campo y le da el foco (ux.md §4).
   const goTo = (id: string) => {
     flushSync(() => setTab(id.startsWith('role-') ? 'semantic' : 'main'));
+    // En una columna, el campo está en el panel: se abre antes de darle el foco.
+    if (!wide) {
+      dialogRef.current?.showModal();
+      setMenuOpen(true);
+    }
     document.getElementById(id)?.focus();
   };
   const scales = useMemo(() => visibleScales(result, colorName), [result, colorName]);
@@ -143,73 +178,128 @@ export default function App() {
     .filter(Boolean)
     .join(' ');
 
+  const settingsPanel = (
+    <section
+      ref={settingsRef}
+      id="settings"
+      aria-labelledby="settings-heading"
+      tabIndex={-1}
+      className={`flex flex-col gap-200 p-400 sm:px-600 lg:px-400 ${fits ? 'lg:sticky lg:top-[var(--cg-header-height)]' : ''}`}
+    >
+      <h2 id="settings-heading" className="sr-only">
+        Settings
+      </h2>
+      {wide && (
+        <a href="#result" className={skipClass}>
+          Skip to result
+        </a>
+      )}
+      <div className="rounded-container border border-neutral-default bg-neutral-default p-400">
+        <Tabs
+          label="Settings"
+          fill
+          selected={tab}
+          onSelect={setTab}
+          tabs={[
+            {
+              id: 'main',
+              label: 'Main color',
+              panel: (
+                <MainColorPanel
+                  settings={settings}
+                  dispatch={dispatch}
+                  onBlur={onBlur}
+                  result={result}
+                  suggested={suggested}
+                />
+              ),
+            },
+            {
+              id: 'semantic',
+              label: 'Semantic palettes',
+              panel: (
+                <SemanticPanel
+                  settings={settings}
+                  dispatch={dispatch}
+                  onBlur={onRoleBlur}
+                  result={result}
+                  list={list}
+                />
+              ),
+            },
+          ]}
+        />
+      </div>
+    </section>
+  );
+
   return (
     <>
-      <SiteHeader />
-      <main className="lg:flex lg:items-start">
-        <section
-          ref={settingsRef}
-          id="settings"
+      <SiteHeader
+        menu={
+          <button
+            ref={menuRef}
+            type="button"
+            aria-label="Settings"
+            aria-expanded={menuOpen}
+            aria-controls="settings-dialog"
+            onClick={() => setMenuOpen(true)}
+            className={`${iconButtonClass} lg:hidden`}
+          >
+            <Menu />
+          </button>
+        }
+      />
+      <main className="lg:flex">
+        {/* Columna de ajustes: todo el alto entre la cabecera y el pie, con background/neutral/subtle (Figma). */}
+        {wide && <div className="w-[22.5rem] shrink-0 bg-neutral-subtle">{settingsPanel}</div>}
+        {/* El panel solo se cierra con un clic que empieza y acaba en el fondo, no al soltar fuera un arrastre. El clic
+            en el fondo es solo del puntero: con teclado se cierra con Escape (nativo del <dialog>) o con el botón. */}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
+        <dialog
+          ref={dialogRef}
+          id="settings-dialog"
           aria-labelledby="settings-heading"
-          tabIndex={-1}
-          className={`flex flex-col gap-200 p-400 sm:px-600 lg:w-[22.5rem] lg:shrink-0 lg:px-400 ${fits ? 'lg:sticky lg:top-[var(--cg-header-height)]' : ''}`}
+          onClose={() => {
+            setMenuOpen(false);
+            menuRef.current?.focus();
+          }}
+          onPointerDown={(e) => (pressedBackdrop.current = e.target === e.currentTarget)}
+          onClick={(e) => pressedBackdrop.current && e.target === e.currentTarget && dialogRef.current?.close()}
+          className="settings-dialog fixed top-[var(--cg-header-height)] bottom-0 left-0 m-0 h-auto max-h-none w-full max-w-[22.5rem] overflow-y-auto border-0 bg-neutral-subtle p-0 text-neutral-default"
         >
-          <h2 id="settings-heading" className="sr-only">
-            Settings
-          </h2>
-          <a href="#result" className={skipClass}>
-            Skip to result
-          </a>
-          <div className="rounded-container border border-neutral-default bg-neutral-default p-400">
-            <Tabs
-              label="Settings"
-              fill
-              selected={tab}
-              onSelect={setTab}
-              tabs={[
-                {
-                  id: 'main',
-                  label: 'Main color',
-                  panel: (
-                    <MainColorPanel
-                      settings={settings}
-                      dispatch={dispatch}
-                      onBlur={onBlur}
-                      result={result}
-                      suggested={suggested}
-                    />
-                  ),
-                },
-                {
-                  id: 'semantic',
-                  label: 'Semantic palettes',
-                  panel: (
-                    <SemanticPanel
-                      settings={settings}
-                      dispatch={dispatch}
-                      onBlur={onRoleBlur}
-                      result={result}
-                      list={list}
-                    />
-                  ),
-                },
-              ]}
-            />
-          </div>
-        </section>
+          {!wide && (
+            <>
+              <div className="flex justify-end px-400 pt-400 sm:px-600">
+                <button
+                  type="button"
+                  aria-label="Close settings"
+                  onClick={() => dialogRef.current?.close()}
+                  className={iconButtonClass}
+                >
+                  <X />
+                </button>
+              </div>
+              {settingsPanel}
+              <div ref={setSlot} />
+            </>
+          )}
+        </dialog>
         <div className="min-w-0 flex-1 px-400 py-600 sm:px-600 lg:px-[clamp(2rem,calc(10.526vw_-_4.737rem),5rem)]">
           <div className="mx-auto flex max-w-content flex-col gap-600">
             <section id="result" aria-labelledby="result-heading" tabIndex={-1} className="flex flex-col gap-600">
-              <a href="#settings" className={skipClass}>
-                Back to settings
-              </a>
+              {wide && (
+                <a href="#settings" className={skipClass}>
+                  Back to settings
+                </a>
+              )}
               <h2 id="result-heading" className="sr-only">
                 Result
               </h2>
               <ResultSummary settings={settings} result={result} link={link} />
               <Notices list={list} onShow={showInTable} />
               <ScaleStrips scales={scales} rule={result.rule} colorName={colorName} />
-              <ContrastPair scales={scales} />
+              <ContrastPair scales={scales} slot={slot} />
               <ScaleTables scales={scales} list={list} pending={valid.pending} selected={table} onSelect={setTable} />
             </section>
             <ExportSection
@@ -219,7 +309,7 @@ export default function App() {
               onShowErrors={() => dispatch({ type: 'showErrors' })}
               onGoTo={goTo}
             />
-            <StatusRegion result={result} list={list} extra={extra} />
+            <StatusRegion result={result} list={list} extra={extra} slot={slot} />
             <HowItWorks />
           </div>
         </div>

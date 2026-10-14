@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Scales } from '../../tools/scales.mjs';
 import { plural, type Notice } from './noticeData';
+import { LiveText } from './LiveText';
 import { again } from './pairData';
 
 // Pausa antes de anunciar: la de ux.md §9, que se ajusta en C4.
@@ -18,7 +19,18 @@ export function summarize(result: Scales, list: Notice[]) {
   return `Scales updated: ${result.names.length} steps, ${roles ? `${plural(roles, 'semantic palette')}, ` : ''}${plural(warnings, 'warning')}, ${plural(notes, 'note')}.`;
 }
 
-export function StatusRegion({ result, list, extra }: { result: Scales; list: Notice[]; extra: string }) {
+export function StatusRegion({
+  result,
+  list,
+  extra,
+  slot,
+}: {
+  result: Scales;
+  list: Notice[];
+  extra: string;
+  // Hueco del panel de ajustes, para que se oiga con el panel abierto (LiveText).
+  slot: HTMLElement | null;
+}) {
   const [message, setMessage] = useState('');
   // Último resultado anunciado (al abrir, el de la página): si no cambian ni él ni los errores, no se dice nada, por
   // ejemplo al escribir el nombre de la paleta, que cambia el texto de los avisos pero no el resultado.
@@ -43,9 +55,5 @@ export function StatusRegion({ result, list, extra }: { result: Scales; list: No
     }, ANNOUNCE_DELAY);
     return () => clearTimeout(timer);
   }, [result, list, extra]);
-  return (
-    <p role="status" className="sr-only">
-      {message}
-    </p>
-  );
+  return <LiveText slot={slot} status text={message} />;
 }

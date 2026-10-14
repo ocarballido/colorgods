@@ -53,6 +53,61 @@
     outline-offset: 2px;
   }
 
+  /* Puntero de mano en todo lo que se pulsa (decisión 100); lo que tiene aria-disabled, not-allowed. */
+  button,
+  select,
+  summary,
+  input:is([type='checkbox'], [type='radio'], [type='range']),
+  label:has(input:is([type='checkbox'], [type='radio'])) {
+    cursor: pointer;
+  }
+  [aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  /* Barras de desplazamiento finas, como en móvil: pulgar redondeado neutro, sin carril ni flechas (decisión 101).
+     Con colores forzados, las del sistema. */
+  @media not (forced-colors: active) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--cg-color-border-neutral-strong) transparent;
+    }
+    /* Navegadores sin scrollbar-color (Safari): las mismas con ::-webkit-scrollbar. */
+    @supports not (scrollbar-color: auto) {
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        border-radius: var(--cg-radius-1200);
+        background: var(--cg-color-border-neutral-strong);
+      }
+      ::-webkit-scrollbar-button,
+      ::-webkit-scrollbar-corner {
+        display: none;
+      }
+    }
+  }
+
+  /* Panel de ajustes en una columna: fondo negro de background/overlay con la opacidad de capa de las pantallas
+     "MenuOpen" (0,8; queda al 40 %), y la página no se desplaza detrás (decisión 95). */
+  .settings-dialog::backdrop {
+    background: var(--cg-color-background-overlay, #00000080);
+    opacity: 0.8;
+  }
+  html:has(.settings-dialog[open]) {
+    overflow: hidden;
+  }
+
+  /* Anillo de foco de la casilla pegado a la caja, como en Figma: por fuera del borde sin marcar, por dentro marcada. */
+  .check:focus-visible {
+    outline-offset: -1px;
+  }
+  .check:checked:focus-visible {
+    outline-offset: -2px;
+  }
+
   /* Las secciones que reciben el foco con los enlaces de saltar no muestran anillo: no son controles. */
   section[tabindex='-1']:focus {
     outline: none;

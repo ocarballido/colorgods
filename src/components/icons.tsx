@@ -86,6 +86,19 @@ export const TriangleAlert = ({ size = 24, className }: IconProps) =>
     <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01" />,
   );
 
+// li:check de la casilla de ColorScaleUI (componente Checkbox): el de Lucide a 16 px, que con su trazo da el mismo
+// contorno que la copia de Figma. El Check de arriba es el de las filas de la regla.
+export const CheckMark = ({ size = 16, className }: IconProps) =>
+  stroked(size, className, <path d="M20 6 9 17l-5-5" />);
+
+export const Menu = ({ size = 24, className }: IconProps) =>
+  stroked(size, className, <path d="M4 12h16M4 6h16M4 18h16" />);
+
+export const X = ({ size = 24, className }: IconProps) => stroked(size, className, <path d="M18 6 6 18M6 6l12 12" />);
+
+export const ExternalLink = ({ size = 16, className }: IconProps) =>
+  stroked(size, className, <path d="M15 3h6v6m-11 5L21 3m-3 10v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />);
+
 export const Copy = ({ size = 24, className }: IconProps) =>
   stroked(
     size,
