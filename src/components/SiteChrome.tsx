@@ -91,6 +91,7 @@ export function SiteFooter() {
           <span className="sr-only"> (opens in a new tab)</span>
           <ExternalLink />
         </a>
+        <p>Anonymous visit statistics with Vercel Web Analytics. No&nbsp;cookies.</p>
       </div>
     </footer>
   );

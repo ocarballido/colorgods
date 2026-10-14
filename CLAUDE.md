@@ -45,7 +45,7 @@ App web de una sola página que genera escalas tonales de color: N pasos (3 a 30
 - Accesibilidad WCAG 2.2 AA (`docs/ux.md` §9 y §10).
 - Presupuesto de peso: 100 kB con gzip para todo el JavaScript y el CSS de la página (decisión 45; base de C2: 70,7 kB).
 - Variables CSS de la app con el prefijo `--cg-` (decisión 43).
-- Sin analítica, sin cookies y sin datos que salgan de la página (decisión 6).
+- Sin cookies y sin datos que salgan de la página (decisión 6), salvo la analítica de Vercel Web Analytics: mismo origen, sin cookies y la URL sin consulta ni fragmento (decisiones 104 a 106).
 
 ## Reglas del motor
 
