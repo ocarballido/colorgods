@@ -155,6 +155,12 @@
     outline: none;
   }
 
+  /* La columna de ajustes, que en dos columnas se desplaza por dentro y está en el orden de Tab (decisión 107): anillo
+     por dentro, porque por fuera el borde de arriba queda bajo la cabecera. */
+  #settings:focus-visible {
+    outline-offset: calc(-1 * var(--cg-border-width-200));
+  }
+
   /* El resumen de errores de Exportar recibe el foco por script al pulsar Download o Copy: se ve también tras un clic. */
   div[tabindex='-1']:focus {
     outline: var(--cg-border-width-200) solid var(--cg-color-border-focus);
