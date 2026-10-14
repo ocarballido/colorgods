@@ -1,0 +1,9 @@
+/* Estilos de la página "How it works" (decisión 108): los mismos tokens y la misma base que la app, pero Tailwind solo
+   busca clases en su HTML, así que este CSS no lleva las de la app ni el de la app las de esta página. */
+@import 'tailwindcss' source(none);
+/* Capa 1 y capa 2, como en index.css. Generados por `npm run tokens`. */
+@import './styles/tokens.css';
+@import './styles/theme.css';
+@import './base.css';
+
+@source '../how-it-works/index.html';

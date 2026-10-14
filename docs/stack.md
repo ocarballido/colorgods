@@ -74,6 +74,8 @@ El JavaScript no cambia; el CSS sube 1.567 B con gzip por las variables de los t
 
 **Con analítica (2026-10-14, decisión 105):** el presupuesto cubre lo que hace falta para pintar y usar la app; el trozo de la analítica (`analytics-*.js`, que el mismo comando lista aparte) y el script que sirve Vercel se miden y se registran fuera de él. Bundle inicial: 99.676 B (JavaScript 92.795 B, CSS 6.881 B); trozo de la analítica: 1.077 B.
 
+**Con la página "How it works" (2026-10-14, decisión 108):** el comando lista también los archivos de esa página (`howItWorks-*.js` y `howItWorks-*.css`), que la app no pide. El presupuesto de 100 kB cuenta solo `main-*.js` y `main-*.css`; la página se mide aparte. App: 99.108 B (JavaScript 92.181 B, CSS 6.927 B); página: 5.119 B (JavaScript 337 B, CSS 4.782 B).
+
 El JavaScript es casi todo React y React DOM: la página solo pinta un `h1`. Para referencia, los archivos que genera `npm run tokens` pesan 21.313 B (`tokens.css`, 3.646 B con gzip) y 5.434 B (`theme.css`, 1.038 B con gzip), pero cuánto CSS llega a la página lo decide Tailwind al construir, así que hay que medirlo.
 
 ## 5. Decidido (2026-10-12)

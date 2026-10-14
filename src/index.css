@@ -5,91 +5,10 @@
 /* Capa 2: @theme inline de Tailwind que apunta a la capa 1. Generado por `npm run tokens`. */
 @import './styles/theme.css';
 
-/* Fuentes servidas desde la propia página, sin peticiones a terceros (decisiones 6 y 70). Subconjunto latino de
-   Fontsource 5.3.0 (archivos de Google Fonts), SIL OFL 1.1: licencias y créditos en src/assets/fonts/ y en el
-   README. Mismo nombre que los tokens font-family (--cg-font-family-sans y -mono), así que una Inter instalada no
-   cambia lo que se ve. Inter es variable (un archivo para 400, 500 y 600, menos que los tres sueltos) y se precarga
-   en index.html; los caracteres fuera del rango, como ✓, salen de la fuente del sistema. */
-@font-face {
-  font-family: 'Inter';
-  font-style: normal;
-  font-weight: 100 900;
-  font-display: swap;
-  src: url('./assets/fonts/inter-latin-wght-normal.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
-    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-/* JetBrains Mono 400, solo para el código (CodeBlock de Exportar y campos con code). */
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('./assets/fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC,
-    U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
+/* Fuentes, cuerpo, foco, puntero, barras y cabecera fija, compartidos con "How it works". */
+@import './base.css';
 
 @layer base {
-  /* Alto de la cabecera fija (76 px en Figma). Los destinos de los enlaces no quedan tapados por ella (2.4.11). */
-  :root {
-    --cg-header-height: 4.75rem;
-  }
-  html {
-    scroll-padding-top: calc(var(--cg-header-height) + var(--cg-space-400));
-  }
-
-  body {
-    background: var(--cg-color-background-neutral-default);
-    color: var(--cg-color-text-neutral-default);
-    font-family: var(--font-sans);
-  }
-
-  /* Foco de ColorScaleUI: anillo border-width/200 en border/focus por fuera (C31 del curso). */
-  :focus-visible {
-    outline: var(--cg-border-width-200) solid var(--cg-color-border-focus);
-    outline-offset: 2px;
-  }
-
-  /* Puntero de mano en todo lo que se pulsa (decisión 100); lo que tiene aria-disabled, not-allowed. */
-  button,
-  select,
-  summary,
-  input:is([type='checkbox'], [type='radio'], [type='range']),
-  label:has(input:is([type='checkbox'], [type='radio'])) {
-    cursor: pointer;
-  }
-  [aria-disabled='true'] {
-    cursor: not-allowed;
-  }
-
-  /* Barras de desplazamiento finas, como en móvil: pulgar redondeado neutro, sin carril ni flechas (decisión 101).
-     neutral-500 da al menos 3:1 sobre los fondos claros y oscuros (1.4.11). Con colores forzados, las del sistema. */
-  @media not (forced-colors: active) {
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: var(--cg-color-neutral-500) transparent;
-    }
-    /* Navegadores sin scrollbar-color (Safari): las mismas con ::-webkit-scrollbar. */
-    @supports not (scrollbar-color: auto) {
-      ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
-        background: transparent;
-      }
-      ::-webkit-scrollbar-thumb {
-        border-radius: var(--cg-radius-1200);
-        background: var(--cg-color-neutral-500);
-      }
-      ::-webkit-scrollbar-button,
-      ::-webkit-scrollbar-corner {
-        display: none;
-      }
-    }
-  }
-
   /* Panel de ajustes en una columna: fondo negro de background/overlay con la opacidad de capa de las pantallas
      "MenuOpen" (0,8; queda al 40 %), y la página no se desplaza detrás (decisión 95). */
   .settings-dialog::backdrop {
@@ -187,16 +106,6 @@
       inset 0 var(--w) var(--c),
       inset 0 calc(-1 * var(--w)) var(--c),
       inset var(--w) 0 var(--c);
-  }
-
-  /* Sin animaciones que transmitan información (ux.md §4). */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      transition-duration: 0s !important;
-      animation-duration: 0s !important;
-    }
   }
 }
 

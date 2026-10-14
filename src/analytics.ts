@@ -1,5 +1,5 @@
-// Vercel Web Analytics (decisión 104). Se ejecuta al importarse: solo lo importa main.tsx, en producción
-// y después de pintar, así que va en su propio trozo, fuera del bundle inicial.
+// Vercel Web Analytics (decisión 104). Se ejecuta al importarse: lo importan main.tsx y how-it-works.ts (decisión
+// 108) con import(), en producción y después de pintar, así que va en su propio trozo, fuera del bundle inicial.
 import { inject } from '@vercel/analytics';
 
 declare global {

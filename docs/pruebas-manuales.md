@@ -69,7 +69,7 @@ Las 1 a 6, 8 (sin la parte del tope) y 9 se comprobaron en C4 con Chrome manejad
 Con el ratón o el trackpad apartados. En Safari, activa antes Ajustes → Avanzado → "Pulsar Tab para resaltar cada ítem de una página web" (si no, Tab se salta los enlaces).
 
 - [ ] **T1. Orden.** Desde la barra de direcciones, pulsa Tab una y otra vez hasta el final.
-  Esperado: el anillo de foco se ve siempre y nunca desaparece en algo invisible. Orden en dos columnas (1024 px o más): cabecera ("How it works"), "Skip to result" (solo se ve con el foco), pestañas de ajustes, cada control de "Main color" en el orden de la pantalla, el resultado ("Back to settings", que solo se ve con el foco; resumen y sus botones, avisos, tiras si se desplazan, par, pestañas y tabla), Export y el pie. En una columna: "How it works", el botón de menú ("Settings") y el resultado, sin enlaces de saltar (decisión 95).
+  Esperado: el anillo de foco se ve siempre y nunca desaparece en algo invisible. Orden en dos columnas (1024 px o más): cabecera ("How it works"), "Skip to result" (solo se ve con el foco), pestañas de ajustes, cada control de "Main color" en el orden de la pantalla, el resultado ("Back to settings", que solo se ve con el foco; resumen y sus botones, avisos, tiras si se desplazan, par, pestañas y tabla), Export y el pie. En una columna: "How it works", el botón de menú ("Settings") y el resultado, sin enlaces de saltar (decisión 95). "How it works" lleva a la página `/how-it-works` (decisión 108).
 - [ ] **T1b. El foco no queda tapado (2.4.11).** Baja hasta la mitad de la página y recorre hacia atrás con Mayúsculas-Tab; pulsa también "Show in table" en un aviso.
   Esperado: el control con el foco nunca queda debajo de la cabecera fija; se ve entero o, como poco, una parte.
 - [ ] **T2. Enlaces de saltar y panel de ajustes.** En la ventana ancha, "Skip to result" lleva al resultado y "Back to settings" vuelve a los ajustes. En la ventana estrecha (menos de 1024 px) o en el móvil con teclado, el botón de menú ("Settings") abre el panel de ajustes, el foco entra en él y Tab no sale; Escape y el botón de cerrar lo cierran y el foco vuelve al botón de menú. Con ratón o dedo: un clic en el fondo oscuro lo cierra y uno en la parte vacía del panel, no. Con el panel abierto, ensancha la ventana por encima de 1024 px: el panel se cierra, los ajustes vuelven a la columna y el foco se ve en ella. Con VoiceOver y el panel abierto, marca y desmarca un rol: se oye "Scales updated…" una sola vez (decisión 95).
@@ -80,6 +80,8 @@ Con el ratón o el trackpad apartados. En Safari, activa antes Ajustes → Avanz
 - [ ] **T7. El foco no se mueve solo.** Al cambiar un ajuste, el foco se queda en el control. Solo se mueve con "Show in table", con los enlaces de saltar y con Download o Copy con errores (va al resumen de errores, A4).
 - [ ] **T8. Exportar con errores.** Con `#33CC9`, pulsa "Download …".
   Esperado: el foco va a "Fix 1 error to export"; Tab llega a su enlace e Intro lleva al campo del color.
+- [ ] **T9. "How it works" (decisión 108).** Cambia algunos ajustes (por ejemplo, 12 pasos y SDS) y pulsa "How it works" de la cabecera con Intro. Recorre la página con Tab y pulsa Intro en cada enlace del índice; después, "Back to colorgods". Vuelve a la página y usa el botón Atrás del navegador.
+  Esperado: la página se abre en la misma pestaña; el orden es logotipo, "How it works", "Back to colorgods", el índice, los enlaces del texto y el pie; cada enlace del índice lleva a su apartado, con el título a la vista bajo la cabecera; "Back to colorgods" y Atrás vuelven a la app con los mismos ajustes. Abierta la página directamente (escribiendo `/how-it-works`), "Back to colorgods" lleva a la app con los valores por defecto. Abierta en otra pestaña (Cmd+clic o clic central), "Back to colorgods" puede llevar a la app sin los ajustes o con los de una visita anterior en esa pestaña: no es un fallo (decisión 108), apúntalo solo si pasa en la misma pestaña.
 
 ## 4. VoiceOver en macOS
 
@@ -96,7 +98,7 @@ Activar y desactivar: ⌘F5. Navegar: Control-Opción con las flechas, o Tab. Co
 - [ ] **V6. Roles.** Marca danger en "Semantic palettes", elige un paso de danger en "Text" del par y vuelve a la casilla de danger para desmarcarla.
   Esperado: se anuncia "The pair was reset because danger was turned off." y, por separado, "Scales updated: 11 steps, …" (son dos anuncios, no una repetición); el foco se queda en la casilla.
 - [ ] **V7. Lo que no se ve.** Las tiras se leen como una imagen ("blue, 11 steps from 50 to 950; your color is 600"); las filas White AA y Black AA (desde 640 px de ancho), como una frase con los pasos que cumplen ("White AA: 700, 800, 900, 950"); el gráfico de la curva, un paso por elemento con su croma y "your color" en el de la marca; la tabla, con cabeceras de fila y columna.
-- [ ] **V8. Encabezados.** Con el rotor (Control-Opción-U), la lista de encabezados tiene "Settings", "Result", "Export" y "How it works", y los de dentro del resultado.
+- [ ] **V8. Encabezados.** Con el rotor (Control-Opción-U), la lista de encabezados tiene "Settings", "Result" y "Export", y los de dentro del resultado. En `/how-it-works`: "How colorgods works" (nivel 1), un nivel 2 por apartado y "Main color" y "Semantic palettes" (nivel 3).
 
 ## 5. VoiceOver en iOS
 
@@ -165,7 +167,7 @@ Para comprobar que no falta nada (comprobación 4 del encargo de C6, parte 1).
 | Qué | Dónde |
 |---|---|
 | `ux.md` §10, comprobaciones 1 a 9 | B1 a B9 (la 7, en B7) |
-| F19: todo se usa con teclado | §3 (T1 a T8) |
+| F19: todo se usa con teclado | §3 (T1 a T9) |
 | F19: los errores dicen cómo corregirse y están asociados a su campo | A4, A6, B3, B4, T8, V1, V3 |
 | F19: avisos y confirmaciones se anuncian (comprobado en C4 solo por el contenido de las regiones) | B1, V2 a V6, I1 a I3 |
 | F19: ninguna información depende solo del color (marca, roles, niveles de F11, regla de F26) | H2, V7 |
@@ -174,3 +176,4 @@ Para comprobar que no falta nada (comprobación 4 del encargo de C6, parte 1).
 | 1.4.10 (zoom al 400 %) | Z2 |
 | DTCG en Figma (F14, C5) | G1, G2 |
 | Navegadores de escritorio y Safari en iOS | §9 |
+| Página "How it works" (decisión 108): índice, vuelta con los ajustes | T9, V8 |

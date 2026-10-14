@@ -16,7 +16,7 @@ import { SemanticPanel } from './components/SemanticPanel';
 import { ScaleTables, rowId } from './components/ScaleTables';
 import { visibleScales } from './components/scaleData';
 import { Tabs } from './components/Tabs';
-import { HowItWorks, Logo, SiteFooter, SiteHeader } from './components/SiteChrome';
+import { Logo, SiteFooter, SiteHeader } from './components/SiteChrome';
 import { StatusRegion } from './components/StatusRegion';
 import { Menu, X } from './components/icons';
 import { blockingErrors, namesLabel, reducer, roleOptions, stepsError, type Field } from './settings';
@@ -170,6 +170,8 @@ export default function App() {
     <section
       id="settings"
       aria-labelledby="settings-heading"
+      // jsx-a11y no contempla una región desplazable enfocable, como la de las tablas.
+      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
       tabIndex={wide ? 0 : -1}
       className={`flex flex-col gap-200 ${wide ? 'sticky top-[var(--cg-header-height)] max-h-[calc(100dvh-var(--cg-header-height))] scroll-py-400 overflow-y-auto p-400' : ''}`}
     >
@@ -224,6 +226,7 @@ export default function App() {
   return (
     <>
       <SiteHeader
+        search={search}
         menu={
           <button
             ref={menuRef}
@@ -305,7 +308,6 @@ export default function App() {
               onGoTo={goTo}
             />
             <StatusRegion result={result} list={list} extra={extra} slot={slot} />
-            <HowItWorks />
           </div>
         </div>
       </main>
