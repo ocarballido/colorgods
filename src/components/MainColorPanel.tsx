@@ -199,7 +199,7 @@ export function MainColorPanel({ settings: s, dispatch, onBlur, result, suggeste
           {s.cap ? '; the dashed line is its chroma' : ''}. Curves from Tailwind CSS (MIT).
         </p>
         <div className="flex flex-col gap-200">
-          <Checkbox checked={s.cap} describedBy="cap-hint" onChange={(cap) => dispatch({ type: 'cap', cap })}>
+          <Checkbox checked={s.cap} hintId="cap-hint" onChange={(cap) => dispatch({ type: 'cap', cap })}>
             Keep chroma at or below my color’s
           </Checkbox>
           <p id="cap-hint" className={hintClass}>

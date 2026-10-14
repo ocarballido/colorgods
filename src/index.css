@@ -66,11 +66,11 @@
   }
 
   /* Barras de desplazamiento finas, como en móvil: pulgar redondeado neutro, sin carril ni flechas (decisión 101).
-     Con colores forzados, las del sistema. */
+     neutral-500 da al menos 3:1 sobre los fondos claros y oscuros (1.4.11). Con colores forzados, las del sistema. */
   @media not (forced-colors: active) {
     * {
       scrollbar-width: thin;
-      scrollbar-color: var(--cg-color-border-neutral-strong) transparent;
+      scrollbar-color: var(--cg-color-neutral-500) transparent;
     }
     /* Navegadores sin scrollbar-color (Safari): las mismas con ::-webkit-scrollbar. */
     @supports not (scrollbar-color: auto) {
@@ -81,7 +81,7 @@
       }
       ::-webkit-scrollbar-thumb {
         border-radius: var(--cg-radius-1200);
-        background: var(--cg-color-border-neutral-strong);
+        background: var(--cg-color-neutral-500);
       }
       ::-webkit-scrollbar-button,
       ::-webkit-scrollbar-corner {
@@ -98,14 +98,6 @@
   }
   html:has(.settings-dialog[open]) {
     overflow: hidden;
-  }
-
-  /* Anillo de foco de la casilla pegado a la caja, como en Figma: por fuera del borde sin marcar, por dentro marcada. */
-  .check:focus-visible {
-    outline-offset: -1px;
-  }
-  .check:checked:focus-visible {
-    outline-offset: -2px;
   }
 
   /* Las secciones que reciben el foco con los enlaces de saltar no muestran anillo: no son controles. */

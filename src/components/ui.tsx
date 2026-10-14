@@ -224,17 +224,17 @@ export function Callout({
 }
 
 // Checkbox de ColorScaleUI: caja de 24 px con li:check de 16 en text/on-accent, sus estados de Figma (hover sobre toda
-// la etiqueta) y el anillo de foco pegado a la caja (index.css). Con colores forzados vuelve la casilla del sistema.
+// la etiqueta). El anillo de foco es el de toda la app, por fuera (decisión 98). Con colores forzados, la del sistema.
 export function Checkbox({
   checked,
   onChange,
-  describedBy,
+  hintId,
   className = '',
   children,
 }: {
   checked: boolean;
   onChange: (checked: boolean) => void;
-  describedBy?: string;
+  hintId?: string;
   className?: string;
   children: ReactNode;
 }) {
@@ -244,7 +244,7 @@ export function Checkbox({
         <input
           type="checkbox"
           checked={checked}
-          aria-describedby={describedBy}
+          aria-describedby={hintId}
           onChange={(e) => onChange(e.target.checked)}
           className="check peer size-[24px] appearance-none rounded-100 border border-neutral-strong bg-neutral-default group-hover:bg-neutral-hover checked:border-transparent checked:bg-accent-strong-default checked:group-hover:bg-accent-strong-hover forced-colors:appearance-auto"
         />

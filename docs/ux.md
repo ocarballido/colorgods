@@ -201,10 +201,10 @@ Una línea con lo calculado ("Scales for #1877F2 · 11 steps · Tailwind names �
 
 ## 9. Teclado y lector de pantalla (WCAG 2.2 AA)
 
-- **Orden:** "How it works" de la cabecera y el enlace para saltar al resultado (decisión 67), ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Encabezados: h1 (colorgods y lo que hace), h2 Settings, Result, Export, How it works; h3 dentro de Result.
+- **Orden:** en dos columnas, "How it works" de la cabecera y el enlace para saltar al resultado (decisión 67), ajustes en el orden de §5, resultado (resumen, avisos, regla y tiras, par, pestañas y tabla), exportar. Por debajo de 1024 px, "How it works", el botón "Settings" (abre el panel de ajustes, donde el foco queda atrapado) y el resultado, sin enlaces de saltar (decisión 95). Encabezados: h1 (el logotipo, con el texto alternativo "colorgods", decisión 97), h2 Settings, Result, Export, How it works; h3 dentro de Result.
 - **Campos:** etiqueta visible, ayuda y error asociados con `aria-describedby`; `aria-invalid` con error.
 - **Anuncios:** una región `role="status"` resume el resultado tras una pausa en los cambios ("Scales updated: 11 steps, 1 warning, 2 notes"; con roles activos, "11 steps, 2 semantic palettes, …") y nombra los avisos nuevos, para cumplir F12 sin anunciar a cada tecla. La pausa empieza en unos 500 ms y se ajusta en C4. El par y las confirmaciones de copia tienen su propia región.
-- **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, y los enlaces de saltar.
+- **Foco:** no se mueve al calcular. Solo se mueve con acciones del usuario: "Show in table", el resumen de errores al exportar con errores, los enlaces de saltar y el panel de ajustes (al abrirlo entra en él; al cerrarlo vuelve al botón "Settings" o, si se cerró al pasar a dos columnas, a la columna de ajustes).
 - **Color:** la marca, los roles, los avisos, los niveles de contraste y las marcas de la regla llevan texto (F19, 1.4.1). Las muestras de color no tienen borde, como en Figma; con colores forzados llevan un contorno del sistema. Oscar asume el riesgo el 2026-10-13: el paso más claro casi no se distingue del blanco (decisión 75, que sustituye al borde de C21 del curso).
 - **Objetivos:** todos los controles de al menos 24 × 24 px (2.5.8).
 - **Colores forzados:** bordes, foco, casillas, las marcas de la regla y el paso de la marca visibles.

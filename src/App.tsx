@@ -133,6 +133,13 @@ export default function App() {
       if (!dialog.open) dialog.showModal();
     } else if (dialog.open) dialog.close();
   }, [menuOpen, wide]);
+  // Al pasar a una columna (por ejemplo, con zoom), los ajustes se desmontan de la columna; si el foco estaba en ellos,
+  // se habría perdido en el body: va al botón de menú, que los abre.
+  const wasWide = useRef(wide);
+  useEffect(() => {
+    if (wasWide.current && !wide && document.activeElement === document.body) menuRef.current?.focus();
+    wasWide.current = wide;
+  }, [wide]);
   const onBlur = usePointerSafeBlur(useCallback((field: Field) => dispatch({ type: 'blur', field }), []));
   const onRoleBlur = usePointerSafeBlur(useCallback((role: Role) => dispatch({ type: 'roleBlur', role }), []));
   const { color, valid, curve, cap, tint } = settings;
@@ -241,6 +248,7 @@ export default function App() {
             ref={menuRef}
             type="button"
             aria-label="Settings"
+            aria-haspopup="dialog"
             aria-expanded={menuOpen}
             aria-controls="settings-dialog"
             onClick={() => setMenuOpen(true)}
@@ -262,14 +270,16 @@ export default function App() {
           aria-labelledby="settings-heading"
           onClose={() => {
             setMenuOpen(false);
-            menuRef.current?.focus();
+            // Si se cierra al pasar a dos columnas, el botón de menú ya no se ve: el foco va a la columna de ajustes.
+            (wideQuery.matches ? document.getElementById('settings') : menuRef.current)?.focus();
           }}
           onPointerDown={(e) => (pressedBackdrop.current = e.target === e.currentTarget)}
           onClick={(e) => pressedBackdrop.current && e.target === e.currentTarget && dialogRef.current?.close()}
           className="settings-dialog fixed top-[var(--cg-header-height)] bottom-0 left-0 m-0 h-auto max-h-none w-full max-w-[22.5rem] overflow-y-auto border-0 bg-neutral-subtle p-0 text-neutral-default"
         >
+          {/* El contenido ocupa todo el panel: así un clic en su parte vacía no llega al <dialog> y no lo cierra. */}
           {!wide && (
-            <>
+            <div className="min-h-full">
               <div className="flex justify-end px-400 pt-400 sm:px-600">
                 <button
                   type="button"
@@ -282,7 +292,7 @@ export default function App() {
               </div>
               {settingsPanel}
               <div ref={setSlot} />
-            </>
+            </div>
           )}
         </dialog>
         <div className="min-w-0 flex-1 px-400 py-600 sm:px-600 lg:px-[clamp(2rem,calc(10.526vw_-_4.737rem),5rem)]">
